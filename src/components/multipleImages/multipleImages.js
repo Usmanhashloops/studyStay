@@ -1,9 +1,19 @@
 import React, { useState } from "react";
 import { IoIosAddCircle } from "react-icons/io";
 import { RxCrossCircled } from "react-icons/rx";
-function CustomImageUpload(props) {
+function MultipleImages(props) {
   const { handleImageChange, image, handleImageClose } = props;
-
+  // const [image, setImage] = useState(null);
+  // const handleImageChange = (e) => {
+  //   const file = e.target.files[0];
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onload = () => {
+  //       setImage(reader.result);
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
   return (
     <div>
       {image ? (
@@ -22,4 +32,4 @@ function CustomImageUpload(props) {
     </div>
   );
 }
-export default CustomImageUpload;
+export default MultipleImages;

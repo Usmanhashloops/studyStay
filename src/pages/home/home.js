@@ -3,14 +3,14 @@ import bgBanner from "../../assets/bgBanner.jpg";
 const Home = () => {
   return (
     <section>
-      <img src={bgBanner} style={{ objectFit: "cover", height: "580px", width: "100%" }} />
-      <section class="py-12 bg-neutral-50 sm:py-16 lg:py-17">
+      <section class=" pb-10 bg-neutral-50">
         <div class="px-4 mx-auto sm:px-6 lg:px-0 max-w-7xl">
-          <div class="text-center lg:text-left">
+          <img src={bgBanner} style={{ objectFit: "cover", height: "580px", width: "100%" }} />
+          {/* <div class="text-center lg:text-left mt-12">
             <h2 class="text-2xl font-bold text-black sm:text-3xl">Fashion & Clothing</h2>
-          </div>
-          <div class="grid grid-cols-2 gap-4 mt-8 sm:mt-12 sm:gap-6 lg:grid-cols-4">
-            <div class="relative flex flex-col overflow-hidden bg-white rounded-xl group">
+          </div> */}
+          {/* <div class="grid grid-cols-2 gap-4 mt-8 sm:mt-12 sm:gap-6 lg:grid-cols-4">
+            <div class="relative flex flex-col overflow-hidden bg-white rounded-xl group shadow-lg">
               <div class="flex-shrink-0 overflow-hidden aspect-w-1 aspect-h-1">
                 <img
                   class="object-cover w-full h-full transition-all duration-300 group-hover:scale-125"
@@ -46,7 +46,7 @@ const Home = () => {
                 </div>
               </div>
             </div>
-            <div class="relative flex flex-col overflow-hidden bg-white rounded-xl group">
+            <div class="relative flex flex-col overflow-hidden bg-white rounded-xl group shadow-lg">
               <div class="flex-shrink-0 overflow-hidden aspect-w-1 aspect-h-1">
                 <img
                   class="object-cover w-full h-full transition-all duration-300 group-hover:scale-125"
@@ -82,7 +82,7 @@ const Home = () => {
                 </div>
               </div>
             </div>
-            <div class="relative flex flex-col overflow-hidden bg-white rounded-xl group">
+            <div class="relative flex flex-col overflow-hidden bg-white rounded-xl group shadow-lg">
               <div class="flex-shrink-0 overflow-hidden aspect-w-1 aspect-h-1">
                 <img
                   class="object-cover w-full h-full transition-all duration-300 group-hover:scale-125"
@@ -118,7 +118,7 @@ const Home = () => {
                 </div>
               </div>
             </div>
-            <div class="relative flex flex-col overflow-hidden bg-white rounded-xl group">
+            <div class="relative flex flex-col overflow-hidden bg-white rounded-xl group shadow-lg">
               <div class="flex-shrink-0 overflow-hidden aspect-w-1 aspect-h-1">
                 <img
                   class="object-cover w-full h-full transition-all duration-300 group-hover:scale-125"
@@ -154,7 +154,7 @@ const Home = () => {
                 </div>
               </div>
             </div>
-            <div class="relative flex flex-col overflow-hidden bg-white rounded-xl group">
+            <div class="relative flex flex-col overflow-hidden bg-white rounded-xl group shadow-lg">
               <div class="flex-shrink-0 overflow-hidden aspect-w-1 aspect-h-1">
                 <img
                   class="object-cover w-full h-full transition-all duration-300 group-hover:scale-125"
@@ -190,7 +190,7 @@ const Home = () => {
                 </div>
               </div>
             </div>
-            <div class="relative flex flex-col overflow-hidden bg-white rounded-xl group">
+            <div class="relative flex flex-col overflow-hidden bg-white rounded-xl group shadow-lg">
               <div class="flex-shrink-0 overflow-hidden aspect-w-1 aspect-h-1">
                 <img
                   class="object-cover w-full h-full transition-all duration-300 group-hover:scale-125"
@@ -226,7 +226,7 @@ const Home = () => {
                 </div>
               </div>
             </div>
-            <div class="relative flex flex-col overflow-hidden bg-white rounded-xl group">
+            <div class="relative flex flex-col overflow-hidden bg-white rounded-xl group shadow-lg">
               <div class="flex-shrink-0 overflow-hidden aspect-w-1 aspect-h-1">
                 <img
                   class="object-cover w-full h-full transition-all duration-300 group-hover:scale-125"
@@ -262,7 +262,7 @@ const Home = () => {
                 </div>
               </div>
             </div>
-            <div class="relative flex flex-col overflow-hidden bg-white rounded-xl group">
+            <div class="relative flex flex-col overflow-hidden bg-white rounded-xl group shadow-lg">
               <div class="flex-shrink-0 overflow-hidden aspect-w-1 aspect-h-1">
                 <img
                   class="object-cover w-full h-full transition-all duration-300 group-hover:scale-125"
@@ -298,7 +298,7 @@ const Home = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </section>
     </section>

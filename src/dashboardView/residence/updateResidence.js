@@ -7,11 +7,13 @@ import { useNavigate } from "react-router-dom";
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 import Grid from "@mui/material/Grid";
 import CustomImageUpload from "../../components/imageUpload/imageupload";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
+import MultipleImages from "../../components/multipleImages/multipleImages";
 import FormControl from "@mui/material/FormControl";
 import { useLocation } from "react-router-dom";
+import { IMAGE_BASE_URL } from "../../utils/Url";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
 const UpdateResidence = (props) => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -20,15 +22,16 @@ const UpdateResidence = (props) => {
   const [person, setPerson] = useState("");
   const [residenceName, setResidenceName] = useState("");
   const [residenceType, setResidenceType] = useState("");
-  const [image, setImage] = useState();
+  const [image, setImage] = useState([]);
   const [openRoom, setOpenRoom] = useState(false);
   const [openApartments, setOpenApartments] = useState(false);
-  const [residenceData, setResidenceData] = useState({});
-  const [locationId, setLocationId] = useState(location.state.id);
+  const [updatedDate, setUpdatedDate] = useState({});
+  const [valueUpdate, setValueUpdate] = useState(location.state.id);
+  const [UpdatedImage, setUpdatedImage] = useState(valueUpdate?.images);
   const [address, setAddress] = useState("");
   const [coordinates, setCoordinates] = useState(null);
   const apiKey = "AIzaSyC7Jz78vSl5-mHKv4eBOy1fRhmoph6loMA";
-  console.log("locationId", locationId);
+  console.log("valueUpdate", valueUpdate);
   const handleSelect = async (selectedAddress) => {
     try {
       const results = await geocodeByAddress(selectedAddress);
@@ -39,22 +42,126 @@ const UpdateResidence = (props) => {
       console.error("Error while fetching coordinates:", error);
     }
   };
-  const [imagePreview, setImagePreview] = useState();
+  // console.log("coordinates", coordinates);
+
+  // useEffect(() => {
+  //   setUpdatedImage(valueUpdate?.image);
+  // }, [input]);
+
+  // const handleImageChange = (e) => {
+  //   const files = e.target.files;
+  //   const newImages = [...image];
+  //   const newPreviews = [...imagePreview];
+
+  //   for (let i = 0; i < files.length; i++) {
+  //     const reader = new FileReader();
+
+  //     reader.onload = () => {
+  //       newPreviews.push(reader.result);
+  //       setImagePreview([...newPreviews]);
+  //     };
+
+  //     reader.readAsDataURL(files[i]);
+  //     newImages.push(files[i]);
+  //   }
+
+  //   setImage(newImages);
+  // };
+  const [imagePreview, setImagePreview] = useState([]);
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setImage(file);
-    if (file) {
+    const files = e.target.files;
+    const newImages = [...image];
+    const newPreviews = [...imagePreview];
+
+    for (let i = 0; i < files.length; i++) {
       const reader = new FileReader();
+
       reader.onload = () => {
-        setImagePreview(reader.result);
+        newPreviews.push(reader.result);
+        setImagePreview([...newPreviews]);
       };
-      reader.readAsDataURL(file);
+
+      reader.readAsDataURL(files[i]);
+      newImages.push(files[i]);
     }
+
+    setImage(newImages);
   };
-  const handleImageClose = () => {
-    setImage(null);
-    setImagePreview(null);
+  console.log("imagePreview", imagePreview);
+
+  // const handleImageChange = (e) => {
+  //   const file = e.target.files[0];
+  //   setImage(file);
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onload = () => {
+  //       setImagePreview(reader.result);
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
+  // const handleImageChange = (e) => {
+  //   const file = e.target.files;
+  //   setImage(file);
+  //   const array = [];
+  //   if (imagePreview?.length > 0) {
+  //     array = [imagePreview];
+  //   }
+  //   if (file.length > 0) {
+  //     for (let i = 0; i < file.length; i++) {
+  //       const reader = new FileReader();
+  //       reader.onload = () => {
+  //         array.push(reader.result);
+
+  //         setImagePreview(array);
+  //       };
+  //       reader.readAsDataURL(file[i]);
+  //     }
+  //   }
+  // };
+  // const handleImageClose = (index) => {
+  //   const updatedImagePreview = [...image];
+  //   updatedImagePreview.splice(index, 1);
+  //   setImage(updatedImagePreview);
+  // };
+  // console.log("UpdatedImage", UpdatedImage?.id);
+  // const handleImageClose = async (index) => {
+  //   console.log(image?.id, "image");
+  //   const response = await Api("post", `delete-residence-image/${image[index]?.id}`);
+  //   if (response?.status === 200 || response?.status === 201) {
+  //     const newData = [...image];
+  //     newData.splice(index, 1);
+  //     setImage(newData);
+  //     ;
+  //     toast.success("Image Deleted Successfully");
+  //   } else {
+  //     toast.error("Error");
+  //   }
+  // };
+  const handleImageClose = ({ index }) => {
+    const updatedImages = [...image];
+    updatedImages.splice(index, 1);
+    setImage(updatedImages);
+    const updatedPreviews = [...imagePreview];
+    updatedPreviews.splice(index, 1);
+    setImagePreview(updatedPreviews);
   };
+  useEffect(() => {
+    if (valueUpdate) {
+      setFlatName(valueUpdate?.flate_name);
+      setAddress(valueUpdate?.address);
+      setPrice(valueUpdate?.price);
+      setPerson(valueUpdate?.total_person);
+      setResidenceType(valueUpdate?.resident_type);
+      setResidenceName(valueUpdate?.residence_name);
+      setImage(valueUpdate?.images);
+    }
+  }, [valueUpdate]);
+
+  // const handleImageClose = () => {
+  //   setImage(null);
+  //   setImagePreview(null);
+  // };
   const HandlerUpdateResidence = async () => {
     const formData = new FormData();
     formData.append("flate_name", flatName);
@@ -63,22 +170,22 @@ const UpdateResidence = (props) => {
     formData.append("total_person", person);
     formData.append("price", price);
     formData.append("address", address);
-    formData.append("images", image);
-    formData.append("longitude", coordinates.lng);
-    formData.append("latitude", coordinates.lat);
-
-    const response = await Api("post", "add-residence", formData);
-
-    console.log("Add-response", response);
+    for (let i = 0; i < image.length; i++) {
+      formData.append("images[]", image[i]);
+    }
+    formData.append("longitude", coordinates?.lng);
+    formData.append("latitude", coordinates?.lat);
+    const response = await Api("post", `update-residence/${valueUpdate?.id}`, formData);
+    // console.log("response", response);
     if (response?.status === 200 || response?.status === 201) {
-      setResidenceData(response?.data?.data);
+      setUpdatedDate(response?.data?.data);
       toast.success(response?.data?.message);
       navigate("/dashboard/residence");
     } else {
       toast.error(response?.data?.message);
     }
   };
-  console.log("residenceData", residenceData);
+  // console.log("residenceType", residenceType);
   return (
     <div className="flex flex-col flex-1 ">
       <div className="py-12 bg-white sm:py-16 lg:py-8">
@@ -98,6 +205,7 @@ const UpdateResidence = (props) => {
                         type="text"
                         name="title"
                         id=""
+                        value={flatName}
                         onChange={(e) => setFlatName(e.target.value)}
                         placeholder="Enter Flat Name"
                         className="block w-full px-3 py-3 text-gray-900 placeholder-gray-600 bg-white border border-gray-400 rounded-xl focus:border-gray-900 focus:ring-gray-900 caret-gray-900"
@@ -111,9 +219,10 @@ const UpdateResidence = (props) => {
                     </label>
                     <div className="mt-2.5 addInput">
                       <input
-                        type="text"
-                        name="email"
+                        type="number"
+                        name="price"
                         id=""
+                        value={price}
                         onChange={(e) => setPrice(e.target.value)}
                         placeholder="Enter Price"
                         className="block w-full px-3 py-3 text-gray-900 placeholder-gray-600 bg-white border border-gray-400 rounded-xl focus:border-gray-900 focus:ring-gray-900 caret-gray-900"
@@ -149,36 +258,41 @@ const UpdateResidence = (props) => {
                     </div>
                   </div>
                   <div className="pt-1">
-                    <div>
+                    <FormControl>
                       <label for="" className="text-base font-medium text-gray-900 font-pj">
                         Resident Type
                       </label>
-                      <FormControl fullWidth style={{ marginTop: "10px", marginBottom: "10px" }} className="borderRadius">
-                        <Select labelId="demo-simple-select-label" id="demo-simple-select" value={residenceType} onChange={(e) => setResidenceType(e.target.value)} className="borderRadius">
-                          <MenuItem
-                            value={"room"}
-                            onClick={() => {
-                              setOpenRoom(!openRoom);
-                              setOpenApartments(false);
-                            }}
-                          >
-                            room
-                          </MenuItem>
-                          <MenuItem
-                            value={"appartment"}
-                            onClick={() => {
-                              setOpenApartments(!openApartments);
-                              setOpenRoom(false);
-                            }}
-                          >
-                            appartment
-                          </MenuItem>
-                        </Select>
-                      </FormControl>
-                    </div>
+                      <RadioGroup
+                        style={{ marginTop: "10px" }}
+                        row
+                        aria-labelledby="demo-row-radio-buttons-group-label"
+                        name="row-radio-buttons-group"
+                        value={residenceType}
+                        onChange={(e) => setResidenceType(e.target.value)}
+                      >
+                        <FormControlLabel
+                          value="room"
+                          control={<Radio />}
+                          label="Room"
+                          onClick={() => {
+                            setOpenRoom(!openRoom);
+                            setOpenApartments(false);
+                          }}
+                        />
+                        <FormControlLabel
+                          value="appartment"
+                          control={<Radio />}
+                          label="Appartment"
+                          onClick={() => {
+                            setOpenApartments(!openApartments);
+                            setOpenRoom(false);
+                          }}
+                        />
+                      </RadioGroup>
+                    </FormControl>
                   </div>
                 </div>
-                {openRoom && (
+                {openRoom || residenceType === "room" ? (
                   <div className="max-w-4xl mx-auto mt-8 ">
                     <div className="space-y-4">
                       <div className="relative">
@@ -198,6 +312,7 @@ const UpdateResidence = (props) => {
                                     <input
                                       type="text "
                                       placeholder="Enter Room Name"
+                                      value={residenceName}
                                       onChange={(e) => setResidenceName(e.target.value)}
                                       className="block w-full px-3 py-3 text-gray-900 placeholder-gray-600 bg-white border border-gray-400 rounded-xl focus:border-gray-900 focus:ring-gray-900 caret-gray-900"
                                     />
@@ -213,6 +328,7 @@ const UpdateResidence = (props) => {
                                       type="number"
                                       name="person"
                                       id=""
+                                      value={person}
                                       onChange={(e) => setPerson(e.target.value)}
                                       placeholder="Enter Total Person"
                                       className="block w-full px-3 py-3 text-gray-900 placeholder-gray-600 bg-white border border-gray-400 rounded-xl focus:border-gray-900 focus:ring-gray-900 caret-gray-900"
@@ -226,8 +342,10 @@ const UpdateResidence = (props) => {
                       </div>
                     </div>
                   </div>
+                ) : (
+                  ""
                 )}
-                {openApartments && (
+                {openApartments || residenceType === "appartment" ? (
                   <div className="max-w-4xl mx-auto mt-8 ">
                     <div className="space-y-4">
                       <div className="relative">
@@ -247,6 +365,7 @@ const UpdateResidence = (props) => {
                                     <input
                                       type="text "
                                       placeholder="Enter Appartment Name"
+                                      value={residenceName}
                                       onChange={(e) => setResidenceName(e.target.value)}
                                       className="block w-full px-3 py-3 text-gray-900 placeholder-gray-600 bg-white border border-gray-400 rounded-xl focus:border-gray-900 focus:ring-gray-900 caret-gray-900"
                                     />
@@ -262,6 +381,7 @@ const UpdateResidence = (props) => {
                                       type="number"
                                       name="person"
                                       id=""
+                                      value={person}
                                       onChange={(e) => setPerson(e.target.value)}
                                       placeholder="Enter Total Person"
                                       className="block w-full px-3 py-3 text-gray-900 placeholder-gray-600 bg-white border border-gray-400 rounded-xl focus:border-gray-900 focus:ring-gray-900 caret-gray-900"
@@ -275,11 +395,58 @@ const UpdateResidence = (props) => {
                       </div>
                     </div>
                   </div>
+                ) : (
+                  ""
                 )}
                 <Grid container spacing={2} sx={{ marginTop: "15px" }}>
+                  {/* {imagePreview?.length == 0 &&
+                    image?.map(
+                      (value, index) => {
+                        return (
+                          <Grid item xs={12} sm={6} md={3}>
+                            <div className="bg-slate-200 h-52 rounded-lg relative">
+                              <MultipleImages handleImageChange={handleImageChange} image={IMAGE_BASE_URL + value?.images} handleImageClose={() => handleImageClose(index)} />
+                            </div>
+                          </Grid>
+                        );
+                      } */}
+                  {/* // : imagePreview?.map((value, index) => {
+                      //     return (
+                      //       <Grid item xs={12} sm={6} md={3}>
+                      //         <div className="bg-slate-200 h-52 rounded-lg relative">
+                      //           <MultipleImages handleImageChange={handleImageChange} image={imagePreview} handleImageClose={() => handleImageClose(index)} />
+                      //         </div>
+                      //       </Grid>
+                      //     );
+                      //   }
+                    )} */}
+                  {/* {imagePreview ? (
+                    <Grid item xs={12} sm={6} md={3}>
+                      <div className="bg-slate-200 h-52 rounded-lg relative">
+                        <MultipleImages handleImageChange={handleImageChange} handleImageClose={handleImageClose} />
+                      </div>
+                    </Grid>
+                  ) : (
+                    <Grid item xs={12} sm={6} md={3}>
+                      <div className="bg-slate-200 h-52 rounded-lg relative">
+                        <MultipleImages handleImageChange={handleImageChange} image={imagePreview} imageNext={imagePreview} handleImageClose={handleImageClose} />
+                      </div>
+                    </Grid>
+                  )} */}
+                </Grid>
+                {console.log("image", image)}
+                <Grid container spacing={2} sx={{ marginTop: "15px" }}>
+                  {image.map((img, index) => (
+                    <Grid item xs={12} sm={6} md={3} key={index}>
+                      <div className="bg-slate-200 h-52 rounded-lg relative">
+                        <MultipleImages handleImageChange={handleImageChange} image={IMAGE_BASE_URL + img?.images} handleImageClose={() => handleImageClose(index)} />
+                      </div>
+                    </Grid>
+                  ))}
+
                   <Grid item xs={12} sm={6} md={3}>
                     <div className="bg-slate-200 h-52 rounded-lg relative">
-                      <CustomImageUpload handleImageChange={handleImageChange} image={imagePreview} imageNext={imagePreview} handleImageClose={handleImageClose} />
+                      <MultipleImages handleImageChange={handleImageChange} handleImageClose={handleImageClose} />
                     </div>
                   </Grid>
                 </Grid>

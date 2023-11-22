@@ -47,7 +47,7 @@ const Footer = () => {
           </ul>
         </div>
         <div className="pt-12 mt-12 text-center border-t border-gray-700 sm:mt-16 lg:mt-12">
-          <p className="text-sm font-normal text-slate-300">© Copyright 2022, All Rights Reserved </p>
+          <p className="text-sm font-normal text-slate-300">© Copyright 2023, All Rights Reserved </p>
         </div>
       </div>
     </footer>

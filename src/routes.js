@@ -12,13 +12,15 @@ import ChangePassword from "./pages/authentication/changePassword";
 import Residence from "./dashboardView/residence/residence";
 import AddResidence from "./dashboardView/residence/addResidence";
 import UpdateResidence from "./dashboardView/residence/updateResidence";
+import ReserveResidence from "./dashboardView/reserveResidence/reserveResidence";
+import InformationPage from "./pages/authentication/informationPage";
 const routes = [
   {
     path: "/",
     element: <PublicRender />,
     children: [
       { path: "/", element: <Home /> },
-      { path: "/apartments", element: <Apartments /> },
+      { path: "/apartments/:searchValue", element: <Apartments /> },
       { path: "/rooms", element: <Rooms /> },
     ],
   },
@@ -28,12 +30,15 @@ const routes = [
   { path: "/profile", element: <Profile /> },
   { path: "/add_Residence", element: <AddResidence /> },
   { path: "/update_Residence", element: <UpdateResidence /> },
+  { path: "/information", element: <InformationPage /> },
   {
     path: "/dashboard",
     element: <PrivateLayout />,
     children: [
-      { path: "/dashboard", element: <AdminDashboard /> },
+      // { path: "/dashboard", element: <AdminDashboard /> },
+      { path: "/dashboard", element: <Residence /> },
       { path: "/dashboard/residence", element: <Residence /> },
+      { path: "/dashboard/reserve_residence", element: <ReserveResidence /> },
     ],
   },
 ];

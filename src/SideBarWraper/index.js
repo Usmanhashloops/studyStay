@@ -16,7 +16,7 @@ const Sidebar = () => {
           <div className="flex flex-col flex-1 px-3 mt-8">
             <div className="space-y-4">
               <nav className="flex-1 space-y-2">
-                <a
+                {/* <a
                   onClick={() => navigate("/dashboard")}
                   className="flex items-center px-4 py-2.5 text-sm font-medium transition-all duration-200 text-white rounded-lg hover:bg-indigo-600 group cursor-pointer"
                 >
@@ -28,20 +28,20 @@ const Sidebar = () => {
                     />
                   </svg>
                   Dashboard
-                </a>
+                </a> */}
                 <a
                   onClick={() => navigate("/dashboard/residence")}
                   className="flex items-center px-4 py-2.5 text-sm font-medium transition-all duration-200 text-white rounded-lg hover:bg-indigo-600 group cursor-pointer"
                 >
                   <AiOutlineHome className="flex-shrink-0   mr-4 text-white w-6 h-6" />
-                  {/* <svg className="flex-shrink-0 w-5 h-5 mr-4 text-white w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                    />
-                  </svg> */}
                   Residence
+                </a>
+                <a
+                  onClick={() => navigate("/dashboard/reserve_residence")}
+                  className="flex items-center px-4 py-2.5 text-sm font-medium transition-all duration-200 text-white rounded-lg hover:bg-indigo-600 group cursor-pointer"
+                >
+                  <AiOutlineHome className="flex-shrink-0   mr-4 text-white w-6 h-6" />
+                  Reserve Residence
                 </a>
               </nav>
               <hr className="border-gray-700" />
@@ -88,7 +88,7 @@ const Sidebar = () => {
             <div className="flex flex-col flex-1 px-3 mt-8">
               <div className="space-y-4">
                 <nav className="flex-1 space-y-2">
-                  <a
+                  {/* <a
                     onClick={() => {
                       navigate("/dashboard");
                       setOpenDrawer(false);
@@ -103,7 +103,7 @@ const Sidebar = () => {
                       />
                     </svg>
                     Dashboard
-                  </a>
+                  </a> */}
                   <a
                     onClick={() => {
                       navigate("/dashboard/residence");
@@ -111,15 +111,18 @@ const Sidebar = () => {
                     }}
                     className="flex items-center px-4 py-2.5 text-sm font-medium transition-all duration-200 text-white rounded-lg hover:bg-indigo-600 group cursor-pointer"
                   >
-                    <AiOutlineHome />
-                    {/* <svg className="flex-shrink-0 w-5 h-5 mr-4 text-white w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                      />
-                    </svg> */}
+                    <AiOutlineHome className="flex-shrink-0   mr-4 text-white w-6 h-6" />
                     Residence
+                  </a>
+                  <a
+                    onClick={() => {
+                      navigate("/dashboard/reserve_residence");
+                      setOpenDrawer(false);
+                    }}
+                    className="flex items-center px-4 py-2.5 text-sm font-medium transition-all duration-200 text-white rounded-lg hover:bg-indigo-600 group cursor-pointer"
+                  >
+                    <AiOutlineHome className="flex-shrink-0   mr-4 text-white w-6 h-6" />
+                    Reserve Residence
                   </a>
                 </nav>
                 <hr className="border-gray-700" />

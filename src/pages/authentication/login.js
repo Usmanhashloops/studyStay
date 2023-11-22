@@ -48,7 +48,7 @@ const Login = () => {
         navigate("/");
       }
     } else {
-      toast.error("Failed");
+      toast.error("Invalid data");
     }
   };
 

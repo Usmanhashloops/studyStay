@@ -7,7 +7,10 @@ body {
   font-family: Roboto, Helvetica, Arial, sans-serif;
 }
 body::-webkit-scrollbar {
-  display: none;
+  display: none !important;
+}
+.scrollRemove::-webkit-scrollbar {
+  display: none !important;
 }
 .search-bar {
   position: relative;
@@ -258,11 +261,22 @@ body::-webkit-scrollbar {
 }
 @media only screen and (min-width: 300px) and (max-width: 1024px) {
   .search-input {
-    width: 100%;
+    width: 100% !important;
   }
 }
 .modal_ProfileView {
   height: 300px;
+  width: 400px;
+  border: 1px solid #fff;
+}
+.modal_SeeProfile {
+  height: 500px;
+  width: 550px;
+  border: 1px solid #fff;
+  overflow-y: auto;
+}
+.modal_confirmation {
+  /* height: 300px; */
   width: 400px;
   border: 1px solid #fff;
 }
@@ -276,12 +290,29 @@ body::-webkit-scrollbar {
 }
 .modalScrollbar {
   height: 630px;
-  width: 550px;
+  width: 620px;
+  padding-bottom: 30px !important;
+}
+.modalViewReserveResidence {
+  height: 580px;
+  width: 560px;
+}
+.modalScrollbar .css-vqmohf-MuiButtonBase-root-MuiRadio-root.Mui-checked {
+  color: #000000 !important;
 }
 .modalScrollbar::-webkit-scrollbar {
-  display: none;
+  display: none !important;
+}
+.modalViewReserveResidence::-webkit-scrollbar {
+  display: none !important;
 }
 .modal_ProfileView::-webkit-scrollbar {
+  display: none !important;
+}
+.modal_SeeProfile::-webkit-scrollbar {
+  display: none !important;
+}
+.modal_confirmation::-webkit-scrollbar {
   display: none;
 }
 @media only screen and (min-width: 300px) and (max-width: 350px) {
@@ -289,9 +320,21 @@ body::-webkit-scrollbar {
     width: 280px;
     height: 550px;
   }
+  .modalViewReserveResidence {
+    width: 280px;
+    height: 550px;
+  }
   .modal_ProfileView {
     width: 280px;
     height: 300px;
+  }
+  .modal_SeeProfile {
+    width: 290px;
+    height: 500px;
+  }
+  .modal_confirmation {
+    width: 280px;
+    /* height: 300px; */
   }
 }
 @media only screen and (min-width: 351px) and (max-width: 400px) {
@@ -299,9 +342,17 @@ body::-webkit-scrollbar {
     width: 330px;
     height: 550px;
   }
+  .modalViewReserveResidence {
+    width: 330px;
+    height: 550px;
+  }
   .modal_ProfileView {
     width: 330px;
     height: 300px;
+  }
+  .modal_confirmation {
+    width: 330px;
+    /* height: 300px; */
   }
 }
 @media only screen and (min-width: 401px) and (max-width: 450px) {
@@ -309,9 +360,17 @@ body::-webkit-scrollbar {
     width: 380px;
     height: 550px;
   }
+  .modalViewReserveResidence {
+    width: 380px;
+    height: 550px;
+  }
   .modal_ProfileView {
     width: 380px;
     height: 300px;
+  }
+  .modal_confirmation {
+    width: 380px;
+    /* height: 300px; */
   }
 }
 @media only screen and (min-width: 451px) and (max-width: 500px) {
@@ -319,9 +378,17 @@ body::-webkit-scrollbar {
     width: 430px;
     height: 550px;
   }
+  .modalViewReserveResidence {
+    width: 430px;
+    height: 550px;
+  }
   .modal_ProfileView {
     width: 430px;
     height: 300px;
+  }
+  .modal_confirmation {
+    width: 430px;
+    /* height: 300px; */
   }
 }
 @media only screen and (min-width: 501px) and (max-width: 600px) {
@@ -329,15 +396,41 @@ body::-webkit-scrollbar {
     width: 480px;
     height: 550px;
   }
+  .modalViewReserveResidence {
+    width: 480px;
+    height: 550px;
+  }
   .modal_ProfileView {
     width: 480px;
     height: 300px;
+  }
+  .modal_confirmation {
+    width: 480px;
+    /* height: 300px; */
   }
 }
 @media only screen and (min-width: 601px) and (max-width: 700px) {
   .modal_ProfileView {
     width: 580px;
     height: 300px;
+  }
+  .modal_confirmation {
+    width: 580px;
+    /* height: 300px; */
+  }
+  .modalScrollbar {
+    width: 530px;
+    height: 550px;
+  }
+  .modalViewReserveResidence {
+    width: 530px;
+    height: 550px;
+  }
+}
+@media only screen and (min-width: 701px) and (max-width: 800px) {
+  .modalScrollbar {
+    width: 580px;
+    height: 550px;
   }
 }
 .slider {
@@ -359,9 +452,11 @@ body::-webkit-scrollbar {
 .img {
   border-radius: 15px;
   height: 130px !important;
+  background-color: #878f9a;
+  width: 100% !important;
 }
 .img-slider {
-  width: 32% !important;
+  width: 200px !important;
   object-fit: contain;
   border-radius: 10px !important;
   margin-left: 6px;
@@ -401,12 +496,12 @@ body::-webkit-scrollbar {
     object-fit: cover;
   }
   .img-slider {
-    width: 30% !important;
+    width: 100% !important;
   }
 }
 @media only screen and (min-width: 280px) and (max-width: 550px) {
   .slider {
-    display: none;
+    /* display: none; */
   }
 }
 @media only screen and (min-width: 551px) {
@@ -492,11 +587,12 @@ body::-webkit-scrollbar {
   }
 }
 .imageIcon {
-  height: 30px;
-  width: 30px;
+  height: 42px;
+  width: 42px;
   border-radius: 50%;
   object-fit: cover;
-  margin-top: 2px;
+  margin-top: -2px;
+  cursor: pointer;
 }
 .imageIcon-view {
   height: 45px;
@@ -543,4 +639,11 @@ input[type="number"]::-webkit-outer-spin-button {
 .borderRadius {
   border-radius: 15px !important;
   height: 50px !important;
+}
+.textArea .css-dpjnhs-MuiInputBase-root-MuiOutlinedInput-root {
+  border-radius: 10px !important;
+  min-height: 100px;
+}
+.Mui-checked.Mui-focusVisible .MuiRadio-root {
+  outline: none !important; /* Remove the outline when focused */
 }

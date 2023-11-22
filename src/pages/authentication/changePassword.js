@@ -66,7 +66,7 @@ const ChangePassword = () => {
     console.log("response", response);
     if (response?.data?.code === 200) {
       toast.success("Password Changed Successfully");
-      navigate("/profile");
+      navigate("/");
     } else {
       toast.error(response?.data?.message);
     }

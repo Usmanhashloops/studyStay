@@ -9,5 +9,4 @@ const PrivateLayout = () => {
     return <Navigate to="/signup" />;
   }
 };
-
 export default PrivateLayout;

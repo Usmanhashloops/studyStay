@@ -6,10 +6,14 @@ import { Api } from "../../utils/Api";
 import { useNavigate } from "react-router-dom";
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 import Grid from "@mui/material/Grid";
-import CustomImageUpload from "../../components/imageUpload/imageupload";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
+import MultipleImages from "../../components/multipleImages/multipleImages";
+// import CustomImageUpload from "../../components/imageUpload/imageupload";
 import FormControl from "@mui/material/FormControl";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+
+import TextField from "@mui/material/TextField";
 const AddResidence = (props) => {
   const navigate = useNavigate();
   const [flatName, setFlatName] = useState("");
@@ -17,64 +21,83 @@ const AddResidence = (props) => {
   const [person, setPerson] = useState("");
   const [residenceName, setResidenceName] = useState("");
   const [residenceType, setResidenceType] = useState("");
-  const [image, setImage] = useState();
+  const [description, setDescription] = useState("");
+  const [image, setImage] = useState([]);
   const [openRoom, setOpenRoom] = useState(false);
   const [openApartments, setOpenApartments] = useState(false);
   const [residenceData, setResidenceData] = useState({});
   const [address, setAddress] = useState("");
   const [coordinates, setCoordinates] = useState(null);
   const apiKey = "AIzaSyC7Jz78vSl5-mHKv4eBOy1fRhmoph6loMA";
-
   const handleSelect = async (selectedAddress) => {
     try {
       const results = await geocodeByAddress(selectedAddress);
       const latLng = await getLatLng(results[0]);
       setCoordinates(latLng);
-      setAddress(selectedAddress); // Update the input field value
+      setAddress(selectedAddress);
     } catch (error) {
       console.error("Error while fetching coordinates:", error);
     }
   };
   const [imagePreview, setImagePreview] = useState();
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setImage(file);
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setImagePreview(reader.result);
-      };
-      reader.readAsDataURL(file);
+    const file = e.target.files;
+
+    var array = [];
+    if (imagePreview?.length > 0) {
+      setImage([...image, ...file]);
+      console.log("xsdsdsds", array);
+      array = imagePreview;
+      console.log("c", array);
+    } else {
+      setImage(file);
+    }
+    if (file.length > 0) {
+      for (let i = 0; i < file.length; i++) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          array.push(reader.result);
+
+          setImagePreview([...array]);
+        };
+        reader.readAsDataURL(file[i]);
+      }
     }
   };
-  const handleImageClose = () => {
-    setImage(null);
-    setImagePreview(null);
+  console.log(imagePreview, "imagePreview");
+  const handleImageClose = (index) => {
+    const updatedImagePreview = [...imagePreview];
+    updatedImagePreview.splice(index, 1);
+    setImagePreview(updatedImagePreview);
   };
   const HandlerAddResidence = async () => {
+    console.log("sdasd");
+    if (!flatName || !residenceType || !residenceName || !person || !price || !address) {
+      toast.error("Fill all the fields");
+    }
     const formData = new FormData();
     formData.append("flate_name", flatName);
     formData.append("resident_type", residenceType);
     formData.append("residence_name", residenceName);
     formData.append("total_person", person);
+    formData.append("description", description);
     formData.append("price", price);
     formData.append("address", address);
-    formData.append("images", image);
     formData.append("longitude", coordinates.lng);
     formData.append("latitude", coordinates.lat);
-
+    for (let i = 0; i < image.length; i++) {
+      formData.append("images[]", image[i]);
+    }
     const response = await Api("post", "add-residence", formData);
-
     console.log("Add-response", response);
     if (response?.status === 200 || response?.status === 201) {
       setResidenceData(response?.data?.data);
       toast.success(response?.data?.message);
       navigate("/dashboard/residence");
     } else {
-      toast.error(response?.data?.message);
+      toast.error("Error");
     }
   };
-  console.log("residenceData", residenceData);
   return (
     <div className="flex flex-col flex-1 ">
       <div className="py-12 bg-white sm:py-16 lg:py-8">
@@ -107,8 +130,8 @@ const AddResidence = (props) => {
                     </label>
                     <div className="mt-2.5 addInput">
                       <input
-                        type="text"
-                        name="email"
+                        type="number"
+                        name="price"
                         id=""
                         onChange={(e) => setPrice(e.target.value)}
                         placeholder="Enter Price"
@@ -146,30 +169,37 @@ const AddResidence = (props) => {
                   </div>
                   <div className="pt-1">
                     <div>
-                      <label for="" className="text-base font-medium text-gray-900 font-pj">
-                        Resident Type
-                      </label>
-                      <FormControl fullWidth style={{ marginTop: "10px", marginBottom: "10px" }} className="borderRadius">
-                        <Select labelId="demo-simple-select-label" id="demo-simple-select" value={residenceType} onChange={(e) => setResidenceType(e.target.value)} className="borderRadius">
-                          <MenuItem
-                            value={"room"}
+                      <FormControl>
+                        <label for="" className="text-base font-medium text-gray-900 font-pj">
+                          Resident Type
+                        </label>
+                        <RadioGroup
+                          style={{ marginTop: "10px" }}
+                          row
+                          aria-labelledby="demo-row-radio-buttons-group-label"
+                          name="row-radio-buttons-group"
+                          value={residenceType}
+                          onChange={(e) => setResidenceType(e.target.value)}
+                        >
+                          <FormControlLabel
+                            value="room"
+                            control={<Radio />}
+                            label="Room"
                             onClick={() => {
                               setOpenRoom(!openRoom);
                               setOpenApartments(false);
                             }}
-                          >
-                            room
-                          </MenuItem>
-                          <MenuItem
-                            value={"appartment"}
+                          />
+                          <FormControlLabel
+                            value="appartment"
+                            control={<Radio />}
+                            label="Appartment"
                             onClick={() => {
                               setOpenApartments(!openApartments);
                               setOpenRoom(false);
                             }}
-                          >
-                            appartment
-                          </MenuItem>
-                        </Select>
+                          />
+                        </RadioGroup>
                       </FormControl>
                     </div>
                   </div>
@@ -272,13 +302,46 @@ const AddResidence = (props) => {
                     </div>
                   </div>
                 )}
-
+                <div className="pt-4">
+                  <label for="" className="text-base font-medium text-gray-900 font-pj ">
+                    {" "}
+                    Description{" "}
+                  </label>
+                  <div className="mt-2.5 textArea border border-gray-200 rounded-xl">
+                    <TextField
+                      className="w-full border border-gray-400"
+                      id="outlined-multiline-flexible"
+                      placeholder="Enter Description"
+                      multiline
+                      maxRows={8}
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                    />
+                  </div>
+                </div>
                 <Grid container spacing={2} sx={{ marginTop: "15px" }}>
-                  <Grid item xs={12} sm={6} md={3}>
-                    <div className="bg-slate-200 h-52 rounded-lg relative">
-                      <CustomImageUpload handleImageChange={handleImageChange} image={imagePreview} imageNext={imagePreview} handleImageClose={handleImageClose} />
-                    </div>
-                  </Grid>
+                  {imagePreview?.map((value, index) => {
+                    return (
+                      <Grid item xs={12} sm={6} md={3} key={index}>
+                        <div className="bg-slate-200 h-52 rounded-lg relative">
+                          <MultipleImages handleImageChange={handleImageChange} image={value} imageNext={imagePreview} handleImageClose={() => handleImageClose(index)} />
+                        </div>
+                      </Grid>
+                    );
+                  })}
+                  {imagePreview ? (
+                    <Grid item xs={12} sm={6} md={3}>
+                      <div className="bg-slate-200 h-52 rounded-lg relative">
+                        <MultipleImages handleImageChange={handleImageChange} handleImageClose={handleImageClose} />
+                      </div>
+                    </Grid>
+                  ) : (
+                    <Grid item xs={12} sm={6} md={3}>
+                      <div className="bg-slate-200 h-52 rounded-lg relative">
+                        <MultipleImages handleImageChange={handleImageChange} image={imagePreview} imageNext={imagePreview} handleImageClose={handleImageClose} />
+                      </div>
+                    </Grid>
+                  )}
                 </Grid>
                 <Button
                   title={"Add"}
