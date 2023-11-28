@@ -18,7 +18,7 @@ body::-webkit-scrollbar {
   width: 100%;
 }
 .search-input {
-  width: 130%;
+  width: 100%;
   padding: 2px 40px 2px 40px;
   font-size: 14px;
   background-color: #f2f3f4ee;
@@ -56,7 +56,7 @@ body::-webkit-scrollbar {
   height: 100%;
 }
 .searchicon-apartmentbox {
-  background-color: #4065a5ab;
+  background-color: #4065a5e6;
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
   height: 55px !important;
@@ -736,7 +736,7 @@ input[type="number"]::-webkit-outer-spin-button {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Adjust the color and opacity as needed */
+    background-color: rgba(0, 0, 0, 0.2); /* Adjust the color and opacity as needed */
   }
 }
 .ImageRooms {

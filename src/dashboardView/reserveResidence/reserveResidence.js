@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import "react-responsive-modal/styles.css";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 import Button from "../../components/button";
+
+import { BsSearch } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import { Api } from "../../utils/Api";
 import { IMAGE_BASE_URL } from "../../utils/Url";
@@ -11,14 +13,24 @@ import { MdRemoveRedEye } from "react-icons/md";
 import BookResidenceModal from "./modal/BookResidenceModal";
 import Pagination from "../../components/Pagination/pagination";
 const ReserveResidence = () => {
+  const tabs = ["Reserved", "Booked", "Cancelled"];
   const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState(0);
   const [bookResidenceModal, setBookResidenceModal] = useState(false);
   const [valueReserveResidence, setValueReserveResidence] = useState();
   const [allReserveResidenceData, setAllReserveResidenceData] = useState();
   const [pages, setPages] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [statusApi, setStatusApi] = useState("Reserved");
+
+  const handleTabClick = (tabNumber, tab) => {
+    getAllReserveResidenceData(currentPage, tab);
+    setActiveTab(tabNumber);
+    setStatusApi(tab);
+  };
+
   useEffect(() => {
-    getAllReserveResidenceData(currentPage);
+    getAllReserveResidenceData(currentPage, statusApi);
   }, [currentPage]);
   const getAllReserveResidenceData = async (page) => {
     const response = await Api("get", `show-reserve-residence?page=${page}`);
@@ -42,6 +54,29 @@ const ReserveResidence = () => {
     <div className="flex flex-col flex-1 xl:pl-64">
       <div className="py-12 bg-white sm:py-16 lg:py-8">
         <div className="px-4 sm:px-6 lg:px-8">
+          <div className=" mb-8  sm:flex sm:justify-between">
+            <nav className="flex -mb-px space-x-10">
+              {tabs.map((tab, index) => (
+                <div
+                  key={index}
+                  className={` ${
+                    activeTab === index
+                      ? "py-2 text-sm font-medium	 text-indigo-600 transition-all duration-200 border-b-2 border-indigo-600 whitespace-nowrap cursor-pointer"
+                      : "py-2 text-sm font-medium text-gray-500 transition-all duration-200 border-b-2 border-transparent hover:border-gray-300 whitespace-nowrap cursor-pointer"
+                  }`}
+                  onClick={() => handleTabClick(index, tab)}
+                >
+                  {tab}
+                </div>
+              ))}
+            </nav>
+            <nav className="flex">
+              <div>
+                <input className="search-input" placeholder="search or filter" />
+                <BsSearch className="ml-3 absolute" style={{ color: "#000000", marginTop: "-25px" }} />
+              </div>
+            </nav>
+          </div>
           <div className="flex flex-col ">
             <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">

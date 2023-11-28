@@ -15,6 +15,7 @@ const ConfirmationReserveModal = (props) => {
   const { open, onClose, sendData } = props;
   const [showSuccessfullModal, setShowSuccessfullModal] = useState(false);
   const localData = localStorage.getItem("auth-token");
+  console.log("--023-0-30", localData);
   const handlerReserveResidence = async () => {
     if (localData) {
       const response = await Api("post", `reserve-residence/${sendData?.id?.id}`);

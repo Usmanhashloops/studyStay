@@ -25,8 +25,8 @@ const Apartments = () => {
   const [residenceData, setResidenceData] = useState();
   const [startIndex, setStartIndex] = useState(0);
   const imageContainerRef = useRef(null);
-  const [coordinates, setCoordinates] = useState(null);
   const [address, setAddress] = useState("");
+  const [coordinates, setCoordinates] = useState(null);
   const handleSelect = async (selectedAddress) => {
     try {
       const results = await geocodeByAddress(selectedAddress);
@@ -108,22 +108,72 @@ const Apartments = () => {
   };
 
   const handleNext = () => {
-    setStartIndex((prevIndex) => Math.min(prevIndex + 1, Math.max(0, flashSearchData?.length - 6)));
+    setStartIndex((prevIndex) => Math.min(prevIndex + 1, Math.max(0, flashSearchData?.length - 5)));
   };
+  useEffect(() => {
+    const firstImage = imageContainerRef.current?.querySelector(".slider");
+    if (firstImage) {
+      setImageWidth(firstImage.clientWidth);
+    }
+  }, [flashSearchData]);
 
   return (
     <div>
-      <Banner />
-
+      {/* <Banner /> */}
+      <div className="bg-apartment-background">
+        <div className="pt-60 z-30 ">
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={12} md={6} lg={6}>
+              <div className=" text-3xl text-slate-100 font-bold z-30 pl-4 pt-2  md:pl-32">{searchValue}</div>
+            </Grid>
+            <Grid item xs={12} sm={12} md={6} lg={6}>
+              <div className="">
+                <PlacesAutocomplete value={address} onChange={setAddress} onSelect={handleSelect} searchOptions={{ types: ["geocode"] }}>
+                  {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                    <div>
+                      <div className="flex items-center justify-center ">
+                        <input
+                          className="search-input-banner shadow-2xl"
+                          {...getInputProps({
+                            placeholder: "Enter address or location name",
+                            onKeyDown: (e) => {
+                              if (e.key === "Enter") {
+                                navigate(`/apartments/${encodeURIComponent(address)}`, { state: { coordinates: coordinates } });
+                              }
+                            },
+                          })}
+                        />
+                        <div className="searchicon-apartmentbox">
+                          <BsSearch style={{ color: "#ffffff", height: "25px", width: "25px" }} />
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-center z-30 marginLeft">
+                        <div className="bg-gray-500 rounded-xl shadow-xl z-30  dropdownContainer ">
+                          {loading && <div className=" px-2 py-2">Loading...</div>}
+                          {suggestions.map((suggestion) => (
+                            <div className=" px-2 py-2 " key={suggestion.id}>
+                              <div {...getSuggestionItemProps(suggestion)}>{suggestion.description}</div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </PlacesAutocomplete>
+              </div>
+            </Grid>
+          </Grid>
+        </div>
+      </div>
       <section class="py-12 bg-neutral-50 sm:py-16 lg:py-16">
         <div class="px-2 mx-auto sm:px-6 lg:px-0 max-w-7xl">
-          <div className=" text-3xl font-pj text-slate-500 font-bold">{searchValue}</div>
-          <div className=" text-2xl text-slate-500  font-bold font-pj text-center mt-10">Flash Opportunity</div>
+          {/* <div className=" text-3xl font-pj text-slate-500 font-bold">{searchValue}</div> */}
+          <div className=" text-3xl text-slate-500  font-bold font-pj text-center ">Flash Opportunity</div>
           {/* big Screen flash opportunities slider like tablet,pc or large pc */}
           <div className="app mt-6 mb-12">
             {flashSearchData && flashSearchData.length > 0 ? (
               <div className="slider pt-4">
-                {flashSearchData?.length > 5 ? (
+                {flashSearchData?.length > 7 ? (
                   <button
                     className="nav-button"
                     onClick={() => {
@@ -162,7 +212,7 @@ const Apartments = () => {
                     </div>
                   ))}
                 </div>
-                {flashSearchData?.length > 5 ? (
+                {flashSearchData?.length > 7 ? (
                   <button
                     className="nav-button-right"
                     onClick={() => {
@@ -183,7 +233,7 @@ const Apartments = () => {
 
           {/* small Screen flash opportunities slider like Mobile phone */}
 
-          <div className=" text-2xl text-slate-500 font-bold font-pj text-center pt-2 mb-10">Featured Opportunity</div>
+          <div className=" text-3xl text-slate-500 font-bold font-pj text-center pt-2 mb-10">Featured Opportunity</div>
           {availableSearchData ? (
             <Grid container spacing={2}>
               {availableSearchData.map((item, i) => (
@@ -201,7 +251,7 @@ const Apartments = () => {
                           </div>
                         </div>
                         <div className="">
-                          <div className="text-sm flex justify-end">{item?.distance == 0 ? 0 : item?.distance.toFixed(3)} Km</div>
+                          <div className="text-sm flex justify-end">{item?.distance == 0 ? 0 : item?.distance.toFixed(1)} Km</div>
                           <div className="flex justify-end">
                             <img src={image} className="imagesmallIcon mr-2" />
                             <div className=" text-sm text-right mt-1">

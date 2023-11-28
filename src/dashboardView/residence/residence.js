@@ -4,6 +4,7 @@ import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 import Button from "../../components/button";
 import { useNavigate } from "react-router-dom";
 import { Api } from "../../utils/Api";
+import { BsSearch } from "react-icons/bs";
 import { IMAGE_BASE_URL } from "../../utils/Url";
 import GeocodeAddress from "../../components/getAddress/getAddress";
 import Pagination from "../../components/Pagination/pagination";
@@ -60,6 +61,15 @@ const Residence = () => {
                 onClick={() => navigate("/add_Residence")}
               />
             </div>
+            {/* <div className=" mb-8  sm:flex sm:justify-between">
+              <nav className="flex -mb-px space-x-10"></nav>
+              <nav className="flex">
+                <div>
+                  <input className="search-input" placeholder="search or filter" />
+                  <BsSearch className="ml-3 absolute" style={{ color: "#000000", marginTop: "-25px" }} />
+                </div>
+              </nav>
+            </div> */}
             <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
                 <table className="min-w-full lg:divide-gray-200 lg:divide-y">

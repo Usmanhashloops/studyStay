@@ -9,6 +9,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
+import Icon from "../../assets/StudyStay2preview.png";
 import { Api } from "../../utils/Api";
 import { useParams } from "react-router-dom";
 import { IoHome } from "react-icons/io5";
@@ -18,7 +19,6 @@ import PlacesAutocomplete, { geocodeByAddress, getLatLng } from "react-places-au
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  console.log("location==>", location.pathname);
   const [showProfileData, setShowProfileData] = useState({});
   const [expanded, setExpanded] = useState(false);
   const toggleExpanded = () => {
@@ -38,14 +38,16 @@ const Header = () => {
       console.error("Error while fetching coordinates:", error);
     }
   };
-  const localStorageData = localStorage.getItem("auth-token");
-  const decoded = jwtDecode(localStorageData);
-  console.log("decoded", decoded);
+  const localData = localStorage.getItem("auth-token");
+  // const decoded = jwtDecode(localData);
+  console.log("localData", localData);
   const getProfileData = async () => {
-    const response = await Api("get", `profile-get/${decoded?.sub}`);
-    if (response?.data?.code === 200 || response?.data?.code === 201) {
-      setShowProfileData(response?.data?.data);
-    }
+    // if (localData) {
+    //   const response = await Api("get", `profile-get/${decoded?.sub}`);
+    //   if (response?.data?.code === 200 || response?.data?.code === 201) {
+    //     setShowProfileData(response?.data?.data);
+    //   }
+    // }
   };
   useEffect(() => {
     getProfileData();
@@ -70,13 +72,12 @@ const Header = () => {
   };
   console.log("showProfileData", showProfileData);
   return (
-    <header className="py-4 bg-white " x-data="{ expanded: false }">
+    <header className=" bg-white " x-data="{ expanded: false }">
       <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-0">
         <div className="flex items-center justify-between">
-          <div className="flex-shrink-0">
-            <a title="" className="flex">
-              <div className="text-xl text-slate-500 font-bold font-pj">StudyStay</div>
-            </a>
+          {" "}
+          <div style={{ paddingTop: "5px", paddingBottom: "-10px" }}>
+            <img src={Icon} style={{ height: "78px", width: "92px" }} />
           </div>
           <div className="flex lg:hidden">
             <button type="button" className="text-gray-900" onClick={toggleExpanded} aria-expanded={expanded}>
@@ -92,7 +93,6 @@ const Header = () => {
               </span>
             </button>
           </div>
-
           <nav className="hidden lg:flex lg:items-center lg:justify-center lg:space-x-12">
             <a
               href=""
@@ -128,7 +128,6 @@ const Header = () => {
               Contact us{" "}
             </a>
           </nav>
-
           {localAuth ? (
             <nav class="hidden lg:flex lg:items-end lg:justify-end lg:space-x-4">
               <div className="capitalize mt-1 text-base font-medium text-gray-900 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-50 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2">
