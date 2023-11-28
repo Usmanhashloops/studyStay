@@ -96,9 +96,6 @@ const Profile = () => {
   const decoded = jwtDecode(localStorageData);
   console.log("decoded", decoded);
   const HandlerUpdate = async () => {
-    // if (!gender || !cook || !tidy || !allergies || !pets || !smoke || !preference || !visitors || !image || !social || !bathroom || !shareRoom || !briefDescription) {
-    //   toast.error("Fill all the fields");
-    // }
     const formData = new FormData();
     formData.append("name", name);
     formData.append("gender", gender);
@@ -139,10 +136,7 @@ const Profile = () => {
                 <div className=" relative  flex items-center justify-center">
                   <img className="flex-shrink-0 object-cover w-40 h-40 rounded-full" src={!imagePreview ? IMAGE_BASE_URL + image : imagePreview} alt="" />
 
-                  <div
-                    className="cursor-pointer absolute  ml-32 mt-24"
-                    // onClick={handleImageClose}
-                  >
+                  <div className="cursor-pointer absolute  ml-32 mt-24">
                     <div className="h-14 w-14 bg-blue-200 rounded-full flex justify-center items-center">
                       <label htmlFor="fileInputt">
                         <BsPencil className="h-7 w-7 text-black" />
@@ -150,9 +144,6 @@ const Profile = () => {
                     </div>
                   </div>
                   <input type="file" multiple accept="image/*" id="fileInputt" style={{ display: "none" }} onChange={handleImageChange} />
-                  {/* <div className="bg-slate-200 h-52 w-52 rounded-full relative">
-                    <CustomImageUpload handleImageChange={handleImageChange} image={imagePreview} handleImageClose={handleImageClose} />
-                  </div> */}
                 </div>
               </div>
               <div className="grid sm:grid-cols-2 gap-6 sm:items-center flex items-center justify-center">
@@ -256,9 +247,9 @@ const Profile = () => {
                     <FormControlLabel value="No" control={<Radio size="small" />} label="No" onClick={() => setAllergiesInput(false)} />
                   </RadioGroup>
                 </FormControl>
-                {allergiesInput && (
-                  <div>
-                    <div className="mb-2  font-semibold font-pj text-base mt-2">Which ones?</div>
+                {allergies === 1 || allergies === "Yes" ? (
+                  <FormControl fullWidth>
+                    <div className="mb-2  font-semibold font-pj text-base">Which ones?</div>
                     <input
                       type="text"
                       name=""
@@ -268,7 +259,9 @@ const Profile = () => {
                       onChange={(e) => setAllergiesDesc(e.target.value)}
                       className="border block w-full px-4 py-3 placeholder-gray-500 border-gray-300 rounded-lg focus:ring-indigo-600 focus:border-indigo-600 sm:text-sm caret-indigo-600"
                     />
-                  </div>
+                  </FormControl>
+                ) : (
+                  ""
                 )}
 
                 <FormControl fullWidth>

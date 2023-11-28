@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { IMAGE_BASE_URL } from "../../utils/Url";
 import { useNavigate } from "react-router-dom";
-const SliderApartment = ({ images, imageDummy, item }) => {
+const FlashSlider = ({ images, imageDummy, item }) => {
   const navigate = useNavigate();
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -28,7 +28,7 @@ const SliderApartment = ({ images, imageDummy, item }) => {
         src={images[currentIndex].images ? IMAGE_BASE_URL + images[currentIndex].images : imageDummy[currentIndex].imageDummy}
         alt={`Image ${currentIndex + 1}`}
         style={{
-          height: "340px",
+          height: "180px",
           width: "100%",
           objectFit: "cover",
           borderTopLeftRadius: "10px",
@@ -43,4 +43,4 @@ const SliderApartment = ({ images, imageDummy, item }) => {
     </div>
   );
 };
-export default SliderApartment;
+export default FlashSlider;

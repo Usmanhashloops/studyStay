@@ -9,129 +9,121 @@ import { Api } from "../../utils/Api";
 import toast from "react-hot-toast";
 import { useLocation } from "react-router-dom";
 import { IMAGE_BASE_URL } from "../../utils/Url";
-
+import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
+import { useMemo } from "react";
+import { useNavigate } from "react-router-dom";
+import ConfirmationReserveModal from "./residentProfileViewModal/confirmationReserveModal";
 const Rooms = () => {
+  const navigate = useNavigate();
   const numbers = ["", "", "", ""];
   const residents = ["", "", ""];
   const location = useLocation();
   const [showResidentProfileModal, setshowResidentProfileModal] = useState(false);
+  const [showConfirmationReserveModal, setShowConfirmationReserveModal] = useState(false);
   const handleOpen = () => setshowResidentProfileModal(true);
   const handleClose = () => setshowResidentProfileModal(false);
   const [allReserveResidenceData, setAllReserveResidenceData] = useState();
+  const [residenceDataByID, setResidenceDataByID] = useState({});
   const [roomData, setRoomData] = useState(location.state.roomData);
   const [profileData, setProfileData] = useState();
   const [showRoomNumber, setshowRoomNumber] = useState(true);
+  const startIndex = 1;
+  const [sendData, setSendData] = useState();
+  const endIndex = 4;
+
+  const visibleImages = roomData?.images.slice(startIndex, endIndex + 1);
   useEffect(() => {
     getAllReserveResidenceData();
   }, []);
+  useEffect(() => {
+    getResidenceById();
+  }, []);
   const getAllReserveResidenceData = async () => {
     const response = await Api("get", "show-reserve-residence");
-    console.log("response", response);
+    // console.log("response", response);
     if (response?.status === 200 || response?.status == 201) {
       setAllReserveResidenceData(response?.data?.data?.data);
     }
   };
-  console.log("roomData", roomData);
-  const handlerReserveResidence = async () => {
-    const response = await Api("post", `reserve-residence/${roomData?.id?.id}`);
+  const getResidenceById = async () => {
+    const response = await Api("get", `get-residence/${roomData?.id?.id}`);
     console.log("response", response);
-    if (response?.status === 200 || response?.status === 201) {
-      toast.success("Reserved Successfully");
-    } else {
-      toast.error("Already reserved");
+    if (response?.status === 200 || response?.status == 201) {
+      setResidenceDataByID(response?.data?.data);
     }
   };
+  console.log("residenceDataByID", residenceDataByID);
+  console.log("sendData", sendData);
+
+  const lat = roomData?.id?.latitude;
+  const lng = roomData?.id?.longitude;
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: "AIzaSyC7Jz78vSl5-mHKv4eBOy1fRhmoph6loMA",
+  });
+  const center = useMemo(() => ({ lat: 18.52043, lng: 73.856743 }), []);
+  const customMarker = {
+    path: "M29.395,0H17.636c-3.117,0-5.643,3.467-5.643,6.584v34.804c0,3.116,2.526,5.644,5.643,5.644h11.759   c3.116,0,5.644-2.527,5.644-5.644V6.584C35.037,3.467,32.511,0,29.395,0z M34.05,14.188v11.665l-2.729,0.351v-4.806L34.05,14.188z    M32.618,10.773c-1.016,3.9-2.219,8.51-2.219,8.51H16.631l-2.222-8.51C14.41,10.773,23.293,7.755,32.618,10.773z M15.741,21.713   v4.492l-2.73-0.349V14.502L15.741,21.713z M13.011,37.938V27.579l2.73,0.343v8.196L13.011,37.938z M14.568,40.882l2.218-3.336   h13.771l2.219,3.336H14.568z M31.321,35.805v-7.872l2.729-0.355v10.048L31.321,35.805",
+    fillColor: "red",
+    fillOpacity: 2,
+    strokeWeight: 1,
+    rotation: 0,
+    scale: 1,
+  };
+
   return (
     <section class="py-8 bg-neutral-50 sm:py-16 lg:py-12">
-      <div class="px-2 mx-auto sm:px-6 lg:px-0 max-w-7xl">
-        <nav class="flex lg:space-x-6t pb-12">
-          <a
-            title=""
-            class="
-        inline-flex
-        items-center
-        justify-center
-        px-7
-        py-2
-        text-base
-        font-semibold
-        leading-7
-        text-gray-900
-        transition-all
-        duration-200
-        bg-transparent
-        border border-gray-900
-        rounded-xl
-        font-pj
-        focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900
-        hover:bg-gray-900 hover:text-white
-        focus:bg-gray-900 focus:text-white
-    "
-            role="button"
-          >
-            Common Areas
-          </a>
-          <a
-            title=""
-            class="
-        inline-flex
-        items-center
-        justify-center
-        px-7
-        py-2
-        text-base
-        font-semibold
-        leading-7
-        text-gray-900
-        transition-all
-        duration-200
-        bg-transparent
-        border border-gray-900
-        rounded-xl
-        font-pj
-        focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900
-        hover:bg-gray-900 hover:text-white
-        focus:bg-gray-900 focus:text-white
-        ml-2
-    "
-            role="button"
-          >
-            Rooms
-          </a>
-        </nav>
+      <div class="px-2 mx-auto sm:px-6 lg:px-0 max-w-7xl pt-6">
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={6} md={8}>
+          <Grid item xs={12} sm={6} md={7} lg={8}>
             <div className="bg-slate-200  rounded-lg">
-              <SliderRoom images={roomData?.images} showRoomNumber={showRoomNumber} />
+              <SliderRoom images={roomData?.images} />
             </div>
           </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <Grid container spacing={2}>
-              {numbers.map((item, i) => (
-                <Grid item xs={12} sm={6} md={6} key={i}>
-                  <div className="bg-slate-200  rounded-lg relative  h-52">
-                    <CustomRoomImageUpload />
+          <Grid item xs={12} sm={6} md={5} lg={4}>
+            <div className="">
+              <div className=" px-5 py-4 pb-4 scrollRemove  card_ResidenceDetail ">
+                {roomData?.id?.price ? (
+                  <div className="flex">
+                    <div className="font-bold text-xl text-black mt-1">
+                      <span className="">€</span>
+                      {roomData?.id?.price.toLocaleString()}
+                    </div>
+                    <div className="mt-2 font-medium text-base ml-1">/ month</div>
                   </div>
-                </Grid>
-              ))}
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={6} md={8}>
-            <div className="mt-8">
-              <div className="text-lg text-slate-600 mb-2">Description</div>
-              <div className=" bg-slate-200  rounded-lg px-4 py-4 pb-4 scrollRemove" style={{ height: "180px", overflow: "auto" }}>
-                {roomData?.id?.description}
-              </div>
-            </div>
-          </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <div className="mt-8">
-              <div className="text-lg text-slate-600 mb-2">Residents & Room Capacity</div>
-              <div className=" bg-slate-200  rounded-lg px-4 py-4 pb-4 scrollRemove" style={{ height: "180px", overflow: "auto" }}>
+                ) : (
+                  ""
+                )}
+
+                <nav class="flex justify-center items-center mb-2 mt-9 ">
+                  <a
+                    onClick={() => {
+                      setShowConfirmationReserveModal(true);
+                      setSendData(roomData);
+                    }}
+                    // onClick={handlerReserveResidence}
+                    className="
+        inline-flex
+        items-center
+        justify-center
+        px-8
+        py-2
+        text-base
+        font-semibold
+        leading-7
+        bg-black
+        shadow-xl
+        rounded-xl
+        text-white        
+    "
+                    role="button"
+                  >
+                    Reserve
+                  </a>
+                </nav>
+                {/* <div className="text-base text-center text-black  mt-3">You want be charged yet</div> */}
                 <Grid container spacing={2}>
-                  <Grid item xs={9} sm={9} md={9}>
+                  <Grid item xs={9} sm={7} md={7}>
+                    <div className="text-lg text-black  font-bold  pb-3 mt-6">Residents</div>
                     {roomData &&
                       roomData?.history?.map((item, i) => (
                         <div
@@ -146,11 +138,10 @@ const Rooms = () => {
                           <div className="mt-2 ml-2  text-sm text-black capitalize cursor-pointer"> {item?.user_id?.name} </div>
                         </div>
                       ))}
-                    {/* <div className="text-sm text-blue-600 font-semibold ml-9 mt-4  cursor-pointer" onClick={handleOpen}>
-                      See More
-                    </div> */}
+                    {roomData?.history ? "" : <div className="mt-3 text-base text-black capitalize cursor-pointer"> No Resident Exist </div>}
                   </Grid>
-                  <Grid item xs={3} sm={3} md={3}>
+                  <Grid item xs={3} sm={5} md={5}>
+                    <div className="text-lg text-black  font-bold pb-3 mt-6 flex items-end justify-end">Room Capacity</div>
                     <div className="mt-3 text-right text-sm font-semibold text-slate-700">
                       {roomData?.id?.remaining_person}/{roomData?.id?.total_person}
                     </div>
@@ -160,34 +151,36 @@ const Rooms = () => {
             </div>
           </Grid>
         </Grid>
-        <nav class="fixed right-10 bottom-4">
-          <a
-            onClick={handlerReserveResidence}
-            className="
-        inline-flex
-        items-center
-        justify-center
-        px-3
-        py-2
-        text-base
-        font-semibold
-        leading-7
-        transition-all
-        duration-200
-        bg-slate-400
-        shadow-xl
-        rounded-xl
-        font-pj
-        focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900
-        hover:hover:text-white
-        focus: focus:text-white
-    "
-            role="button"
-          >
-            Reserve Residence
-          </a>
-        </nav>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={12} md={9} lg={8}>
+            <div className="mt-12">
+              <div className="flex">
+                <div className="capitalize sm:text-2xl text-black  font-semibold ">{roomData?.id?.residence_name}</div>
+                <div className="ml-2 sm:text-2xl text-black  font-semibold ">{roomData?.id?.address}</div>
+              </div>
+              {roomData?.id ? (
+                <div className="mt-3 sm:text-lg">
+                  <span className="text-black font-semibold">Capacity</span>: {roomData?.id?.total_person} Person
+                </div>
+              ) : (
+                ""
+              )}
+              <div className="border-b border-slate-300 mt-5"></div>
+              <div className="mt-8 text-lg">{roomData?.id?.description}</div>
+            </div>
+          </Grid>
+        </Grid>
+        <div className="App-container mt-14">
+          {!isLoaded ? (
+            <h1>Loading...</h1>
+          ) : (
+            <GoogleMap mapContainerClassName="map-container" center={center} zoom={15}>
+              <Marker position={{ lat: 18.52043, lng: 73.856743 }} icon={customMarker} />
+            </GoogleMap>
+          )}
+        </div>
       </div>
+      {showConfirmationReserveModal && <ConfirmationReserveModal open={showConfirmationReserveModal} onClose={() => setShowConfirmationReserveModal(false)} sendData={sendData} />}
       {showResidentProfileModal && <ResidentProfileModal open={showResidentProfileModal} onClose={handleClose} profileData={profileData} />}
     </section>
   );

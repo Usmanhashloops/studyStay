@@ -13,8 +13,8 @@ const ResidentProfileModal = (props) => {
       <DialogContent className="pb-6">
         <DialogContentText id="alert-dialog-description">
           <div className="modal_SeeProfile">
-            <div className="font-pj  text-lg text-current font-bold text-center pt-1 mb-3">Detail of Resident</div>
-            <div className="flex item-center justify-center mt-6 mb-6 ">
+            <div className="font-pj  text-lg text-current font-bold sm:text-center pt-1 mb-3">Detail of Resident</div>
+            <div className="flex sm:item-center sm:justify-center mt-6 mb-6 ">
               <img className="flex-shrink-0  object-cover w-40 h-40 rounded-full" src={IMAGE_BASE_URL + profileData?.user_id?.image} alt="" />
             </div>
             <div className="grid sm:grid-cols-2 gap-4 mb-3 pb-3 ">
@@ -26,16 +26,9 @@ const ResidentProfileModal = (props) => {
                   className=" capitalize border mt-3 block w-full px-4 py-3 placeholder-gray-500 border-gray-300 rounded-lg focus:ring-indigo-600 focus:border-indigo-600 sm:text-sm caret-indigo-600"
                 />
               </div>
+
               <div>
-                <div className="block text-sm font-bold text-gray-900 font-pj sm:mt-px sm:pt-2">Email</div>
-                <input
-                  disabled
-                  value={profileData?.user_id?.email}
-                  className=" capitalize border mt-3 block w-full px-4 py-3 placeholder-gray-500 border-gray-300 rounded-lg focus:ring-indigo-600 focus:border-indigo-600 sm:text-sm caret-indigo-600"
-                />
-              </div>
-              <div>
-                <div className="block text-sm font-bold text-gray-900 font-pj ">Gender</div>
+                <div className="block text-sm font-bold text-gray-900 font-pj sm:mt-px sm:pt-2">Gender</div>
                 <input
                   disabled
                   value={profileData?.user_id?.gender}
@@ -110,6 +103,7 @@ const ResidentProfileModal = (props) => {
                 <div>
                   <div className="block text-sm font-bold text-gray-900 font-pj "> Which ones? </div>
                   <input
+                    disabled
                     value={profileData?.user_id?.which_one}
                     className="border block w-full px-4 py-3 mt-3 placeholder-gray-500 border-gray-300 rounded-lg focus:ring-indigo-600 focus:border-indigo-600 sm:text-sm caret-indigo-600"
                   />

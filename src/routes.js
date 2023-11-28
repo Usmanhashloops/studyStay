@@ -8,12 +8,14 @@ import SignUp from "./pages/authentication/signup";
 import PrivateLayout from "./layout/Private/private";
 import AdminDashboard from "./dashboardView/Admin/admin";
 import Profile from "./pages/profile/profile";
+import RemoveResidence from "./pages/removeResidence/removeResidence";
 import ChangePassword from "./pages/authentication/changePassword";
 import Residence from "./dashboardView/residence/residence";
 import AddResidence from "./dashboardView/residence/addResidence";
 import UpdateResidence from "./dashboardView/residence/updateResidence";
 import ReserveResidence from "./dashboardView/reserveResidence/reserveResidence";
 import InformationPage from "./pages/authentication/informationPage";
+import HeaderRender from "./layout/headerLayout/headerLayout";
 const routes = [
   {
     path: "/",
@@ -23,6 +25,11 @@ const routes = [
       { path: "/apartments/:searchValue", element: <Apartments /> },
       { path: "/rooms", element: <Rooms /> },
     ],
+  },
+  {
+    path: "/reserve_residence",
+    element: <HeaderRender />,
+    children: [{ path: "/reserve_residence", element: <RemoveResidence /> }],
   },
   { path: "/login", element: <Login /> },
   { path: "/signup", element: <SignUp /> },

@@ -4,7 +4,7 @@
 body {
   margin: 0px;
   padding: 0px;
-  font-family: Roboto, Helvetica, Arial, sans-serif;
+  font-family: "Inter", sans-serif !important;
 }
 body::-webkit-scrollbar {
   display: none !important;
@@ -27,6 +27,45 @@ body::-webkit-scrollbar {
   border: none !important;
   color: #000 !important;
   position: relative;
+}
+.search-input-banner {
+  width: 50%;
+  padding: 2px 40px 2px 20px;
+  font-size: 14px;
+  background-color: #ffffff;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  height: 55px;
+  border: none !important;
+  color: #000 !important;
+  position: relative;
+}
+.dropdownContainer {
+  width: 50%;
+}
+.searchiconbox {
+  background-color: #414141;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  height: 55px !important;
+  width: 55px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+.searchicon-apartmentbox {
+  background-color: #4065a5ab;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  height: 55px !important;
+  width: 55px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 .search-icon {
   position: absolute;
@@ -126,6 +165,9 @@ body::-webkit-scrollbar {
   align-items: center;
   height: 100%;
 }
+.marginLeft {
+  margin-left: -40px;
+}
 @media only screen and (min-width: 550px) and (max-width: 1000px) {
   .header-container {
     padding-top: 20px;
@@ -135,6 +177,24 @@ body::-webkit-scrollbar {
 @media only screen and (min-width: 300px) and (max-width: 600px) {
   .Menu-Icon {
     margin-top: 11px;
+  }
+  .search-input-banner {
+    width: 80%;
+    padding: 2px 40px 2px 20px;
+    font-size: 14px;
+    background-color: #ffffff;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    height: 54px;
+    border: none !important;
+    color: #000 !important;
+    position: relative;
+  }
+  .dropdownContainer {
+    width: 90%;
+  }
+  .marginLeft {
+    margin-left: -10px;
   }
 }
 .search-dropdown-container {
@@ -270,7 +330,7 @@ body::-webkit-scrollbar {
   border: 1px solid #fff;
 }
 .modal_SeeProfile {
-  height: 500px;
+  height: 550px;
   width: 550px;
   border: 1px solid #fff;
   overflow-y: auto;
@@ -296,6 +356,7 @@ body::-webkit-scrollbar {
 .modalViewReserveResidence {
   height: 580px;
   width: 560px;
+  overflow-y: auto;
 }
 .modalScrollbar .css-vqmohf-MuiButtonBase-root-MuiRadio-root.Mui-checked {
   color: #000000 !important;
@@ -329,7 +390,7 @@ body::-webkit-scrollbar {
     height: 300px;
   }
   .modal_SeeProfile {
-    width: 290px;
+    width: 290px !important;
     height: 500px;
   }
   .modal_confirmation {
@@ -448,15 +509,18 @@ body::-webkit-scrollbar {
 .image-container {
   display: flex;
   position: relative;
+  transition: transform 0.5s ease;
 }
 .img {
-  border-radius: 15px;
-  height: 130px !important;
+  border-top-right-radius: 12px;
+  border-top-left-radius: 12px;
+  height: 230px !important;
   background-color: #878f9a;
   width: 100% !important;
+  object-fit: cover;
 }
 .img-slider {
-  width: 200px !important;
+  width: 240px !important;
   object-fit: contain;
   border-radius: 10px !important;
   margin-left: 6px;
@@ -492,18 +556,14 @@ body::-webkit-scrollbar {
 }
 @media only screen and (min-width: 280px) and (max-width: 768px) {
   .img {
-    height: 200px;
+    height: 170px;
     object-fit: cover;
   }
   .img-slider {
-    width: 100% !important;
+    width: 200px !important;
   }
 }
-@media only screen and (min-width: 280px) and (max-width: 550px) {
-  .slider {
-    /* display: none; */
-  }
-}
+
 @media only screen and (min-width: 551px) {
   .slider-small {
     display: none;
@@ -511,7 +571,7 @@ body::-webkit-scrollbar {
 }
 @media only screen and (min-width: 769px) and (max-width: 1110px) {
   .img {
-    height: 200px;
+    height: 180px;
     object-fit: cover;
   }
 }
@@ -594,6 +654,14 @@ body::-webkit-scrollbar {
   margin-top: -2px;
   cursor: pointer;
 }
+.imagesmallIcon {
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  margin-top: 4px;
+  object-fit: cover;
+  cursor: pointer;
+}
 .imageIcon-view {
   height: 45px;
   width: 45px;
@@ -646,4 +714,48 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 .Mui-checked.Mui-focusVisible .MuiRadio-root {
   outline: none !important; /* Remove the outline when focused */
+}
+.bg-custom-background {
+  background-image: url("https://www.ilaan.com/assets/images/pictures/ilaan-main-opt.webp?v=1.2");
+  background-size: cover;
+  height: 580px;
+  width: 100%;
+  background-position: center;
+}
+.bg-apartment-background {
+  background-image: url("./assets/student-bedroom-dormitory-night-with-bunk-bed-desk-chair_88138-1039.jpg");
+  background-size: cover;
+  height: 580px;
+  width: 100%;
+  background-position: center;
+  position: relative;
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Adjust the color and opacity as needed */
+  }
+}
+.ImageRooms {
+  width: -webkit-fill-available !important;
+}
+.card_ResidenceDetail {
+  border: 1px solid rgb(221, 221, 221);
+  border-radius: 12px;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 6px 16px;
+  background-color: #ffffff;
+  height: 434px;
+  overflow-y: auto;
+}
+.App-container {
+  height: 70vh;
+}
+
+.map-container {
+  height: 100%;
+  width: 100%;
+  border-radius: 15px;
 }

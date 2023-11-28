@@ -6,13 +6,13 @@ import DialogContentText from "@mui/material/DialogContentText";
 import { Api } from "../../../utils/Api";
 import toast from "react-hot-toast";
 const BookResidenceModal = (props) => {
-  const { open, onClose, valueReserveResidence } = props;
+  const { open, onClose, valueReserveResidence, setAllReserveResidenceData } = props;
   console.log("valueReserveResidence", valueReserveResidence);
   const handlerBookResidence = async () => {
     const response = await Api("post", `booking-residence/${valueReserveResidence?.item?.id}`);
     console.log("response", response);
     if (response?.status === 200 || response?.status === 201) {
-      // setAllReserveResidenceData(allReserveResidenceData.filter((data) => data?.id !== valueReserveResidence?.id));
+      setAllReserveResidenceData(response?.data?.data?.status);
       toast.success(response?.data?.message);
       onClose();
     } else {
@@ -35,7 +35,7 @@ const BookResidenceModal = (props) => {
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
           <div className="modalViewReserveResidence">
-            <h1 className="-mt-2 mb-8 text-center font-bold text-xl text-black font-pj">Book Residence</h1>
+            <h1 className="mt-2 mb-8 text-center font-bold text-xl text-black font-pj">View Residence</h1>
             <div className="grid  sm:grid-cols-2 ">
               <div className="mb-2">
                 <div className="mb-2  font-semibold font-pj text-base mt-2">Name</div>
@@ -114,34 +114,38 @@ const BookResidenceModal = (props) => {
                 >
                   Cancel Residence
                 </a>
-                <a
-                  onClick={handlerBookResidence}
-                  title=""
-                  class="
-        inline-flex
-        items-center
-        justify-center
-        px-7
-        py-2
-        text-base
-        font-semibold
-        leading-7
-        text-white
-        transition-all
-        duration-200
-        bg-black
-        border border-gray-900
-        rounded-xl
-        font-pj
-        focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900
-        hover:bg-gray-900 hover:text-white
-        focus:bg-gray-900 focus:text-white
-        ml-2
-    "
-                  role="button"
-                >
-                  Book Residence
-                </a>
+                {valueReserveResidence?.item?.status === "booked" ? (
+                  ""
+                ) : (
+                  <a
+                    onClick={handlerBookResidence}
+                    title=""
+                    class="
+    inline-flex
+    items-center
+    justify-center
+    px-7
+    py-2
+    text-base
+    font-semibold
+    leading-7
+    text-white
+    transition-all
+    duration-200
+    bg-black
+    border border-gray-900
+    rounded-xl
+    font-pj
+    focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900
+    hover:bg-gray-900 hover:text-white
+    focus:bg-gray-900 focus:text-white
+    ml-2
+"
+                    role="button"
+                  >
+                    Book Residence
+                  </a>
+                )}
               </nav>
             )}
           </div>

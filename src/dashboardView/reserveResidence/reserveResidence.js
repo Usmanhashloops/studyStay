@@ -117,8 +117,10 @@ const ReserveResidence = () => {
                   open={bookResidenceModal}
                   onClose={() => setBookResidenceModal(false)}
                   valueReserveResidence={valueReserveResidence}
-                  allReserveResidenceData={allReserveResidenceData}
-                  setAllReserveResidenceData={setAllReserveResidenceData}
+                  setAllReserveResidenceData={(data) => {
+                    allReserveResidenceData[valueReserveResidence.i].status = data;
+                    setAllReserveResidenceData([...allReserveResidenceData]);
+                  }}
                 />
               )}
             </div>

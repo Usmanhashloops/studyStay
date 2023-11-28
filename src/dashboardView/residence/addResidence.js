@@ -190,7 +190,7 @@ const AddResidence = (props) => {
                               setOpenApartments(false);
                             }}
                           />
-                          <FormControlLabel
+                          {/* <FormControlLabel
                             value="appartment"
                             control={<Radio />}
                             label="Appartment"
@@ -198,7 +198,7 @@ const AddResidence = (props) => {
                               setOpenApartments(!openApartments);
                               setOpenRoom(false);
                             }}
-                          />
+                          /> */}
                         </RadioGroup>
                       </FormControl>
                     </div>
@@ -253,7 +253,7 @@ const AddResidence = (props) => {
                     </div>
                   </div>
                 )}
-                {openApartments && (
+                {/* {openApartments && (
                   <div className="max-w-4xl mx-auto mt-8 ">
                     <div className="space-y-4">
                       <div className="relative">
@@ -301,7 +301,7 @@ const AddResidence = (props) => {
                       </div>
                     </div>
                   </div>
-                )}
+                )} */}
                 <div className="pt-4">
                   <label for="" className="text-base font-medium text-gray-900 font-pj ">
                     {" "}

@@ -9,6 +9,20 @@ const Footer = () => {
               <div className="text-xl text-slate-300 font-bold">StudyStay</div>
             </a>
           </div>
+          <nav className="flex items-center justify-center space-x-6 sm:space-x-16 xl:space-x-20">
+            <a title="" className="text-base font-medium text-gray-100 transition-all duration-200 hover:-translate-y-1 hover:text-white">
+              Product
+            </a>
+            <a title="" className="text-base font-medium text-gray-100 transition-all duration-200 hover:-translate-y-1 hover:text-white">
+              Flash
+            </a>
+            <a title="" className="text-base font-medium text-gray-100 transition-all duration-200 hover:-translate-y-1 hover:text-white">
+              Features
+            </a>
+            <a title="" className="text-base font-medium text-gray-100 transition-all duration-200 hover:-translate-y-1 hover:text-white">
+              Contact us
+            </a>
+          </nav>
           <ul className="flex items-center justify-end space-x-3">
             <li>
               <a title="" className="inline-flex items-center justify-center w-8 h-8 text-white transition-all duration-200 bg-gray-800 rounded-full hover:bg-blue-600" target="_blank" rel="noopener">

@@ -3,11 +3,33 @@ import React from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
-import Button from "../button";
+
+import { useNavigate } from "react-router-dom";
 import { AiOutlineDelete } from "react-icons/ai";
-const ConfirmationModal = (props) => {
-  const { open, setOpen, onClick, onClose, onConfirm } = props;
-  const residents = ["", "", "", ""];
+import SuccessfullModal from "./successfullModal";
+import { Api } from "../../../utils/Api";
+import toast from "react-hot-toast";
+import { useState } from "react";
+const ConfirmationReserveModal = (props) => {
+  const navigate = useNavigate();
+  const { open, onClose, sendData } = props;
+  const [showSuccessfullModal, setShowSuccessfullModal] = useState(false);
+  const localData = localStorage.getItem("auth-token");
+  const handlerReserveResidence = async () => {
+    if (localData) {
+      const response = await Api("post", `reserve-residence/${sendData?.id?.id}`);
+      if (response?.status === 200 || response?.status === 201) {
+        toast.success("Reserved Successfully");
+        onClose();
+        setShowSuccessfullModal(true);
+      } else {
+        toast.error("Already reserved");
+        onClose();
+      }
+    } else {
+      navigate("/login");
+    }
+  };
   return (
     <Dialog open={open} onClose={onClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
       <DialogContent>
@@ -15,17 +37,15 @@ const ConfirmationModal = (props) => {
           <div className="modal_confirmation">
             <div className="w-full max-w-sm rounded-lg">
               <div className="-mt-1">
-                <div className="text-center">
-                  <AiOutlineDelete className="h-6 w-6 text-rose-600 m-auto" />
-                </div>
-                <p className="mt-6 text-xl font-bold text-center text-gray-900">{props?.title}</p>
-                <p className="mt-4 text-lg font-bold text-center text-gray-900">{props?.title1}</p>
-                <p className="mt-3 text-sm font-medium text-center text-gray-500">{props?.message}</p>
+                <p className="mt-3 text-lg font-medium text-center text-gray-500">Are you sure you want to Reserve this Residence?</p>
                 <div className="flex items-center mt-10 space-x-4 justify-center">
                   <button
                     type="button"
                     className="inline-flex items-center justify-center px-6 py-2 text-sm font-bold leading-5 text-white transition-all duration-200 bg-red-600 border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 hover:bg-slate-500"
-                    onClick={() => onClick()}
+                    onClick={() => {
+                      handlerReserveResidence();
+                      setShowSuccessfullModal(true);
+                    }}
                   >
                     Confirm
                   </button>
@@ -44,10 +64,11 @@ const ConfirmationModal = (props) => {
           </div>
         </DialogContentText>
       </DialogContent>
+      {showSuccessfullModal && <SuccessfullModal open={showSuccessfullModal} onClose={() => setShowSuccessfullModal(false)} />}
     </Dialog>
   );
 };
-export default ConfirmationModal;
-ConfirmationModal.defaultProps = {
+export default ConfirmationReserveModal;
+ConfirmationReserveModal.defaultProps = {
   open: "false",
 };

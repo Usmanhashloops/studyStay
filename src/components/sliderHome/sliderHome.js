@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { IMAGE_BASE_URL } from "../../utils/Url";
 import { useNavigate } from "react-router-dom";
-const SliderApartment = ({ images, imageDummy, item }) => {
+const SliderHome = ({ images, imageDummy, item }) => {
   const navigate = useNavigate();
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -33,9 +33,9 @@ const SliderApartment = ({ images, imageDummy, item }) => {
           objectFit: "cover",
           borderTopLeftRadius: "10px",
           borderTopRightRadius: "10px",
-          cursor: "pointer",
+          //   cursor: "pointer",
         }}
-        onClick={() => navigate(`/rooms`, { state: { roomData: item } })}
+        // onClick={() => navigate(`/rooms`, { state: { roomData: item } })}
       />
       <button className="right-icon" onClick={nextSlide}>
         <IoIosArrowForward />
@@ -43,4 +43,4 @@ const SliderApartment = ({ images, imageDummy, item }) => {
     </div>
   );
 };
-export default SliderApartment;
+export default SliderHome;

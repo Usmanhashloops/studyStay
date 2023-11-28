@@ -11,50 +11,51 @@ import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import { Api } from "../../utils/Api";
 import { useParams } from "react-router-dom";
+import { IoHome } from "react-icons/io5";
+import { jwtDecode } from "jwt-decode";
+import { useLocation } from "react-router-dom";
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 const Header = () => {
   const navigate = useNavigate();
-  const handlerModalClose = () => setShowUpdateProfileModal(false);
-  const [showUpdateProfileModal, setShowUpdateProfileModal] = React.useState(false);
-  const [searchDropdown, setSearchDropdown] = useState(false);
-  const [flashSearchData, setFlashSearchData] = useState();
-  const [availableSearchData, setAvailableSearchData] = useState();
+  const location = useLocation();
+  console.log("location==>", location.pathname);
+  const [showProfileData, setShowProfileData] = useState({});
   const [expanded, setExpanded] = useState(false);
   const toggleExpanded = () => {
     setExpanded(!expanded);
   };
-  const [address, setAddress] = useState("");
-  const [coordinates, setCoordinates] = useState(null);
-
   const localAuth = localStorage.getItem("auth-token");
 
-  const apiKey = "AIzaSyC7Jz78vSl5-mHKv4eBOy1fRhmoph6loMA";
-  // console.log("address", address);
-  // console.log("coordinates", coordinates);
+  const [address, setAddress] = useState("");
+  const [coordinates, setCoordinates] = useState(null);
   const handleSelect = async (selectedAddress) => {
     try {
       const results = await geocodeByAddress(selectedAddress);
       const latLng = await getLatLng(results[0]);
       setCoordinates(latLng);
       setAddress(selectedAddress);
-
-      // handleSearchHandlers();
     } catch (error) {
       console.error("Error while fetching coordinates:", error);
     }
   };
+  const localStorageData = localStorage.getItem("auth-token");
+  const decoded = jwtDecode(localStorageData);
+  console.log("decoded", decoded);
+  const getProfileData = async () => {
+    const response = await Api("get", `profile-get/${decoded?.sub}`);
+    if (response?.data?.code === 200 || response?.data?.code === 201) {
+      setShowProfileData(response?.data?.data);
+    }
+  };
+  useEffect(() => {
+    getProfileData();
+  }, []);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
-  // const handleSearchHandlers = async (event) => {
-  //   if (coordinates && address) {
-  //     await HandlerFlashSearch();
-  //     await HandlerAvailableSearch();
-  //   }
-  // };
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -67,30 +68,7 @@ const Header = () => {
     localStorage.clear();
     navigate("/login");
   };
-  const HandlerAvailableSearch = async () => {
-    const payload = {
-      address: address,
-      latitude: coordinates.lat,
-      longitude: coordinates.lng,
-    };
-    const response = await Api("post", "search-near-available-places", payload);
-    if (response?.status === 200 || response?.status === 201) {
-      setAvailableSearchData(response?.data?.data?.data);
-    }
-  };
-  const HandlerFlashSearch = async () => {
-    const payload = {
-      address: address,
-      latitude: coordinates.lat,
-      longitude: coordinates.lng,
-    };
-    const response = await Api("post", "search-near-flash-places", payload);
-    if (response?.status === 200 || response?.status === 201) {
-      setFlashSearchData(response?.data?.data?.data);
-    }
-  };
-  // console.log("flashSearchData", flashSearchData);
-  // console.log("availableSearchData", availableSearchData);
+  console.log("showProfileData", showProfileData);
   return (
     <header className="py-4 bg-white " x-data="{ expanded: false }">
       <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-0">
@@ -114,42 +92,48 @@ const Header = () => {
               </span>
             </button>
           </div>
-          <nav className="hidden lg:flex lg:items-center lg:justify-center lg:space-x-12 -ml-24">
-            <PlacesAutocomplete value={address} onChange={setAddress} onSelect={handleSelect} searchOptions={{ types: ["geocode"] }}>
-              {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-                <div>
-                  <input
-                    className="search-input"
-                    {...getInputProps({
-                      placeholder: "Enter address or location",
-                      onKeyDown: (e) => {
-                        if (e.key === "Enter") {
-                          if (localAuth) {
-                            navigate(`/apartments/${encodeURIComponent(address)}`, { state: { coordinates: coordinates } });
-                          } else {
-                            navigate("/login");
-                          }
-                          // navigate(`/apartments/${encodeURIComponent(address)}`, { state: { flashSearchData: flashSearchData, availableSearchData: availableSearchData } });
-                        }
-                      },
-                    })}
-                  />
-                  <BsSearch className="ml-3 absolute" style={{ color: "#000000", marginTop: "-25px" }} />
 
-                  <div className="bg-slate-100 rounded-xl absolute">
-                    {loading && <div className=" px-2 py-2">Loading...</div>}
-                    {suggestions.map((suggestion) => (
-                      <div className=" px-2 py-2" key={suggestion.id}>
-                        <div {...getSuggestionItemProps(suggestion)}>{suggestion.description}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </PlacesAutocomplete>
+          <nav className="hidden lg:flex lg:items-center lg:justify-center lg:space-x-12">
+            <a
+              href=""
+              title=""
+              class="text-base font-medium text-gray-900 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-50 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2"
+            >
+              {" "}
+              Home{" "}
+            </a>
+
+            <a
+              href=""
+              title=""
+              class="text-base font-medium text-gray-900 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-50 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2"
+            >
+              {" "}
+              About us{" "}
+            </a>
+            <a
+              href=""
+              title=""
+              class="text-base font-medium text-gray-900 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-50 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2"
+            >
+              {" "}
+              Faq{" "}
+            </a>
+            <a
+              href=""
+              title=""
+              class="text-base font-medium text-gray-900 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-50 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2"
+            >
+              {" "}
+              Contact us{" "}
+            </a>
           </nav>
+
           {localAuth ? (
             <nav class="hidden lg:flex lg:items-end lg:justify-end lg:space-x-4">
+              <div className="capitalize mt-1 text-base font-medium text-gray-900 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-50 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2">
+                {showProfileData?.name}
+              </div>
               <a>
                 <BsFillPersonFill
                   style={{ height: "25px", width: "25px", cursor: "pointer" }}
@@ -194,14 +178,17 @@ const Header = () => {
                 transformOrigin={{ horizontal: "right", vertical: "top" }}
                 anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
               >
-                <MenuItem
-                  onClick={() => navigate("/profile")}
-                  // onClick={handleOpenUpdateProfile}
-                >
+                <MenuItem onClick={() => navigate("/profile")}>
                   <ListItemIcon>
                     <PersonAdd fontSize="small" />
                   </ListItemIcon>
                   Profile
+                </MenuItem>
+                <MenuItem onClick={() => navigate("/reserve_residence")}>
+                  <ListItemIcon>
+                    <IoHome className="ml-0" />
+                  </ListItemIcon>
+                  Reserved Residences
                 </MenuItem>
                 <MenuItem onClick={handlerChangePassword}>
                   <ListItemIcon>
@@ -280,7 +267,41 @@ const Header = () => {
         <nav className={expanded ? "block" : "hidden"} x-collapse>
           <div className="px-1 py-8">
             <div className="grid gap-y-7">
-              <PlacesAutocomplete value={address} onChange={setAddress} onSelect={handleSelect} searchOptions={{ types: ["geocode"] }}>
+              <a
+                href=""
+                title=""
+                class="text-base font-medium text-gray-900 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-50 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2"
+              >
+                {" "}
+                Home{" "}
+              </a>
+
+              <a
+                href=""
+                title=""
+                class="text-base font-medium text-gray-900 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-50 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2"
+              >
+                {" "}
+                About us{" "}
+              </a>
+              <a
+                href=""
+                title=""
+                class="text-base font-medium text-gray-900 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-50 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2"
+              >
+                {" "}
+                Faq{" "}
+              </a>
+              <a
+                href=""
+                title=""
+                class="text-base font-medium text-gray-900 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-50 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2"
+              >
+                {" "}
+                Contact us{" "}
+              </a>
+
+              {/* <PlacesAutocomplete value={address} onChange={setAddress} onSelect={handleSelect} searchOptions={{ types: ["geocode"] }}>
                 {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
                   <div>
                     <input
@@ -301,7 +322,7 @@ const Header = () => {
                     </div>
                   </div>
                 )}
-              </PlacesAutocomplete>
+              </PlacesAutocomplete> */}
               {/* {SearchFieldWithDropdown(searchDropdown, setSearchDropdown)} */}
               {localAuth ? (
                 <a
