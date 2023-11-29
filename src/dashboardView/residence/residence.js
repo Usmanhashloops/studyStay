@@ -54,22 +54,21 @@ const Residence = () => {
       <div className="py-12 bg-white sm:py-16 lg:py-8">
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col ">
-            <div className="flex items-center justify-start sm:justify-end sm:mt-0 sm:space-x-7">
-              <Button
-                title={"Add Residence"}
-                className="items-center hidden px-3 py-2 text-sm font-medium leading-4 mb-6 text-gray-700 bg-slate-50 border border-gray-300 rounded-lg shadow-md sm:inline-flex hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-                onClick={() => navigate("/add_Residence")}
-              />
-            </div>
-            {/* <div className=" mb-8  sm:flex sm:justify-between">
-              <nav className="flex -mb-px space-x-10"></nav>
-              <nav className="flex">
+            <div className=" mb-8  sm:flex sm:justify-between">
+              <nav className="flex -mb-px space-x-10">
                 <div>
-                  <input className="search-input" placeholder="search or filter" />
+                  <input className="search-input bg-slate-200" placeholder="search or filter" />
                   <BsSearch className="ml-3 absolute" style={{ color: "#000000", marginTop: "-25px" }} />
                 </div>
               </nav>
-            </div> */}
+              <nav className="flex">
+                <Button
+                  title={"Add Property"}
+                  className="items-center mt-6 sm:mt-0 px-3 py-2 text-sm font-medium leading-4 mb-6 text-gray-700 bg-slate-50 border border-gray-300 rounded-lg shadow-md sm:inline-flex hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                  onClick={() => navigate("/add_Residence")}
+                />
+              </nav>
+            </div>
             <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
                 <table className="min-w-full lg:divide-gray-200 lg:divide-y">
@@ -81,6 +80,7 @@ const Residence = () => {
                       <th className="py-3.5 px-4 text-left text-sm tracking-widest font-medium text-gray-500">Residence Name</th>
                       <th className="py-3.5 px-4 text-left text-sm tracking-widest font-medium text-gray-500">Price</th>
                       <th className="py-3.5 px-4 text-left text-sm tracking-widest font-medium text-gray-500">Address</th>
+                      <th className="py-3.5 px-4 text-left text-sm tracking-widest font-medium text-gray-500">status</th>
                       <th className="py-3.5 px-4 text-left text-sm tracking-widest font-medium text-gray-500">Actions</th>
                     </tr>
                   </thead>
@@ -106,6 +106,9 @@ const Residence = () => {
                           </td>
                           <td className="px-4 py-4 text-sm font-medium text-gray-900 xl:table-cell whitespace-nowrap">
                             <div className="flex items-center capitalize  ">{item?.address}</div>
+                          </td>
+                          <td className="px-4 py-4 text-sm font-medium text-gray-900 xl:table-cell whitespace-nowrap">
+                            <div className="flex items-center capitalize  ">{item?.status}</div>
                           </td>
                           <td className=" px-4 py-4 lg:table-cell whitespace-nowrap">
                             <div className="flex items-center space-x-4">
@@ -137,7 +140,7 @@ const Residence = () => {
               <ConfirmationModal
                 open={openConfirmationModal}
                 onClose={() => setOpenConfirmationModal(false)}
-                title={"Are you sure you want to delete this Record?"}
+                title={"Are you sure you want to delete this Property?"}
                 onClick={() => handlerDelete(viewItems.index)}
               />
             )}

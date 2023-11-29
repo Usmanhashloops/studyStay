@@ -76,8 +76,8 @@ const Header = () => {
       <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-0">
         <div className="flex items-center justify-between">
           {" "}
-          <div style={{ paddingTop: "5px", paddingBottom: "-10px" }}>
-            <img src={Icon} style={{ height: "78px", width: "92px" }} />
+          <div style={{ marginTop: "-5px", marginBottom: "-10px", marginRight: "-70px" }}>
+            <img src={Icon} style={{ height: "78px", width: "100px" }} />
           </div>
           <div className="flex lg:hidden">
             <button type="button" className="text-gray-900" onClick={toggleExpanded} aria-expanded={expanded}>
@@ -95,14 +95,13 @@ const Header = () => {
           </div>
           <nav className="hidden lg:flex lg:items-center lg:justify-center lg:space-x-12">
             <a
-              href=""
+              onClick={() => navigate("/")}
               title=""
-              class="text-base font-medium text-gray-900 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-50 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2"
+              class="cursor-pointer text-base font-medium text-gray-900 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-50 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2"
             >
               {" "}
               Home{" "}
             </a>
-
             <a
               href=""
               title=""
@@ -110,14 +109,6 @@ const Header = () => {
             >
               {" "}
               About us{" "}
-            </a>
-            <a
-              href=""
-              title=""
-              class="text-base font-medium text-gray-900 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-50 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2"
-            >
-              {" "}
-              Faq{" "}
             </a>
             <a
               href=""

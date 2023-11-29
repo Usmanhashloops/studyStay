@@ -104,7 +104,7 @@ const AddResidence = (props) => {
         <div className="px-4 sm:px-6 lg:px-8" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
           <div className="lg:mt-8 addInventory">
             <div className="sm:px-2 ">
-              <div className="text-center text-xl font-semibold lg:-mt-8 mb-3">Add Residence</div>
+              <div className="text-center text-xl font-semibold lg:-mt-8 mb-3">Add Property</div>
               <div className="mt-8">
                 <div className="grid  sm:grid-cols-2 gap-6">
                   <div className="pt-4">

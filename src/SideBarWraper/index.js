@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineHome } from "react-icons/ai";
+import { MdOutlineLogout } from "react-icons/md";
+import { IoBookmarkOutline } from "react-icons/io5";
+import logo from "../assets/StudyStay2preview.png";
 const Sidebar = () => {
   const navigate = useNavigate();
   const [openDropdown, setOpenDropdown] = useState(false);
   const [openDrawer, setOpenDrawer] = useState(false);
-  // const localStorageData = JSON.parse(localStorage.getItem("localData"));
   return (
     <div>
-      <div className="hidden xl:flex xl:w-64 xl:flex-col xl:fixed xl:inset-y-0">
-        <div className="flex flex-col flex-grow pt-5 overflow-y-auto bg-gray-900">
+      <div className="hidden xl:flex xl:w-64 xl:flex-col xl:fixed xl:inset-y-0 z-20">
+        <div className="flex flex-col flex-grow pt-5 overflow-y-auto bg-gray-900 z-20">
           <div className="flex items-center flex-shrink-0 px-4">
-            <img className="w-auto h-8" src="https://landingfoliocom.imgix.net/store/collection/clarity-dashboard/images/logo-alt.svg" alt="" />
+            <img src={logo} style={{ height: "170px", width: "220px", marginTop: "-30px", marginBottom: "-30px" }} />
           </div>
           <div className="flex flex-col flex-1 px-3 mt-8">
             <div className="space-y-4">
@@ -34,19 +36,32 @@ const Sidebar = () => {
                   className="flex items-center px-4 py-2.5 text-sm font-medium transition-all duration-200 text-white rounded-lg hover:bg-indigo-600 group cursor-pointer"
                 >
                   <AiOutlineHome className="flex-shrink-0   mr-4 text-white w-6 h-6" />
-                  Residence
+                  Property
                 </a>
                 <a
                   onClick={() => navigate("/dashboard/reserve_residence")}
                   className="flex items-center px-4 py-2.5 text-sm font-medium transition-all duration-200 text-white rounded-lg hover:bg-indigo-600 group cursor-pointer"
                 >
-                  <AiOutlineHome className="flex-shrink-0   mr-4 text-white w-6 h-6" />
-                  Reserve Residence
+                  <IoBookmarkOutline className="flex-shrink-0   mr-4 text-white w-6 h-6" />
+                  Reserved Property
                 </a>
               </nav>
               <hr className="border-gray-700" />
             </div>
             <div className="pb-4 mt-auto">
+              <button
+                onClick={() => {
+                  localStorage.clear();
+                  navigate("/login");
+                }}
+                type="button"
+                className=" cursor-pointer flex w-full px-4 py-3 text-sm font-medium text-white transition-all duration-200 rounded-lg hover:bg-gray-700"
+              >
+                <MdOutlineLogout className="flex-shrink-0   mr-4 text-white w-6 h-6" />
+                <div className="mt-1 -ml-1">Sign Out</div>
+              </button>
+            </div>
+            {/* <div className="pb-4 mt-auto">
               {openDropdown && (
                 <div
                   className="bg-black rounded-xl px-3 py-3 cursor-pointer"
@@ -75,15 +90,15 @@ const Sidebar = () => {
                   <path stroke-linecap="round" stroke-linejoin="round" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
                 </svg>
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
       {openDrawer && (
-        <div className=" xl:hidden w-64 flex-col fixed inset-y-0">
-          <div className=" h-full flex flex-col flex-grow pt-5 overflow-y-auto bg-gray-900">
+        <div className=" xl:hidden w-64 flex-col fixed inset-y-0 z-20">
+          <div className=" h-full flex flex-col flex-grow pt-5 overflow-y-auto bg-gray-900 z-20">
             <div className="flex items-center flex-shrink-0 px-4">
-              <img className="w-auto h-8" src="https://landingfoliocom.imgix.net/store/collection/clarity-dashboard/images/logo-alt.svg" alt="" />
+              <img src={logo} style={{ height: "170px", width: "220px", marginTop: "-30px", marginBottom: "-30px" }} />
             </div>
             <div className="flex flex-col flex-1 px-3 mt-8">
               <div className="space-y-4">
@@ -112,7 +127,7 @@ const Sidebar = () => {
                     className="flex items-center px-4 py-2.5 text-sm font-medium transition-all duration-200 text-white rounded-lg hover:bg-indigo-600 group cursor-pointer"
                   >
                     <AiOutlineHome className="flex-shrink-0   mr-4 text-white w-6 h-6" />
-                    Residence
+                    Property
                   </a>
                   <a
                     onClick={() => {
@@ -121,40 +136,23 @@ const Sidebar = () => {
                     }}
                     className="flex items-center px-4 py-2.5 text-sm font-medium transition-all duration-200 text-white rounded-lg hover:bg-indigo-600 group cursor-pointer"
                   >
-                    <AiOutlineHome className="flex-shrink-0   mr-4 text-white w-6 h-6" />
-                    Reserve Residence
+                    <IoBookmarkOutline className="flex-shrink-0   mr-4 text-white w-6 h-6" />
+                    Reserved Property
                   </a>
                 </nav>
                 <hr className="border-gray-700" />
               </div>
               <div className="pb-4 mt-auto">
-                {openDropdown && (
-                  <div
-                    className="bg-black rounded-xl px-3 py-3 cursor-pointer"
-                    onClick={() => {
-                      localStorage.clear();
-                      navigate("/login");
-                    }}
-                  >
-                    <div className="flex" onClick={() => setOpenDropdown(false)}>
-                      <div className="text-md text-white mt-0.5 ">Sign Out</div>
-                    </div>
-                  </div>
-                )}
                 <button
-                  onClick={() => setOpenDropdown(!openDropdown)}
+                  onClick={() => {
+                    localStorage.clear();
+                    navigate("/login");
+                  }}
                   type="button"
-                  className="flex items-center justify-between w-full px-4 py-3 text-sm font-medium text-white transition-all duration-200 rounded-lg hover:bg-gray-700"
+                  className="flex w-full px-4 py-3 text-sm font-medium text-white transition-all duration-200 rounded-lg hover:bg-gray-700 cursor-pointer"
                 >
-                  <img
-                    className="flex-shrink-0 object-cover w-6 h-6 mr-3 rounded-full"
-                    src="https://landingfoliocom.imgix.net/store/collection/clarity-dashboard/images/previews/settings/4/avatar-female.png"
-                    alt=""
-                  />
-                  Mariana Jones
-                  <svg className="w-5 h-5 ml-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
-                  </svg>
+                  <MdOutlineLogout className="flex-shrink-0   mr-4 text-white w-6 h-6" />
+                  <div className="mt-1 -ml-1">Sign Out</div>
                 </button>
               </div>
             </div>

@@ -7,6 +7,7 @@ import CustomRoomImageUpload from "../../components/imageUpload/roomImageUpload"
 import ResidentProfileModal from "./residentProfileViewModal/residentProfileModal";
 import { Api } from "../../utils/Api";
 import toast from "react-hot-toast";
+import GoogleIcon from "../../assets/avatar.jpg";
 import { useLocation } from "react-router-dom";
 import { IMAGE_BASE_URL } from "../../utils/Url";
 import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
@@ -15,8 +16,6 @@ import { useNavigate } from "react-router-dom";
 import ConfirmationReserveModal from "./residentProfileViewModal/confirmationReserveModal";
 const Rooms = () => {
   const navigate = useNavigate();
-  const numbers = ["", "", "", ""];
-  const residents = ["", "", ""];
   const location = useLocation();
   const [showResidentProfileModal, setshowResidentProfileModal] = useState(false);
   const [showConfirmationReserveModal, setShowConfirmationReserveModal] = useState(false);
@@ -26,7 +25,6 @@ const Rooms = () => {
   const [residenceDataByID, setResidenceDataByID] = useState({});
   const [roomData, setRoomData] = useState(location.state.roomData);
   const [profileData, setProfileData] = useState();
-  const [showRoomNumber, setshowRoomNumber] = useState(true);
   const startIndex = 1;
   const [sendData, setSendData] = useState();
   const endIndex = 4;
@@ -55,16 +53,18 @@ const Rooms = () => {
   console.log("residenceDataByID", residenceDataByID);
   console.log("sendData", sendData);
 
-  const lat = roomData?.id?.latitude;
-  const lng = roomData?.id?.longitude;
+  const lat = Number(roomData?.id?.latitude);
+  const lng = Number(roomData?.id?.longitude);
+  console.log("lat", lat);
+  console.log("lng", lng);
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: "AIzaSyC7Jz78vSl5-mHKv4eBOy1fRhmoph6loMA",
   });
-  const center = useMemo(() => ({ lat: 18.52043, lng: 73.856743 }), []);
+  const center = useMemo(() => ({ lat: lat, lng: lng }), []);
   const customMarker = {
     path: "M29.395,0H17.636c-3.117,0-5.643,3.467-5.643,6.584v34.804c0,3.116,2.526,5.644,5.643,5.644h11.759   c3.116,0,5.644-2.527,5.644-5.644V6.584C35.037,3.467,32.511,0,29.395,0z M34.05,14.188v11.665l-2.729,0.351v-4.806L34.05,14.188z    M32.618,10.773c-1.016,3.9-2.219,8.51-2.219,8.51H16.631l-2.222-8.51C14.41,10.773,23.293,7.755,32.618,10.773z M15.741,21.713   v4.492l-2.73-0.349V14.502L15.741,21.713z M13.011,37.938V27.579l2.73,0.343v8.196L13.011,37.938z M14.568,40.882l2.218-3.336   h13.771l2.219,3.336H14.568z M31.321,35.805v-7.872l2.729-0.355v10.048L31.321,35.805",
     fillColor: "red",
-    fillOpacity: 2,
+    fillOpacity: 0.8, // Adjusted fillOpacity
     strokeWeight: 1,
     rotation: 0,
     scale: 1,
@@ -82,25 +82,23 @@ const Rooms = () => {
           <Grid item xs={12} sm={6} md={5} lg={4}>
             <div className="">
               <div className=" px-5 py-4 pb-4 scrollRemove  card_ResidenceDetail ">
-                {roomData?.id?.price ? (
-                  <div className="flex">
-                    <div className="font-bold text-xl text-black mt-1">
-                      <span className="">€</span>
-                      {roomData?.id?.price.toLocaleString()}
+                <nav class="flex justify-between  mb-2 mt-3 ">
+                  {roomData?.id?.price ? (
+                    <div className="flex">
+                      <div className="font-bold text-xl text-black mt-1">
+                        <span className="">€</span>
+                        {roomData?.id?.price.toLocaleString()}
+                      </div>
+                      <div className="mt-2 font-medium text-base ml-1">/ month</div>
                     </div>
-                    <div className="mt-2 font-medium text-base ml-1">/ month</div>
-                  </div>
-                ) : (
-                  ""
-                )}
-
-                <nav class="flex justify-center items-center mb-2 mt-9 ">
+                  ) : (
+                    ""
+                  )}
                   <a
                     onClick={() => {
                       setShowConfirmationReserveModal(true);
                       setSendData(roomData);
                     }}
-                    // onClick={handlerReserveResidence}
                     className="
         inline-flex
         items-center
@@ -120,7 +118,6 @@ const Rooms = () => {
                     Reserve
                   </a>
                 </nav>
-                {/* <div className="text-base text-center text-black  mt-3">You want be charged yet</div> */}
                 <Grid container spacing={2}>
                   <Grid item xs={9} sm={7} md={7}>
                     <div className="text-lg text-black  font-bold  pb-3 mt-6">Residents</div>
@@ -175,7 +172,9 @@ const Rooms = () => {
             <h1>Loading...</h1>
           ) : (
             <GoogleMap mapContainerClassName="map-container" center={center} zoom={15}>
-              <Marker position={{ lat: 18.52043, lng: 73.856743 }} icon={customMarker} />
+              <Marker position={{ lat: lat, lng: lng }}>
+                <img src={GoogleIcon} />
+              </Marker>
             </GoogleMap>
           )}
         </div>

@@ -140,7 +140,12 @@ const Home = () => {
                   <div className="image-container" style={{ transform: `translateX(-${startIndex * imageWidth}px)` }} ref={imageContainerRef}>
                     {allFlashResidence?.map((item, index) => (
                       <div className="img-slider bg-slate-200  rounded-lg " key={index}>
-                        <img src={IMAGE_BASE_URL + item?.images[0]?.images} alt="logo" className="img" />
+                        <img
+                          src={IMAGE_BASE_URL + item?.images[0]?.images}
+                          alt="logo"
+                          className="img cursor-pointer"
+                          //  onClick={() => navigate(`/rooms`, { state: { roomData: item } })}
+                        />
                         <div className=" px-3 py-3">
                           <div className="font-bold text-sm text-black capitalize">{item?.flate_name}</div>
                           <div className="lg:flex justify-between">

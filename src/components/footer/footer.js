@@ -6,23 +6,17 @@ const Footer = () => {
     <footer className="py-8 bg-gray-900 sm:pt-16 lg:pt-12">
       <div className="px-4 mx-auto sm:px-6 lg:px-0 max-w-7xl">
         <div className="flex flex-col items-center space-y-10 lg:justify-between lg:space-y-0 lg:flex-row">
-          {/* <div className="shrink-0">
-            <a title="" className="flex">
-              <div className="text-xl text-slate-300 font-bold">StudyStay</div>
-            </a>
-          </div> */}
           <div>
-            <img src={Icon} style={{ height: "78px", width: "92px" }} />
+            <div style={{ marginTop: "-10px", marginBottom: "-10px" }}>
+              <img src={Icon} style={{ height: "120px", width: "140px" }} />
+            </div>
           </div>
           <nav className="flex items-center justify-center space-x-6 sm:space-x-16 xl:space-x-20">
             <a title="" className="text-base font-medium text-gray-100 transition-all duration-200 hover:-translate-y-1 hover:text-white">
-              Product
+              Home
             </a>
             <a title="" className="text-base font-medium text-gray-100 transition-all duration-200 hover:-translate-y-1 hover:text-white">
-              Flash
-            </a>
-            <a title="" className="text-base font-medium text-gray-100 transition-all duration-200 hover:-translate-y-1 hover:text-white">
-              Features
+              About us
             </a>
             <a title="" className="text-base font-medium text-gray-100 transition-all duration-200 hover:-translate-y-1 hover:text-white">
               Contact us
