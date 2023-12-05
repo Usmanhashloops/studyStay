@@ -4,10 +4,10 @@ import ConfirmationModal from "../../components/confirmationModal/confirmationMo
 import toast from "react-hot-toast";
 
 const RemoveResidence = () => {
-  const [userAllReserveResidence, setUserAllReserveResidence] = useState();
   const [showConfirmationModal, setShowConfirmationModal] = useState("");
   const [sendData, setSendData] = useState();
 
+  const [userAllReserveResidence, setUserAllReserveResidence] = useState();
   const getUserAllReserveResidence = async () => {
     const response = await Api("get", "show-user-reserve-residence");
     console.log("response", response);
@@ -33,7 +33,7 @@ const RemoveResidence = () => {
   return (
     <section class="py-12 bg-neutral-50 sm:py-16 lg:py-17 h-[90vh]">
       <div class="px-2 mx-auto sm:px-6 lg:px-0 max-w-7xl">
-        <div className=" text-2xl text-slate-500  font-bold text-center  ">Cancel Reserve Residence</div>
+        <div className=" text-3xl text-slate-500  font-bold text-center  ">Reserved Residences</div>
         <div className=" mt-10">
           <div className="flex flex-col ">
             <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">

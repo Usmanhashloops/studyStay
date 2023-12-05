@@ -7,8 +7,8 @@ import Radio from "@mui/material/Radio";
 const CustomRadioButton = ({ value, onChange }) => {
   return (
     <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group" value={value} onChange={onChange}>
-      <FormControlLabel value="Yes" control={<Radio size="small" />} label="Yes" />
-      <FormControlLabel value="No" control={<Radio size="small" />} label="No" />
+      <FormControlLabel value="yes" control={<Radio size="small" />} label="yes" />
+      <FormControlLabel value="no" control={<Radio size="small" />} label="no" />
     </RadioGroup>
   );
 };

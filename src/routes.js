@@ -11,11 +11,14 @@ import Profile from "./pages/profile/profile";
 import RemoveResidence from "./pages/removeResidence/removeResidence";
 import ChangePassword from "./pages/authentication/changePassword";
 import Residence from "./dashboardView/residence/residence";
+import Users from "./dashboardView/users/users";
+import BlockedUsers from "./dashboardView/blockedUsers/blockedUsers";
 import AddResidence from "./dashboardView/residence/addResidence";
 import UpdateResidence from "./dashboardView/residence/updateResidence";
 import ReserveResidence from "./dashboardView/reserveResidence/reserveResidence";
 import InformationPage from "./pages/authentication/informationPage";
 import HeaderRender from "./layout/headerLayout/headerLayout";
+import ForgotPassword from "./pages/authentication/forgotPassword";
 const routes = [
   {
     path: "/",
@@ -38,6 +41,7 @@ const routes = [
   { path: "/add_Residence", element: <AddResidence /> },
   { path: "/update_Residence", element: <UpdateResidence /> },
   { path: "/information", element: <InformationPage /> },
+  { path: "/forgot_password", element: <ForgotPassword /> },
   {
     path: "/dashboard",
     element: <PrivateLayout />,
@@ -46,6 +50,8 @@ const routes = [
       { path: "/dashboard", element: <Residence /> },
       { path: "/dashboard/residence", element: <Residence /> },
       { path: "/dashboard/reserve_residence", element: <ReserveResidence /> },
+      { path: "/dashboard/users", element: <Users /> },
+      { path: "/dashboard/blocked_users", element: <BlockedUsers /> },
     ],
   },
 ];

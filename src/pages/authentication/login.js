@@ -90,7 +90,7 @@ const Login = () => {
                         </label>
 
                         <a
-                          onClick={handleOpen}
+                          onClick={() => navigate("/forgot_password")}
                           title=""
                           className="cursor-pointer text-base font-medium text-gray-500 rounded font-pj hover:text-gray-900 hover:underline focus:outline-none focus:ring-1 focus:ring-gray-900 focus:ring-offset-2"
                         >

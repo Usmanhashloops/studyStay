@@ -3,7 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { AiOutlineHome } from "react-icons/ai";
 import { MdOutlineLogout } from "react-icons/md";
 import { IoBookmarkOutline } from "react-icons/io5";
+import { MdOutlineBlock } from "react-icons/md";
 import logo from "../assets/StudyStay2preview.png";
+import { LuUsers } from "react-icons/lu";
 const Sidebar = () => {
   const navigate = useNavigate();
   const [openDropdown, setOpenDropdown] = useState(false);
@@ -44,6 +46,20 @@ const Sidebar = () => {
                 >
                   <IoBookmarkOutline className="flex-shrink-0   mr-4 text-white w-6 h-6" />
                   Reserved Property
+                </a>
+                <a
+                  onClick={() => navigate("/dashboard/users")}
+                  className="flex items-center px-4 py-2.5 text-sm font-medium transition-all duration-200 text-white rounded-lg hover:bg-indigo-600 group cursor-pointer"
+                >
+                  <LuUsers className="flex-shrink-0   mr-4 text-white w-6 h-6" />
+                  Users
+                </a>
+                <a
+                  onClick={() => navigate("/dashboard/blocked_users")}
+                  className="flex items-center px-4 py-2.5 text-sm font-medium transition-all duration-200 text-white rounded-lg hover:bg-indigo-600 group cursor-pointer"
+                >
+                  <MdOutlineBlock className="flex-shrink-0   mr-4 text-white w-6 h-6" />
+                  Blocked Users
                 </a>
               </nav>
               <hr className="border-gray-700" />
@@ -138,6 +154,26 @@ const Sidebar = () => {
                   >
                     <IoBookmarkOutline className="flex-shrink-0   mr-4 text-white w-6 h-6" />
                     Reserved Property
+                  </a>
+                  <a
+                    onClick={() => {
+                      navigate("/dashboard/users");
+                      setOpenDrawer(false);
+                    }}
+                    className="flex items-center px-4 py-2.5 text-sm font-medium transition-all duration-200 text-white rounded-lg hover:bg-indigo-600 group cursor-pointer"
+                  >
+                    <LuUsers className="flex-shrink-0   mr-4 text-white w-6 h-6" />
+                    Users
+                  </a>
+                  <a
+                    onClick={() => {
+                      navigate("/dashboard/blocked_users");
+                      setOpenDrawer(false);
+                    }}
+                    className="flex items-center px-4 py-2.5 text-sm font-medium transition-all duration-200 text-white rounded-lg hover:bg-indigo-600 group cursor-pointer"
+                  >
+                    <MdOutlineBlock className="flex-shrink-0   mr-4 text-white w-6 h-6" />
+                    Blocked Users
                   </a>
                 </nav>
                 <hr className="border-gray-700" />

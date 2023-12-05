@@ -27,8 +27,6 @@ const ConfirmationReserveModal = (props) => {
         toast.error("Already reserved");
         onClose();
       }
-    } else {
-      navigate("/login");
     }
   };
   return (

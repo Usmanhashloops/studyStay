@@ -76,22 +76,22 @@ const Profile = () => {
       setName(showProfileData?.name);
       setEmail(showProfileData?.email);
       setGender(showProfileData?.gender);
-      setCook(showProfileData?.do_you_cook == "1" ? "Yes" : "No");
-      setTidy(showProfileData?.are_you_tidy == "1" ? "Yes" : "No");
-      setAllergies(showProfileData?.allergies == "1" ? "Yes" : "No");
+      setCook(showProfileData?.do_you_cook == "1" ? "yes" : "no");
+      setTidy(showProfileData?.are_you_tidy == "1" ? "yes" : "no");
+      setAllergies(showProfileData?.allergies == "1" ? "yes" : "no");
       setAllergiesDesc(showProfileData?.which_one);
-      setPets(showProfileData?.pets == "1" ? "Yes" : "No");
-      setVisitors(showProfileData?.visitors == "1" ? "Yes" : "No");
-      setSocial(showProfileData?.social_within_the_house == "1" ? "Yes" : "No");
-      setSmoke(showProfileData?.do_you_smoke == "1" ? "Yes" : "No");
+      setPets(showProfileData?.pets == "1" ? "yes" : "no");
+      setVisitors(showProfileData?.visitors == "1" ? "yes" : "no");
+      setSocial(showProfileData?.social_within_the_house == "1" ? "yes" : "no");
+      setSmoke(showProfileData?.do_you_smoke == "1" ? "yes" : "no");
       setPreference(showProfileData?.atmosphere_perference);
-      setBathroom(showProfileData?.bathroom_schedules == "1" ? "Yes" : "No");
+      setBathroom(showProfileData?.bathroom_schedules == "1" ? "yes" : "no");
       setShareRoom(showProfileData?.prefer_to_share_with);
       setBriefDescription(showProfileData?.description);
       setImage(showProfileData?.image);
     }
   }, [showProfileData]);
-
+  console.log("showProfileData", showProfileData);
   const localStorageData = localStorage.getItem("auth-token");
   const decoded = jwtDecode(localStorageData);
   console.log("decoded", decoded);
@@ -99,17 +99,17 @@ const Profile = () => {
     const formData = new FormData();
     formData.append("name", name);
     formData.append("gender", gender);
-    formData.append("do_you_cook", cook == "Yes" ? 1 : 0);
-    formData.append("are_you_tidy", tidy == "Yes" ? 1 : 0);
-    formData.append("allergies", allergies == "Yes" ? 1 : 0);
+    formData.append("do_you_cook", cook == "yes" ? 1 : 0);
+    formData.append("are_you_tidy", tidy == "yes" ? 1 : 0);
+    formData.append("allergies", allergies == "yes" ? 1 : 0);
     formData.append("which_one", allergiesDesc);
-    formData.append("pets", pets == "Yes" ? 1 : 0);
-    formData.append("do_you_smoke", smoke == "Yes" ? 1 : 0);
+    formData.append("pets", pets == "yes" ? 1 : 0);
+    formData.append("do_you_smoke", smoke == "yes" ? 1 : 0);
     formData.append("atmosphere_perference", preference);
-    formData.append("visitors", visitors == "Yes" ? 1 : 0);
+    formData.append("visitors", visitors == "yes" ? 1 : 0);
     formData.append("image", image);
-    formData.append("social_within_the_house", social == "Yes" ? 1 : 0);
-    formData.append("bathroom_schedules", bathroom == "Yes" ? 1 : 0);
+    formData.append("social_within_the_house", social == "yes" ? 1 : 0);
+    formData.append("bathroom_schedules", bathroom == "yes" ? 1 : 0);
     formData.append("prefer_to_share_with", shareRoom);
     formData.append("description", briefDescription);
     const response = await Api("post", `profile-update/${decoded?.sub}`, formData);
@@ -185,69 +185,76 @@ const Profile = () => {
                   <div className="mb-2 font-semibold font-pj text-base">Gender</div>
                   <FormControl>
                     <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group" value={gender} onChange={(e) => setGender(e.target.value)}>
-                      <FormControlLabel value="Male" control={<Radio size="small" />} label="Male" />
-                      <FormControlLabel value="Female" control={<Radio size="small" />} label="Female" />
-                      <FormControlLabel value="Other" control={<Radio size="small" />} label="Other" />
+                      <FormControlLabel value="male" control={<Radio size="small" />} label="male" />
+                      <FormControlLabel value="female" control={<Radio size="small" />} label="female" />
+                      <FormControlLabel value="other" control={<Radio size="small" />} label="other" />
                     </RadioGroup>
                   </FormControl>
                 </FormControl>
                 <FormControl fullWidth>
                   <div className="mb-2  font-semibold font-pj text-base">Do you cook?</div>
                   <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group" value={cook} onChange={(e) => setCook(e.target.value)}>
-                    <FormControlLabel value="Yes" control={<Radio size="small" />} label="Yes" />
-                    <FormControlLabel value="No" control={<Radio size="small" />} label="No" />
+                    <FormControlLabel value="yes" control={<Radio size="small" />} label="yes" />
+                    <FormControlLabel value="no" control={<Radio size="small" />} label="no" />
                   </RadioGroup>
                 </FormControl>
                 <FormControl fullWidth>
                   <div className="mb-2  font-semibold font-pj text-base">Are you tidy?</div>
                   <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group" value={tidy} onChange={(e) => setTidy(e.target.value)}>
-                    <FormControlLabel value="Yes" control={<Radio size="small" />} label="Yes" />
-                    <FormControlLabel value="No" control={<Radio size="small" />} label="No" />
+                    <FormControlLabel value="yes" control={<Radio size="small" />} label="yes" />
+                    <FormControlLabel value="no" control={<Radio size="small" />} label="no" />
                   </RadioGroup>
                 </FormControl>
                 <FormControl fullWidth>
                   <div className="mb-2  font-semibold font-pj text-base">Pets?</div>
                   <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group" value={pets} onChange={(e) => setPets(e.target.value)}>
-                    <FormControlLabel value="Yes" control={<Radio size="small" />} label="Yes" />
-                    <FormControlLabel value="No" control={<Radio size="small" />} label="No" />
+                    <FormControlLabel value="yes" control={<Radio size="small" />} label="yes" />
+                    <FormControlLabel value="no" control={<Radio size="small" />} label="no" />
                   </RadioGroup>
                 </FormControl>
                 <FormControl fullWidth>
                   <div className="mb-2  font-semibold font-pj text-base">Do you smoke?</div>
                   <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group" value={smoke} onChange={(e) => setSmoke(e.target.value)}>
-                    <FormControlLabel value="Yes" control={<Radio size="small" />} label="Yes" />
-                    <FormControlLabel value="No" control={<Radio size="small" />} label="No" />
+                    <FormControlLabel value="yes" control={<Radio size="small" />} label="yes" />
+                    <FormControlLabel value="no" control={<Radio size="small" />} label="no" />
                   </RadioGroup>
                 </FormControl>
                 <FormControl fullWidth>
                   <div className="mb-2  font-semibold font-pj text-base">visitors?</div>
                   <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group" value={visitors} onChange={(e) => setVisitors(e.target.value)}>
-                    <FormControlLabel value="Yes" control={<Radio size="small" />} label="Yes" />
-                    <FormControlLabel value="No" control={<Radio size="small" />} label="No" />
+                    <FormControlLabel value="yes" control={<Radio size="small" />} label="yes" />
+                    <FormControlLabel value="no" control={<Radio size="small" />} label="no" />
                   </RadioGroup>
                 </FormControl>
                 <FormControl fullWidth>
                   <div className="mb-2  font-semibold font-pj text-base">Social within the house?</div>
                   <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group" value={social} onChange={(e) => setSocial(e.target.value)}>
-                    <FormControlLabel value="Yes" control={<Radio size="small" />} label="Yes" />
-                    <FormControlLabel value="No" control={<Radio size="small" />} label="No" />
+                    <FormControlLabel value="yes" control={<Radio size="small" />} label="yes" />
+                    <FormControlLabel value="no" control={<Radio size="small" />} label="no" />
                   </RadioGroup>
                 </FormControl>
                 <FormControl fullWidth>
                   <div className="mb-2  font-semibold font-pj text-base">Bathroom schedules?</div>
                   <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group" value={bathroom} onChange={(e) => setBathroom(e.target.value)}>
-                    <FormControlLabel value="Yes" control={<Radio size="small" />} label="Yes" />
-                    <FormControlLabel value="No" control={<Radio size="small" />} label="No" />
+                    <FormControlLabel value="yes" control={<Radio size="small" />} label="yes" />
+                    <FormControlLabel value="no" control={<Radio size="small" />} label="no" />
+                  </RadioGroup>
+                </FormControl>
+                <FormControl fullWidth>
+                  <div className="mb-2  font-semibold font-pj text-base">Share Room with?</div>
+                  <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group" value={shareRoom} onChange={(e) => setShareRoom(e.target.value)}>
+                    <FormControlLabel value="yes" control={<Radio size="small" />} label="yes" />
+                    <FormControlLabel value="no" control={<Radio size="small" />} label="no" />
                   </RadioGroup>
                 </FormControl>
                 <FormControl fullWidth>
                   <div className="mb-2  font-semibold font-pj text-base">Allergies?</div>
                   <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group" value={allergies} onChange={(e) => setAllergies(e.target.value)}>
-                    <FormControlLabel value="Yes" control={<Radio size="small" />} label="Yes" onClick={() => setAllergiesInput(true)} />
-                    <FormControlLabel value="No" control={<Radio size="small" />} label="No" onClick={() => setAllergiesInput(false)} />
+                    <FormControlLabel value="yes" control={<Radio size="small" />} label="yes" onClick={() => setAllergiesInput(true)} />
+                    <FormControlLabel value="no" control={<Radio size="small" />} label="no" onClick={() => setAllergiesInput(false)} />
                   </RadioGroup>
                 </FormControl>
-                {allergies === 1 || allergies === "Yes" ? (
+                {allergies === 1 || allergies === "yes" ? (
                   <FormControl fullWidth>
                     <div className="mb-2  font-semibold font-pj text-base">Which ones?</div>
                     <input
@@ -273,19 +280,6 @@ const Profile = () => {
                     placeholder=""
                     value={preference}
                     onChange={(e) => setPreference(e.target.value)}
-                    className="border block w-full px-4 py-3 placeholder-gray-500 border-gray-300 rounded-lg focus:ring-indigo-600 focus:border-indigo-600 sm:text-sm caret-indigo-600"
-                  />
-                </FormControl>
-
-                <FormControl fullWidth>
-                  <div className="mb-2  font-semibold font-pj text-base">Share Room with?</div>
-                  <input
-                    type="text"
-                    name=""
-                    id=""
-                    placeholder=""
-                    value={shareRoom}
-                    onChange={(e) => setShareRoom(e.target.value)}
                     className="border block w-full px-4 py-3 placeholder-gray-500 border-gray-300 rounded-lg focus:ring-indigo-600 focus:border-indigo-600 sm:text-sm caret-indigo-600"
                   />
                 </FormControl>

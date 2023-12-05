@@ -11,11 +11,10 @@ import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import Icon from "../../assets/StudyStay2preview.png";
 import { Api } from "../../utils/Api";
-import { useParams } from "react-router-dom";
 import { IoHome } from "react-icons/io5";
 import { jwtDecode } from "jwt-decode";
 import { useLocation } from "react-router-dom";
-import PlacesAutocomplete, { geocodeByAddress, getLatLng } from "react-places-autocomplete";
+import { IMAGE_BASE_URL } from "../../utils/Url";
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -25,29 +24,15 @@ const Header = () => {
     setExpanded(!expanded);
   };
   const localAuth = localStorage.getItem("auth-token");
-
-  const [address, setAddress] = useState("");
-  const [coordinates, setCoordinates] = useState(null);
-  const handleSelect = async (selectedAddress) => {
-    try {
-      const results = await geocodeByAddress(selectedAddress);
-      const latLng = await getLatLng(results[0]);
-      setCoordinates(latLng);
-      setAddress(selectedAddress);
-    } catch (error) {
-      console.error("Error while fetching coordinates:", error);
-    }
-  };
-  const localData = localStorage.getItem("auth-token");
-  // const decoded = jwtDecode(localData);
-  console.log("localData", localData);
   const getProfileData = async () => {
-    // if (localData) {
-    //   const response = await Api("get", `profile-get/${decoded?.sub}`);
-    //   if (response?.data?.code === 200 || response?.data?.code === 201) {
-    //     setShowProfileData(response?.data?.data);
-    //   }
-    // }
+    if (localAuth) {
+      const decoded = jwtDecode(localAuth);
+      console.log("decoded", decoded);
+      const response = await Api("get", `profile-get/${decoded?.sub}`);
+      if (response?.data?.code === 200 || response?.data?.code === 201) {
+        setShowProfileData(response?.data?.data);
+      }
+    }
   };
   useEffect(() => {
     getProfileData();
@@ -72,7 +57,7 @@ const Header = () => {
   };
   console.log("showProfileData", showProfileData);
   return (
-    <header className=" bg-white " x-data="{ expanded: false }">
+    <header className=" bg-white z-50 " x-data="{ expanded: false }">
       <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-0">
         <div className="flex items-center justify-between">
           {" "}
@@ -93,45 +78,32 @@ const Header = () => {
               </span>
             </button>
           </div>
-          <nav className="hidden lg:flex lg:items-center lg:justify-center lg:space-x-12">
-            <a
-              onClick={() => navigate("/")}
-              title=""
-              class="cursor-pointer text-base font-medium text-gray-900 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-50 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2"
-            >
-              {" "}
-              Home{" "}
-            </a>
-            <a
-              href=""
-              title=""
-              class="text-base font-medium text-gray-900 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-50 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2"
-            >
-              {" "}
-              About us{" "}
-            </a>
-            <a
-              href=""
-              title=""
-              class="text-base font-medium text-gray-900 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-50 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2"
-            >
-              {" "}
-              Contact us{" "}
-            </a>
-          </nav>
           {localAuth ? (
             <nav class="hidden lg:flex lg:items-end lg:justify-end lg:space-x-4">
               <div className="capitalize mt-1 text-base font-medium text-gray-900 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-50 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2">
                 {showProfileData?.name}
               </div>
               <a>
-                <BsFillPersonFill
-                  style={{ height: "25px", width: "25px", cursor: "pointer" }}
-                  onClick={handleClick}
-                  aria-controls={open ? "account-menu" : undefined}
-                  aria-haspopup="true"
-                  aria-expanded={open ? "true" : undefined}
-                />
+                {showProfileData?.image ? (
+                  <img
+                    className="rounded-full"
+                    style={{ height: "34px", width: "34px", cursor: "pointer" }}
+                    src={IMAGE_BASE_URL + showProfileData?.image}
+                    alt=""
+                    onClick={handleClick}
+                    aria-controls={open ? "account-menu" : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? "true" : undefined}
+                  />
+                ) : (
+                  <BsFillPersonFill
+                    style={{ height: "25px", width: "25px", cursor: "pointer" }}
+                    onClick={handleClick}
+                    aria-controls={open ? "account-menu" : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? "true" : undefined}
+                  />
+                )}
               </a>
               <Menu
                 anchorEl={anchorEl}
@@ -257,40 +229,6 @@ const Header = () => {
         <nav className={expanded ? "block" : "hidden"} x-collapse>
           <div className="px-1 py-8">
             <div className="grid gap-y-7">
-              <a
-                href=""
-                title=""
-                class="text-base font-medium text-gray-900 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-50 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2"
-              >
-                {" "}
-                Home{" "}
-              </a>
-
-              <a
-                href=""
-                title=""
-                class="text-base font-medium text-gray-900 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-50 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2"
-              >
-                {" "}
-                About us{" "}
-              </a>
-              <a
-                href=""
-                title=""
-                class="text-base font-medium text-gray-900 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-50 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2"
-              >
-                {" "}
-                Faq{" "}
-              </a>
-              <a
-                href=""
-                title=""
-                class="text-base font-medium text-gray-900 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-50 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2"
-              >
-                {" "}
-                Contact us{" "}
-              </a>
-
               {/* <PlacesAutocomplete value={address} onChange={setAddress} onSelect={handleSelect} searchOptions={{ types: ["geocode"] }}>
                 {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
                   <div>

@@ -56,7 +56,7 @@ body::-webkit-scrollbar {
   height: 100%;
 }
 .searchicon-apartmentbox {
-  background-color: #4065a5e6;
+  background-color: #1d51aa;
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
   height: 55px !important;
@@ -349,7 +349,7 @@ body::-webkit-scrollbar {
   padding: 0 !important;
 }
 .modalScrollbar {
-  height: 630px;
+  height: 660px;
   width: 620px;
   padding-bottom: 30px !important;
 }
@@ -721,24 +721,29 @@ input[type="number"]::-webkit-outer-spin-button {
   height: 580px;
   width: 100%;
   background-position: center;
+
+  margin-top: -80px;
 }
 .bg-apartment-background {
-  background-image: url("./assets/student-bedroom-dormitory-night-with-bunk-bed-desk-chair_88138-1039.jpg");
+  /* background-image: url("https://www.realproperty.pk/assets/77ad0f4b//66af13c2a40eb6e8276cafca42490fbd.webp"); */
+  background-image: url("./assets/image2.webp");
   background-size: cover;
-  height: 580px;
+  height: 470px;
   width: 100%;
   background-position: center;
-  position: relative;
-  &::before {
+  /* position: relative; */
+  margin-top: -66px;
+  /* &::before {
     content: "";
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.2); /* Adjust the color and opacity as needed */
-  }
+    background-color: rgba(0, 0, 0, 0.2);
+  } */
 }
+
 .ImageRooms {
   width: -webkit-fill-available !important;
 }

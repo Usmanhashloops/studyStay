@@ -14,6 +14,9 @@ const Apartments = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { searchValue } = useParams();
+
+  const [pages, setPages] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
   console.log("searchValue", searchValue);
   console.log("location", location);
   const [allCoordinates, setAllCoordinates] = useState();
@@ -35,9 +38,6 @@ const Apartments = () => {
       console.error("Error while fetching coordinates:", error);
     }
   };
-  useEffect(() => {
-    getResidence();
-  }, []);
 
   useEffect(() => {
     console.log("searchValue", searchValue);
@@ -83,22 +83,19 @@ const Apartments = () => {
       console.error("Error:", error);
     }
   };
-  const handleSearchHandlers = () => {
+  const handleFlashHandlers = () => {
     HandlerFlashSearch();
+  };
+  const handleAvailableHandlers = () => {
     HandlerAvailableSearch();
   };
 
   useEffect(() => {
-    handleSearchHandlers();
+    handleAvailableHandlers();
   }, [searchValue]);
-
-  const getResidence = async () => {
-    const response = await Api("get", "all-residence");
-    console.log("getResponse", response);
-    if (response.status === 200 || response.status === 201) {
-      setResidenceData(response?.data?.data?.data);
-    }
-  };
+  useEffect(() => {
+    handleFlashHandlers();
+  }, [searchValue]);
 
   const handlePrev = () => {
     setStartIndex((prevIndex) => Math.max(prevIndex - 1, 0));
@@ -118,10 +115,11 @@ const Apartments = () => {
   return (
     <div>
       <div className="bg-apartment-background">
-        <div className="pt-60 z-30 ">
+        <div className="pt-56 z-20 ">
           <Grid container spacing={2}>
             <Grid item xs={12} sm={12} md={6} lg={6}>
-              <div className=" text-3xl text-slate-100 font-bold z-30 pl-4 pt-2  md:pl-32">{searchValue}</div>
+              <div className=" text-2xl text-white font-bold z-30 pl-4 -mt-4 md:pl-32 searchedResults">Searched Results:</div>
+              <div className=" text-3xl text-white font-bold z-30 pl-4 pt-2  md:pl-32">{searchValue}</div>
             </Grid>
             <Grid item xs={12} sm={12} md={6} lg={6}>
               <div className="">
@@ -145,7 +143,7 @@ const Apartments = () => {
                         </div>
                       </div>
                       <div className="flex items-center justify-center z-30 marginLeft">
-                        <div className="bg-gray-500 rounded-xl shadow-xl z-30  dropdownContainer ">
+                        <div className="bg-gray-200 rounded-xl shadow-xl z-30  dropdownContainer ">
                           {loading && <div className=" px-2 py-2">Loading...</div>}
                           {suggestions.map((suggestion) => (
                             <div className=" px-2 py-2 " key={suggestion.id}>
@@ -164,8 +162,42 @@ const Apartments = () => {
       </div>
       <section class="py-12 bg-neutral-50 sm:py-16 lg:py-16">
         <div class="px-2 mx-auto sm:px-6 lg:px-0 max-w-7xl">
-          <div className=" text-3xl text-slate-500  font-bold font-pj text-center ">Flash Opportunity</div>
-          <div className="app mt-6 mb-12">
+          <div className=" text-3xl text-slate-500 font-bold font-pj text-center mb-10">Featured Opportunity</div>
+          {availableSearchData ? (
+            <Grid container spacing={2}>
+              {availableSearchData.map((item, i) => (
+                <Grid item xs={12} sm={6} md={4} lg={3} key={i}>
+                  <div className="bg-slate-200  rounded-lg mt-4">
+                    <SliderApartment images={item?.images ? item?.images : ""} item={item} />
+                    <div className=" px-3 py-2">
+                      <div className="flex justify-between">
+                        <div className="">
+                          <div className="capitalize font-bold text-sm text-black">{item?.id?.flate_name}</div>
+
+                          <div className="font-bold text-sm text-black mt-1">
+                            <span className="">€</span>
+                            {item?.id?.price.toLocaleString()}
+                          </div>
+                        </div>
+                        <div className="">
+                          <div className="text-sm flex justify-end">{item?.distance == 0 ? 0 : item?.distance.toFixed(1)} Km</div>
+                          <div className="flex justify-end">
+                            <img src={image} className="imagesmallIcon mr-2" />
+                            <div className=" text-sm text-right mt-1">
+                              {item?.id?.remaining_person}/{item?.id?.total_person}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </Grid>
+              ))}
+            </Grid>
+          ) : (
+            <div className=" text-base text-black  font-bold font-pj text-center mt-16">No Featured Property Exist</div>
+          )}
+          <div className="app mt-20 mb-12">
             {flashSearchData && flashSearchData.length > 0 ? (
               <div className="slider pt-4">
                 {flashSearchData?.length > 5 ? (
@@ -185,6 +217,7 @@ const Apartments = () => {
                 <div className="image-container" style={{ transform: `translateX(-${startIndex * imageWidth}px)` }} ref={imageContainerRef}>
                   {flashSearchData?.map((item, index) => (
                     <div className="img-slider bg-slate-200  rounded-lg " key={index}>
+                      {console.log("item==>", item)}
                       <img src={IMAGE_BASE_URL + item?.images[0]?.images} alt="logo" className="img cursor-pointer" onClick={() => navigate(`/rooms`, { state: { roomData: item } })} />
                       <div className="flex justify-between px-3 pt-2 ">
                         <div className="capitalize font-bold text-sm text-black ">{item?.id?.flate_name}</div>
@@ -225,42 +258,6 @@ const Apartments = () => {
               <div className=" text-base text-black  font-bold font-pj text-center mt-12">No Flash Property Exist</div>
             )}
           </div>
-
-          <div className=" text-3xl text-slate-500 font-bold font-pj text-center pt-2 mb-10">Featured Opportunity</div>
-          {availableSearchData ? (
-            <Grid container spacing={2}>
-              {availableSearchData.map((item, i) => (
-                <Grid item xs={12} sm={6} md={4} lg={3} key={i}>
-                  <div className="bg-slate-200  rounded-lg mt-4">
-                    <SliderApartment images={item?.images ? item?.images : ""} item={item} />
-                    <div className=" px-3 py-2">
-                      <div className="flex justify-between">
-                        <div className="">
-                          <div className="capitalize font-bold text-sm text-black">{item?.id?.flate_name}</div>
-
-                          <div className="font-bold text-sm text-black mt-1">
-                            <span className="">€</span>
-                            {item?.id?.price.toLocaleString()}
-                          </div>
-                        </div>
-                        <div className="">
-                          <div className="text-sm flex justify-end">{item?.distance == 0 ? 0 : item?.distance.toFixed(1)} Km</div>
-                          <div className="flex justify-end">
-                            <img src={image} className="imagesmallIcon mr-2" />
-                            <div className=" text-sm text-right mt-1">
-                              {item?.id?.remaining_person}/{item?.id?.total_person}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </Grid>
-              ))}
-            </Grid>
-          ) : (
-            <div className=" text-base text-black  font-bold font-pj text-center mt-16">No Featured Property Exist</div>
-          )}
         </div>
       </section>
     </div>

@@ -77,7 +77,7 @@ const Home = () => {
     <section>
       <section class=" bg-neutral-50">
         <div className="bg-custom-background">
-          <div className="pt-48">
+          <div className="pt-56">
             <div className="text-3xl sm:text-5xl font-extrabold text-slate-600 flex items-center justify-center ">
               We find you <span className="ml-2 text-red-600"> home</span>{" "}
             </div>
@@ -217,7 +217,7 @@ const Home = () => {
                 {/* <Pagination /> */}
               </Grid>
             ) : (
-              <div className=" text-base text-black  font-bold font-pj text-center mt-16">No Featured Property Exist</div>
+              <div className=" text-base text-black  font-bold font-pj text-center mt-16 pb-10  mb-10">No Featured Property Exist</div>
             )}
           </div>
           {allAvailableResidence?.length > 0 ? <Pagination currentPage={currentPage} setCurrentPage={(page) => setCurrentPage(page)} pages={pages} /> : null}

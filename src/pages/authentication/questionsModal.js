@@ -14,6 +14,8 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import toast from "react-hot-toast";
+
+import { RxCrossCircled } from "react-icons/rx";
 const style = {
   position: "absolute",
   top: "50%",
@@ -26,7 +28,7 @@ const style = {
   p: 4,
 };
 const QuestionsModal = (props) => {
-  const { name, email, password, confirmPassword } = props;
+  const { name, email, password, confirmPassword, onClose } = props;
   const navigate = useNavigate();
   const [signUpData, setSignUpData] = useState();
   const [gender, setGender] = useState("");
@@ -61,7 +63,7 @@ const QuestionsModal = (props) => {
     setImagePreview(null);
   };
   const HandlerSignup = async () => {
-    if (!gender || !cook || !tidy || !allergies || !pets || !smoke || !preference || !visitors || !image || !social || !bathroom || !shareRoom || !briefDescription) {
+    if (!gender || !cook || !tidy || !allergies || !pets || !smoke || !preference || !visitors || !social || !bathroom || !shareRoom || !briefDescription) {
       toast.error("Fill all the fields");
     }
     const formData = new FormData();
@@ -70,17 +72,17 @@ const QuestionsModal = (props) => {
     formData.append("password", props?.password);
     formData.append("password_confirmation", props?.confirmPassword);
     formData.append("gender", gender);
-    formData.append("do_you_cook", cook == "Yes" ? 1 : 0);
-    formData.append("are_you_tidy", tidy == "Yes" ? 1 : 0);
-    formData.append("allergies", allergies == "Yes" ? 1 : 0);
+    formData.append("do_you_cook", cook == "yes" ? 1 : 0);
+    formData.append("are_you_tidy", tidy == "yes" ? 1 : 0);
+    formData.append("allergies", allergies == "yes" ? 1 : 0);
     formData.append("which_one", allergiesDesc);
-    formData.append("pets", pets == "Yes" ? 1 : 0);
-    formData.append("do_you_smoke", smoke == "Yes" ? 1 : 0);
+    formData.append("pets", pets == "yes" ? 1 : 0);
+    formData.append("do_you_smoke", smoke == "yes" ? 1 : 0);
     formData.append("atmosphere_perference", preference);
-    formData.append("visitors", visitors == "Yes" ? 1 : 0);
+    formData.append("visitors", visitors == "yes" ? 1 : 0);
     formData.append("image", image);
-    formData.append("social_within_the_house", social == "Yes" ? 1 : 0);
-    formData.append("bathroom_schedules", bathroom == "Yes" ? 1 : 0);
+    formData.append("social_within_the_house", social == "yes" ? 1 : 0);
+    formData.append("bathroom_schedules", bathroom == "yes" ? 1 : 0);
     formData.append("prefer_to_share_with", shareRoom);
     formData.append("description", briefDescription);
     const response = await Api("post", "sign-up", formData);
@@ -95,8 +97,9 @@ const QuestionsModal = (props) => {
   };
   console.log("gender", gender);
   return (
-    <Modal open={props.open} onClose={props.onClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" size="md">
+    <Modal open={props.open} onClose={onClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" size="md">
       <Box className="modalScrollbar" sx={style}>
+        <RxCrossCircled className="absolute text-red-600 h-6 w-6 right-1 top-1 cursor-pointer" onClick={() => onClose()} />
         <h1 className="-mt-2 mb-8 text-center font-bold text-xl text-black font-pj">Add Some Basic Information</h1>
 
         <div className="grid  sm:grid-cols-2 ">
@@ -104,9 +107,9 @@ const QuestionsModal = (props) => {
             <div className="mb-2 font-semibold font-pj text-base">Gender</div>
             <FormControl>
               <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group" value={gender} onChange={(e) => setGender(e.target.value)}>
-                <FormControlLabel value="Male" control={<Radio size="small" />} label="Male" />
-                <FormControlLabel value="Female" control={<Radio size="small" />} label="Female" />
-                <FormControlLabel value="Other" control={<Radio size="small" />} label="Other" />
+                <FormControlLabel value="male" control={<Radio size="small" />} label="male" />
+                <FormControlLabel value="female" control={<Radio size="small" />} label="female" />
+                <FormControlLabel value="other" control={<Radio size="small" />} label="other" />
               </RadioGroup>
             </FormControl>
           </FormControl>
@@ -140,10 +143,17 @@ const QuestionsModal = (props) => {
             <CustomRadioButton value={bathroom} onChange={(e) => setBathroom(e.target.value)} />
           </FormControl>
           <FormControl fullWidth style={{ marginTop: "8px", marginBottom: "6px" }}>
+            <div className="mb-2  font-semibold font-pj text-base">Share Room with?</div>
+            <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group" value={shareRoom} onChange={(e) => setShareRoom(e.target.value)}>
+              <FormControlLabel value="boy" control={<Radio size="small" />} label="boy" />
+              <FormControlLabel value="girl" control={<Radio size="small" />} label="girl" />
+            </RadioGroup>
+          </FormControl>
+          <FormControl fullWidth style={{ marginTop: "8px", marginBottom: "6px" }}>
             <div className="mb-2  font-semibold font-pj text-base">Allergies?</div>
             <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group" value={allergies} onChange={(e) => setAllergies(e.target.value)}>
-              <FormControlLabel value="Yes" control={<Radio size="small" />} label="Yes" onClick={() => setAllergiesInput(true)} />
-              <FormControlLabel value="No" control={<Radio size="small" />} label="No" onClick={() => setAllergiesInput(false)} />
+              <FormControlLabel value="yes" control={<Radio size="small" />} label="yes" onClick={() => setAllergiesInput(true)} />
+              <FormControlLabel value="no" control={<Radio size="small" />} label="no" onClick={() => setAllergiesInput(false)} />
             </RadioGroup>
           </FormControl>
         </div>
@@ -167,10 +177,6 @@ const QuestionsModal = (props) => {
           <TextField id="outlined-multiline-flexible" placeholder="Enter Atmosphere Preference" multiline className="w-full" value={preference} onChange={(e) => setPreference(e.target.value)} />
         </FormControl>
 
-        <FormControl fullWidth style={{ marginTop: "8px", marginBottom: "6px" }}>
-          <div className="mb-2  font-semibold font-pj text-base">Share Room with?</div>
-          <TextField id="outlined-multiline-flexible" placeholder="Enter share room with" multiline maxRows={8} className="w-full" value={shareRoom} onChange={(e) => setShareRoom(e.target.value)} />
-        </FormControl>
         <div className="mb-2  font-semibold font-pj text-base mt-2">Brief description</div>
         <TextField
           id="outlined-multiline-flexible"

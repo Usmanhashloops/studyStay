@@ -14,9 +14,11 @@ import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import ConfirmationReserveModal from "./residentProfileViewModal/confirmationReserveModal";
-const Rooms = () => {
+const Rooms = (props) => {
   const navigate = useNavigate();
   const location = useLocation();
+
+  const [userAllReserveResidence, setUserAllReserveResidence] = useState();
   const [showResidentProfileModal, setshowResidentProfileModal] = useState(false);
   const [showConfirmationReserveModal, setShowConfirmationReserveModal] = useState(false);
   const handleOpen = () => setshowResidentProfileModal(true);
@@ -50,13 +52,36 @@ const Rooms = () => {
       setResidenceDataByID(response?.data?.data);
     }
   };
+  const localAuth = localStorage.getItem("auth-token");
+  const showModal = () => {
+    if (localAuth) {
+      setShowConfirmationReserveModal(true);
+      setSendData(roomData);
+    } else {
+      navigate("/login");
+    }
+  };
+  useEffect(() => {
+    getUserAllReserveResidence();
+  }, []);
+  const getUserAllReserveResidence = async () => {
+    const response = await Api("get", "show-user-reserve-residence");
+    console.log("response", response);
+    if (response?.status === 200 || response?.status == 201) {
+      setUserAllReserveResidence(response?.data?.data);
+    }
+  };
+
+  console.log("userAllReserveResidence", userAllReserveResidence);
   console.log("residenceDataByID", residenceDataByID);
   console.log("sendData", sendData);
+  console.log("roomData", roomData);
 
   const lat = Number(roomData?.id?.latitude);
   const lng = Number(roomData?.id?.longitude);
   console.log("lat", lat);
   console.log("lng", lng);
+
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: "AIzaSyC7Jz78vSl5-mHKv4eBOy1fRhmoph6loMA",
   });
@@ -64,15 +89,15 @@ const Rooms = () => {
   const customMarker = {
     path: "M29.395,0H17.636c-3.117,0-5.643,3.467-5.643,6.584v34.804c0,3.116,2.526,5.644,5.643,5.644h11.759   c3.116,0,5.644-2.527,5.644-5.644V6.584C35.037,3.467,32.511,0,29.395,0z M34.05,14.188v11.665l-2.729,0.351v-4.806L34.05,14.188z    M32.618,10.773c-1.016,3.9-2.219,8.51-2.219,8.51H16.631l-2.222-8.51C14.41,10.773,23.293,7.755,32.618,10.773z M15.741,21.713   v4.492l-2.73-0.349V14.502L15.741,21.713z M13.011,37.938V27.579l2.73,0.343v8.196L13.011,37.938z M14.568,40.882l2.218-3.336   h13.771l2.219,3.336H14.568z M31.321,35.805v-7.872l2.729-0.355v10.048L31.321,35.805",
     fillColor: "red",
-    fillOpacity: 0.8, // Adjusted fillOpacity
+    fillOpacity: 0.8,
     strokeWeight: 1,
     rotation: 0,
     scale: 1,
   };
 
   return (
-    <section class="py-8 bg-neutral-50 sm:py-16 lg:py-12">
-      <div class="px-2 mx-auto sm:px-6 lg:px-0 max-w-7xl pt-6">
+    <section class="py-8 bg-neutral-50 sm:py-16 lg:py-12" style={{ marginTop: "-62px" }}>
+      <div class="px-2 mx-auto sm:px-6 lg:px-0 max-w-7xl pt-12">
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6} md={7} lg={8}>
             <div className="bg-slate-200  rounded-lg">
@@ -94,12 +119,12 @@ const Rooms = () => {
                   ) : (
                     ""
                   )}
-                  <a
-                    onClick={() => {
-                      setShowConfirmationReserveModal(true);
-                      setSendData(roomData);
-                    }}
-                    className="
+                  {userAllReserveResidence?.length > 0 ? (
+                    ""
+                  ) : (
+                    <a
+                      onClick={() => showModal()}
+                      className="
         inline-flex
         items-center
         justify-center
@@ -113,29 +138,36 @@ const Rooms = () => {
         rounded-xl
         text-white        
     "
-                    role="button"
-                  >
-                    Reserve
-                  </a>
+                      role="button"
+                    >
+                      Reserve
+                    </a>
+                  )}
                 </nav>
                 <Grid container spacing={2}>
                   <Grid item xs={9} sm={7} md={7}>
                     <div className="text-lg text-black  font-bold  pb-3 mt-6">Residents</div>
-                    {roomData &&
-                      roomData?.history?.map((item, i) => (
-                        <div
-                          className="flex mb-2"
-                          key={i}
-                          onClick={() => {
-                            setshowResidentProfileModal(true);
-                            setProfileData(item);
-                          }}
-                        >
-                          <img src={IMAGE_BASE_URL + item?.user_id?.image} className="imageIcon" />
-                          <div className="mt-2 ml-2  text-sm text-black capitalize cursor-pointer"> {item?.user_id?.name} </div>
+                    {residenceDataByID.length > 0 &&
+                      residenceDataByID?.map((item, i) => (
+                        <div key={i}>
+                          {item?.user_data.length > 0 ? (
+                            item?.user_data.map((value) => (
+                              <div
+                                className="flex mb-2"
+                                onClick={() => {
+                                  setshowResidentProfileModal(true);
+                                  setProfileData(value);
+                                }}
+                              >
+                                <img src={IMAGE_BASE_URL + value?.user_id?.image} className="imageIcon" />
+                                <div className="mt-2 ml-2  text-sm text-black capitalize cursor-pointer"> {value?.user_id?.name} </div>
+                              </div>
+                            ))
+                          ) : (
+                            <div className="mt-3 text-base text-black capitalize cursor-pointer"> No Resident Exist </div>
+                          )}
                         </div>
                       ))}
-                    {roomData?.history ? "" : <div className="mt-3 text-base text-black capitalize cursor-pointer"> No Resident Exist </div>}
                   </Grid>
                   <Grid item xs={3} sm={5} md={5}>
                     <div className="text-lg text-black  font-bold pb-3 mt-6 flex items-end justify-end">Room Capacity</div>
@@ -172,9 +204,7 @@ const Rooms = () => {
             <h1>Loading...</h1>
           ) : (
             <GoogleMap mapContainerClassName="map-container" center={center} zoom={15}>
-              <Marker position={{ lat: lat, lng: lng }}>
-                <img src={GoogleIcon} />
-              </Marker>
+              <Marker position={{ lat: lat, lng: lng }} />
             </GoogleMap>
           )}
         </div>

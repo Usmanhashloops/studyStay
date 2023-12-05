@@ -4,6 +4,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import { IMAGE_BASE_URL } from "../../../utils/Url";
+import { RxCrossCircled } from "react-icons/rx";
 const ResidentProfileModal = (props) => {
   const { profileData } = props;
   console.log("profileData", profileData);
@@ -12,6 +13,7 @@ const ResidentProfileModal = (props) => {
     <Dialog open={props.open} onClose={props.onClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
       <DialogContent className="pb-6">
         <DialogContentText id="alert-dialog-description">
+          <RxCrossCircled className="absolute text-red-600 h-6 w-6 right-1 top-1 cursor-pointer" onClick={() => props.onClose()} />
           <div className="modal_SeeProfile">
             <div className="font-pj  text-lg text-current font-bold sm:text-center pt-1 mb-3">Detail of Resident</div>
             <div className="flex sm:item-center sm:justify-center mt-6 mb-6 ">

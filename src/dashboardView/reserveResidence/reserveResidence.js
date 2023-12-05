@@ -13,12 +13,14 @@ import { MdRemoveRedEye } from "react-icons/md";
 import BookResidenceModal from "./modal/BookResidenceModal";
 import Pagination from "../../components/Pagination/pagination";
 const ReserveResidence = () => {
-  const tabs = ["Reserved", "Booked", "Cancelled"];
+  const tabs = ["Reserved", "Booked"];
   const navigate = useNavigate();
+  const [search, setSearch] = useState("");
   const [activeTab, setActiveTab] = useState(0);
   const [bookResidenceModal, setBookResidenceModal] = useState(false);
   const [valueReserveResidence, setValueReserveResidence] = useState();
   const [allReserveResidenceData, setAllReserveResidenceData] = useState();
+  const [allBookedResidenceData, setAllBookedResidenceData] = useState();
   const [pages, setPages] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [statusApi, setStatusApi] = useState("Reserved");
@@ -46,10 +48,29 @@ const ReserveResidence = () => {
     }
   };
   console.log("allReserveResidenceData", allReserveResidenceData);
+
+  useEffect(() => {
+    getAllBookedResidenceData(currentPage, statusApi);
+  }, [currentPage]);
+  const getAllBookedResidenceData = async (page) => {
+    const response = await Api("get", `show-all-booking-residence?page=${page}`);
+    console.log("response", response);
+    if (response?.status === 200 || response?.status == 201) {
+      if (pages.length === 0) {
+        for (let i = 1; i <= Math.ceil(response?.data?.data?.total / response.data?.data?.per_page); i++) {
+          pages.push(i);
+        }
+        setPages(pages);
+      }
+      setAllBookedResidenceData(response?.data?.data?.data);
+    }
+  };
+  console.log("allBookedResidenceData", allBookedResidenceData);
   const handlerView = ({ item, i }) => {
     setBookResidenceModal(true);
     setValueReserveResidence({ item, i });
   };
+  console.log("search", search);
   return (
     <div className="flex flex-col flex-1 xl:pl-64">
       <div className="py-12 bg-white sm:py-16 lg:py-8">
@@ -72,7 +93,7 @@ const ReserveResidence = () => {
             </nav>
             <nav className="flex">
               <div>
-                <input className="search-input" placeholder="search or filter" />
+                <input className="search-input" placeholder="search or filter" onChange={(e) => setSearch(e.target.value)} />
                 <BsSearch className="ml-3 absolute" style={{ color: "#000000", marginTop: "-25px" }} />
               </div>
             </nav>
@@ -95,54 +116,113 @@ const ReserveResidence = () => {
                       <th className="py-3.5 px-4 text-left text-sm tracking-widest font-medium text-gray-500">Book</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    {allReserveResidenceData &&
-                      allReserveResidenceData.map((item, i) => (
-                        <tr className="bg-gray-50 border-b-[1px]" key={i}>
-                          <td className="px-4 py-4 pt-6 lg:pt-5 text-sm font-bold text-gray-900 align-top lg:align-middle whitespace-nowrap">
-                            <img className=" w-10 h-10 rounded-full" src={IMAGE_BASE_URL + item?.user_id?.image} alt="" />
-                          </td>
-                          <td className="px-4 py-4 pt-6 lg:pt-5 text-sm font-bold text-gray-900 align-top lg:align-middle whitespace-nowrap">
-                            <div className="flex items-center capitalize">{item?.user_id?.name}</div>
-                          </td>
-                          <td className="px-4 py-4 text-sm font-medium text-gray-900 lg:table-cell whitespace-nowrap">
-                            <div className="flex items-center">{item?.user_id?.email}</div>
-                          </td>
-                          <td className="px-4 py-4 text-sm font-medium text-gray-900 lg:table-cell whitespace-nowrap">
-                            <div className="flex items-center capitalize">{item?.user_id?.gender}</div>
-                          </td>
-                          <td className="px-4 py-4 text-sm font-medium text-gray-900 xl:table-cell whitespace-nowrap">
-                            <div className="flex items-center capitalize">{item?.accommodation_id?.flate_name}</div>
-                          </td>
-                          <td className="px-4 py-4 text-sm font-medium text-gray-900 xl:table-cell whitespace-nowrap">
-                            <div className="flex items-center capitalize"> {item?.accommodation_id?.resident_type}</div>
-                          </td>
-                          <td className="px-4 py-4 text-sm font-medium text-gray-900 xl:table-cell whitespace-nowrap">
-                            <div className="flex items-center capitalize"> {item?.accommodation_id?.residence_name}</div>
-                          </td>
-                          <td className="px-4 py-4 text-sm font-medium text-gray-900 xl:table-cell whitespace-nowrap">
-                            <div className="flex items-center capitalize">
-                              <span>€</span>
-                              {item?.accommodation_id?.price.toLocaleString()}
-                              {/* {item?.accommodation_id?.price} */}
-                            </div>
-                          </td>
-                          <td className="px-4 py-4 text-sm font-medium text-gray-900 xl:table-cell whitespace-nowrap">
-                            <div className="flex items-center capitalize"> {item?.status}</div>
-                          </td>
-                          <td className=" px-4 py-4 lg:table-cell whitespace-nowrap">
-                            <div className="flex items-center space-x-4">
-                              <div
-                                onClick={() => handlerView({ item, i })}
-                                className="cursor-pointer inline-flex items-center px-1 py-1 text-sm font-medium text-gray-700 transition-all duration-200 bg-gray-100 border border-gray-300 rounded-md shadow-sm hover:bg-indigo-200 focus:outline-none hover:text-white hover:border-indigo-600 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                              >
-                                <MdRemoveRedEye className="h-6 w-6 text-indigo-500" />
-                              </div>
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                  </tbody>
+                  {activeTab == 0 ? (
+                    <tbody>
+                      {allReserveResidenceData &&
+                        allReserveResidenceData
+                          .filter((item) => {
+                            return search.toLowerCase() === "" ? item : item?.user_id?.name.toLowerCase().includes(search);
+                          })
+                          .map((item, i) => (
+                            <tr className="bg-gray-50 border-b-[1px]" key={i}>
+                              <td className="px-4 py-4 pt-6 lg:pt-5 text-sm font-bold text-gray-900 align-top lg:align-middle whitespace-nowrap">
+                                <img className=" w-10 h-10 rounded-full" src={IMAGE_BASE_URL + item?.user_id?.image} alt="" />
+                              </td>
+                              <td className="px-4 py-4 pt-6 lg:pt-5 text-sm font-bold text-gray-900 align-top lg:align-middle whitespace-nowrap">
+                                <div className="flex items-center capitalize">{item?.user_id?.name}</div>
+                              </td>
+                              <td className="px-4 py-4 text-sm font-medium text-gray-900 lg:table-cell whitespace-nowrap">
+                                <div className="flex items-center">{item?.user_id?.email}</div>
+                              </td>
+                              <td className="px-4 py-4 text-sm font-medium text-gray-900 lg:table-cell whitespace-nowrap">
+                                <div className="flex items-center capitalize">{item?.user_id?.gender}</div>
+                              </td>
+                              <td className="px-4 py-4 text-sm font-medium text-gray-900 xl:table-cell whitespace-nowrap">
+                                <div className="flex items-center capitalize">{item?.accommodation_id?.flate_name}</div>
+                              </td>
+                              <td className="px-4 py-4 text-sm font-medium text-gray-900 xl:table-cell whitespace-nowrap">
+                                <div className="flex items-center capitalize"> {item?.accommodation_id?.resident_type}</div>
+                              </td>
+                              <td className="px-4 py-4 text-sm font-medium text-gray-900 xl:table-cell whitespace-nowrap">
+                                <div className="flex items-center capitalize"> {item?.accommodation_id?.residence_name}</div>
+                              </td>
+                              <td className="px-4 py-4 text-sm font-medium text-gray-900 xl:table-cell whitespace-nowrap">
+                                <div className="flex items-center capitalize">
+                                  <span>€</span>
+                                  {item?.accommodation_id?.price.toLocaleString()}
+                                  {/* {item?.accommodation_id?.price} */}
+                                </div>
+                              </td>
+                              <td className="px-4 py-4 text-sm font-medium text-gray-900 xl:table-cell whitespace-nowrap">
+                                <div className="flex items-center capitalize"> {item?.status}</div>
+                              </td>
+                              <td className=" px-4 py-4 lg:table-cell whitespace-nowrap">
+                                <div className="flex items-center space-x-4">
+                                  <div
+                                    onClick={() => handlerView({ item, i })}
+                                    className="cursor-pointer inline-flex items-center px-1 py-1 text-sm font-medium text-gray-700 transition-all duration-200 bg-gray-100 border border-gray-300 rounded-md shadow-sm hover:bg-indigo-200 focus:outline-none hover:text-white hover:border-indigo-600 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                  >
+                                    <MdRemoveRedEye className="h-6 w-6 text-indigo-500" />
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                    </tbody>
+                  ) : (
+                    <tbody>
+                      {allBookedResidenceData &&
+                        allBookedResidenceData
+                          .filter((item) => {
+                            return search.toLowerCase() === "" ? item : item?.user_id?.name.toLowerCase().includes(search);
+                          })
+                          .map((item, i) => (
+                            <tr className="bg-gray-50 border-b-[1px]" key={i}>
+                              <td className="px-4 py-4 pt-6 lg:pt-5 text-sm font-bold text-gray-900 align-top lg:align-middle whitespace-nowrap">
+                                <img className=" w-10 h-10 rounded-full" src={IMAGE_BASE_URL + item?.user_id?.image} alt="" />
+                              </td>
+                              <td className="px-4 py-4 pt-6 lg:pt-5 text-sm font-bold text-gray-900 align-top lg:align-middle whitespace-nowrap">
+                                <div className="flex items-center capitalize">{item?.user_id?.name}</div>
+                              </td>
+                              <td className="px-4 py-4 text-sm font-medium text-gray-900 lg:table-cell whitespace-nowrap">
+                                <div className="flex items-center">{item?.user_id?.email}</div>
+                              </td>
+                              <td className="px-4 py-4 text-sm font-medium text-gray-900 lg:table-cell whitespace-nowrap">
+                                <div className="flex items-center capitalize">{item?.user_id?.gender}</div>
+                              </td>
+                              <td className="px-4 py-4 text-sm font-medium text-gray-900 xl:table-cell whitespace-nowrap">
+                                <div className="flex items-center capitalize">{item?.accommodation_id?.flate_name}</div>
+                              </td>
+                              <td className="px-4 py-4 text-sm font-medium text-gray-900 xl:table-cell whitespace-nowrap">
+                                <div className="flex items-center capitalize"> {item?.accommodation_id?.resident_type}</div>
+                              </td>
+                              <td className="px-4 py-4 text-sm font-medium text-gray-900 xl:table-cell whitespace-nowrap">
+                                <div className="flex items-center capitalize"> {item?.accommodation_id?.residence_name}</div>
+                              </td>
+                              <td className="px-4 py-4 text-sm font-medium text-gray-900 xl:table-cell whitespace-nowrap">
+                                <div className="flex items-center capitalize">
+                                  <span>€</span>
+                                  {item?.accommodation_id?.price.toLocaleString()}
+                                  {/* {item?.accommodation_id?.price} */}
+                                </div>
+                              </td>
+                              <td className="px-4 py-4 text-sm font-medium text-gray-900 xl:table-cell whitespace-nowrap">
+                                <div className="flex items-center capitalize"> {item?.status}</div>
+                              </td>
+                              <td className=" px-4 py-4 lg:table-cell whitespace-nowrap">
+                                <div className="flex items-center space-x-4">
+                                  <div
+                                    onClick={() => handlerView({ item, i })}
+                                    className="cursor-pointer inline-flex items-center px-1 py-1 text-sm font-medium text-gray-700 transition-all duration-200 bg-gray-100 border border-gray-300 rounded-md shadow-sm hover:bg-indigo-200 focus:outline-none hover:text-white hover:border-indigo-600 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                  >
+                                    <MdRemoveRedEye className="h-6 w-6 text-indigo-500" />
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                    </tbody>
+                  )}
                 </table>
                 {allReserveResidenceData?.length > 0 ? <Pagination currentPage={currentPage} setCurrentPage={(page) => setCurrentPage(page)} pages={pages} /> : null}
               </div>

@@ -11,7 +11,7 @@ const Footer = () => {
               <img src={Icon} style={{ height: "120px", width: "140px" }} />
             </div>
           </div>
-          <nav className="flex items-center justify-center space-x-6 sm:space-x-16 xl:space-x-20">
+          {/* <nav className="flex items-center justify-center space-x-6 sm:space-x-16 xl:space-x-20">
             <a title="" className="text-base font-medium text-gray-100 transition-all duration-200 hover:-translate-y-1 hover:text-white">
               Home
             </a>
@@ -21,7 +21,7 @@ const Footer = () => {
             <a title="" className="text-base font-medium text-gray-100 transition-all duration-200 hover:-translate-y-1 hover:text-white">
               Contact us
             </a>
-          </nav>
+          </nav> */}
           <ul className="flex items-center justify-end space-x-3">
             <li>
               <a title="" className="inline-flex items-center justify-center w-8 h-8 text-white transition-all duration-200 bg-gray-800 rounded-full hover:bg-blue-600" target="_blank" rel="noopener">

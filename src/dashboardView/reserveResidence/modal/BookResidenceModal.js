@@ -5,6 +5,8 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import { Api } from "../../../utils/Api";
 import toast from "react-hot-toast";
+
+import { RxCrossCircled } from "react-icons/rx";
 const BookResidenceModal = (props) => {
   const { open, onClose, valueReserveResidence, setAllReserveResidenceData } = props;
   console.log("valueReserveResidence", valueReserveResidence);
@@ -13,7 +15,7 @@ const BookResidenceModal = (props) => {
     console.log("response", response);
     if (response?.status === 200 || response?.status === 201) {
       setAllReserveResidenceData(response?.data?.data?.status);
-      toast.success(response?.data?.message);
+      toast.success("Residence Successfully Booked");
       onClose();
     } else {
       toast.error(response?.data?.message);
@@ -23,8 +25,7 @@ const BookResidenceModal = (props) => {
     const response = await Api("post", `cancel-reserve/${valueReserveResidence?.item?.id}`);
     console.log("response", response);
     if (response?.status === 200 || response?.status === 201) {
-      // setAllReserveResidenceData(allReserveResidenceData.filter((data) => data?.id !== valueReserveResidence?.id));
-      toast.success(response?.data?.message);
+      toast.success("Residence Successfully Cancelled");
       onClose();
     } else {
       toast.error("Error Already Cancel");
@@ -34,6 +35,7 @@ const BookResidenceModal = (props) => {
     <Dialog open={open} onClose={onClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
+          <RxCrossCircled className="absolute text-red-600 h-6 w-6 right-1 top-1 cursor-pointer" onClick={() => onClose()} />
           <div className="modalViewReserveResidence">
             <h1 className="mt-2 mb-8 text-center font-bold text-xl text-black font-pj">View Residence</h1>
             <div className="grid  sm:grid-cols-2 ">
