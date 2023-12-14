@@ -1,5 +1,4 @@
 import React, { useRef, useState, useEffect } from "react";
-
 import { useNavigate } from "react-router-dom";
 import image from "../../assets/profileicon.png";
 import SliderApartment from "../../components/sliderApartment/sliderApartment";
@@ -11,8 +10,14 @@ import { BsSearch } from "react-icons/bs";
 import { Api } from "../../utils/Api";
 import SliderHome from "../../components/sliderHome/sliderHome";
 import { IMAGE_BASE_URL } from "../../utils/Url";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+
+const label = { inputProps: { "aria-label": "Checkbox demo" } };
 const Home = () => {
   const [startIndex, setStartIndex] = useState(0);
+  const [smoker, setSmoker] = useState("");
   const imageContainerRef = useRef(null);
   const [imageWidth, setImageWidth] = useState(0);
   const [pages, setPages] = useState([]);
@@ -22,6 +27,28 @@ const Home = () => {
   const navigate = useNavigate();
   const [coordinates, setCoordinates] = useState(null);
   const [address, setAddress] = useState("");
+
+  const labels = ["Cook", "Pets", "Tidy", "Allergies", "Smoker"];
+  const [checkedItems, setCheckedItems] = React.useState({
+    Cook: false,
+    Pets: false,
+    Tidy: false,
+    Allergies: false,
+    Smoker: false,
+  });
+
+  const handleCheckboxChange = (label) => {
+    setCheckedItems((prevCheckedItems) => ({
+      ...prevCheckedItems,
+      [label]: !prevCheckedItems[label],
+    }));
+  };
+  console.log(checkedItems, "checkedItems");
+  const containerFilterStyle = (label) => ({
+    backgroundColor: checkedItems[label] ? "#ec1d41" : "white",
+    color: checkedItems[label] ? "white" : "#7a7979",
+  });
+
   const handleSelect = async (selectedAddress) => {
     try {
       const results = await geocodeByAddress(selectedAddress);
@@ -70,18 +97,47 @@ const Home = () => {
   };
 
   const handleNext = () => {
-    setStartIndex((prevIndex) => Math.min(prevIndex + 1, Math.max(0, allFlashResidence?.length - 6)));
+    setStartIndex((prevIndex) => Math.min(prevIndex + 1, Math.max(0, allFlashResidence?.length - 5)));
   };
+
   console.log("allFlashResidence", allFlashResidence);
+  console.log("smoker", smoker);
   return (
     <section>
       <section class=" bg-neutral-50">
         <div className="bg-custom-background">
-          <div className="pt-56">
+          <div className="pt-52">
             <div className="text-3xl sm:text-5xl font-extrabold text-slate-600 flex items-center justify-center ">
               We find you <span className="ml-2 text-red-600"> home</span>{" "}
             </div>
-            <div className=" mt-10">
+            <div className="mt-14 flex justify-center flex-wrap">
+              <FormGroup sx={{ display: { xs: "contents", sm: "block" } }}>
+                {labels.map((label) => (
+                  <FormControlLabel
+                    key={label}
+                    className="container-filter"
+                    style={{
+                      backgroundColor: checkedItems[label] ? "#dc2626" : "transparent",
+                      color: checkedItems[label] ? "white" : "#7a7979",
+                    }}
+                    control={
+                      <Checkbox
+                        size="small"
+                        style={{
+                          color: checkedItems[label] ? "#ffffff" : "#7a7979", // Change the checked color here
+                        }}
+                        color="default"
+                        sx={{ marginRight: "-5px" }}
+                        checked={checkedItems[label] || false}
+                        onChange={() => handleCheckboxChange(label)}
+                      />
+                    }
+                    label={label}
+                  />
+                ))}
+              </FormGroup>
+            </div>
+            <div className="">
               <PlacesAutocomplete value={address} onChange={setAddress} onSelect={handleSelect} searchOptions={{ types: ["geocode"] }}>
                 {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
                   <div>
@@ -92,7 +148,7 @@ const Home = () => {
                           placeholder: "Enter address or location name",
                           onKeyDown: (e) => {
                             if (e.key === "Enter") {
-                              navigate(`/apartments/${encodeURIComponent(address)}`, { state: { coordinates: coordinates } });
+                              navigate(`/apartments/${encodeURIComponent(address)}`, { state: { coordinates: coordinates, checkedItems: checkedItems } });
                             }
                           },
                         })}
@@ -121,9 +177,9 @@ const Home = () => {
           <div class="text-center lg:text-left mt-12">
             <div className=" text-3xl text-slate-500  font-bold  text-center mt-6">Flash Opportunity</div>
             <div className="app mt-6 mb-12">
-              {allFlashResidence && allFlashResidence.length > 0 ? (
+              {allFlashResidence && allFlashResidence?.length > 0 ? (
                 <div className="slider pt-4">
-                  {allFlashResidence?.length > 6 ? (
+                  {allFlashResidence?.length > 5 ? (
                     <button
                       className="nav-button"
                       onClick={() => {
@@ -165,7 +221,7 @@ const Home = () => {
                       </div>
                     ))}
                   </div>
-                  {allFlashResidence?.length > 6 ? (
+                  {allFlashResidence?.length > 5 ? (
                     <button
                       className="nav-button-right"
                       onClick={() => {
@@ -226,6 +282,4 @@ const Home = () => {
     </section>
   );
 };
-
 export default Home;
-// https://www.ilaan.com/assets/images/pictures/ilaan-main-opt.webp?v=1.2

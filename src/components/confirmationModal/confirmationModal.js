@@ -6,8 +6,10 @@ import DialogContentText from "@mui/material/DialogContentText";
 import Button from "../button";
 import { AiOutlineDelete } from "react-icons/ai";
 const ConfirmationModal = (props) => {
-  const { open, setOpen, onClick, onClose, onConfirm } = props;
+  const { open, setOpen, onClick, onClose, onConfirm, setBtnDisabled, btnDisabled } = props;
   const residents = ["", "", "", ""];
+  console.log("setBtnDisabled", setBtnDisabled);
+  console.log("btnDisabled", btnDisabled);
   return (
     <Dialog open={open} onClose={onClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
       <DialogContent>
@@ -24,8 +26,12 @@ const ConfirmationModal = (props) => {
                 <div className="flex items-center mt-10 space-x-4 justify-center">
                   <button
                     type="button"
+                    disabled={btnDisabled}
                     className="inline-flex items-center justify-center px-6 py-2 text-sm font-bold leading-5 text-white transition-all duration-200 bg-red-600 border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 hover:bg-slate-500"
-                    onClick={() => onClick()}
+                    onClick={() => {
+                      onClick();
+                      // setBtnDisabled(true);
+                    }}
                   >
                     Confirm
                   </button>

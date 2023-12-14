@@ -12,23 +12,49 @@ import toast from "react-hot-toast";
 import { useState } from "react";
 const ConfirmationReserveModal = (props) => {
   const navigate = useNavigate();
-  const { open, onClose, sendData } = props;
+  const { open, onClose, sendData, reserveHandler } = props;
+  const [loading, setLoading] = useState(false);
   const [showSuccessfullModal, setShowSuccessfullModal] = useState(false);
+  const [residenceView, setResidenceView] = useState({});
   const localData = localStorage.getItem("auth-token");
   console.log("--023-0-30", localData);
   const handlerReserveResidence = async () => {
-    if (localData) {
-      const response = await Api("post", `reserve-residence/${sendData?.id?.id}`);
-      if (response?.status === 200 || response?.status === 201) {
-        toast.success("Reserved Successfully");
-        onClose();
-        setShowSuccessfullModal(true);
-      } else {
-        toast.error("Already reserved");
-        onClose();
+    if (localData && !loading) {
+      try {
+        setLoading(true); // Set loading to true on button click
+        const response = await Api("post", `reserve-residence/${sendData?.id?.id}`);
+        console.log("response", response);
+        if (response?.status === 200 || response?.status === 201) {
+          // setResidenceView(response?.data?.data);
+          toast.success("Reserved Successfully");
+          onClose();
+          setShowSuccessfullModal(true);
+          reserveHandler();
+        } else {
+          toast.error("Already reserved");
+          onClose();
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      } finally {
+        setLoading(false); // Reset loading to false after API call
       }
     }
+    // if (localData) {
+    //   const response = await Api("post", `reserve-residence/${sendData?.id?.id}`);
+    //   console.log("response", response);
+    //   if (response?.status === 200 || response?.status === 201) {
+    //     // setResidenceView(response?.data?.data);
+    //     toast.success("Reserved Successfully");
+    //     onClose();
+    //     setShowSuccessfullModal(true);
+    //   } else {
+    //     toast.error("Already reserved");
+    //     onClose();
+    //   }
+    // }
   };
+  console.log("residenceView", residenceView);
   return (
     <Dialog open={open} onClose={onClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
       <DialogContent>
@@ -38,7 +64,7 @@ const ConfirmationReserveModal = (props) => {
               <div className="-mt-1">
                 <p className="mt-3 text-lg font-medium text-center text-gray-500">Are you sure you want to Reserve this Residence?</p>
                 <div className="flex items-center mt-10 space-x-4 justify-center">
-                  <button
+                  {/* <button
                     type="button"
                     className="inline-flex items-center justify-center px-6 py-2 text-sm font-bold leading-5 text-white transition-all duration-200 bg-red-600 border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 hover:bg-slate-500"
                     onClick={() => {
@@ -47,6 +73,16 @@ const ConfirmationReserveModal = (props) => {
                     }}
                   >
                     Confirm
+                  </button> */}
+                  <button
+                    type="button"
+                    className={`inline-flex items-center justify-center px-6 py-2 text-sm font-bold leading-5 ${
+                      loading ? "opacity-50 cursor-not-allowed" : "text-white"
+                    } transition-all duration-200 bg-red-600 border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 hover:bg-slate-500`}
+                    onClick={handlerReserveResidence}
+                    disabled={loading}
+                  >
+                    {loading ? "Confirming..." : "Confirm"}
                   </button>
                   <button
                     type="button"

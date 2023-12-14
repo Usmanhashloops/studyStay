@@ -36,18 +36,18 @@ const BlockedUsers = () => {
       setAllBlockedData(response?.data?.data?.data);
     }
   };
+  console.log("viewItems", viewItems);
   console.log("allBlockedData", allBlockedData);
-
-  const handlerBlock = async (index) => {
-    const response = await Api("post", `blocked-user/${allBlockedData[index].id}`);
+  const handlerUnBlock = async (index) => {
+    const response = await Api("post", `unblocked-user/${allBlockedData[index].id}`);
     console.log("response", response);
     if (response.status === 200 || response.status === 201) {
       const newData = [...allBlockedData];
       newData.splice(index, 1);
       setAllBlockedData(newData);
       setOpenConfirmationModal(false);
-      toast.success(response?.data?.message);
-    } else toast.error(response?.data?.message);
+      toast.success("Successfully");
+    } else toast.error("Error");
   };
   return (
     <div className="flex flex-col flex-1 xl:pl-64">
@@ -61,13 +61,7 @@ const BlockedUsers = () => {
                   <BsSearch className="ml-3 absolute" style={{ color: "#000000", marginTop: "-25px" }} />
                 </div>
               </nav>
-              <nav className="flex">
-                {/* <Button
-                  title={"Add Users"}
-                  className="items-center mt-6 sm:mt-0 px-3 py-2 text-sm font-medium leading-4 mb-6 text-gray-700 bg-slate-50 border border-gray-300 rounded-lg shadow-md sm:inline-flex hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-                  //   onClick={() => navigate("/add_Residence")}
-                /> */}
-              </nav>
+              <nav className="flex"></nav>
             </div>
             <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
@@ -100,18 +94,11 @@ const BlockedUsers = () => {
                             <td className="px-4 py-4 text-sm font-medium text-gray-900 xl:table-cell whitespace-nowrap">
                               <div className="flex items-left">{item?.email}</div>
                             </td>
-
                             <td className="px-4 py-4 text-sm font-medium text-gray-900 xl:table-cell whitespace-nowrap">
                               <div className="flex items-left capitalize  ">{item?.gender}</div>
                             </td>
                             <td className=" px-4 py-4 lg:table-cell whitespace-nowrap">
                               <div className="flex items-center space-x-4">
-                                {/* <div
-                                // onClick={() => navigate(`/update_Residence`, { state: { id: item } })}
-                                className="cursor-pointer inline-flex items-center px-1 py-1 text-sm font-medium text-gray-700 transition-all duration-200 bg-gray-100 border border-gray-300 rounded-md shadow-sm hover:bg-indigo-200 focus:outline-none hover:text-white hover:border-indigo-600 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                              >
-                                <AiOutlineEdit className="h-6 w-6 text-indigo-500" />
-                              </div> */}
                                 <button
                                   type="button"
                                   className="inline-flex items-center justify-center px-4 py-2 text-sm font-bold leading-5 text-white transition-all duration-200 bg-green-600 border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 hover:bg-slate-500"
@@ -120,7 +107,7 @@ const BlockedUsers = () => {
                                     setViewItems({ item, index });
                                   }}
                                 >
-                                  Un block
+                                  Un-block
                                 </button>
                               </div>
                             </td>
@@ -135,7 +122,7 @@ const BlockedUsers = () => {
                 open={openConfirmationModal}
                 onClose={() => setOpenConfirmationModal(false)}
                 title={"Are you sure you want to Un-Block this user?"}
-                onClick={() => handlerBlock(viewItems.index)}
+                onClick={() => handlerUnBlock(viewItems.index)}
               />
             )}
             {allBlockedData?.length > 0 ? <Pagination currentPage={currentPage} setCurrentPage={(page) => setCurrentPage(page)} pages={pages} /> : null}

@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 const RemoveResidence = () => {
   const [showConfirmationModal, setShowConfirmationModal] = useState("");
   const [sendData, setSendData] = useState();
+  const [btnDisabled, setBtnDisabled] = useState(false);
 
   const [userAllReserveResidence, setUserAllReserveResidence] = useState();
   const getUserAllReserveResidence = async () => {
@@ -98,8 +99,10 @@ const RemoveResidence = () => {
               <ConfirmationModal
                 open={showConfirmationModal}
                 onClose={() => setShowConfirmationModal(false)}
-                title={"Are you sure you want to delete this Record?"}
+                title={"Are you sure you want to cancel this Residence?"}
                 onClick={() => handlerDelete(sendData.index)}
+                setBtnDisabled={true}
+                btnDisabled={btnDisabled}
               />
             )}
           </div>

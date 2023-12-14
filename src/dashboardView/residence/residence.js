@@ -13,6 +13,8 @@ import ConfirmationModal from "../../components/confirmationModal/confirmationMo
 
 const Residence = () => {
   const navigate = useNavigate();
+
+  const [search, setSearch] = useState("");
   const [allResidenceData, setAllResidenceData] = useState();
   const [openConfirmationModal, setOpenConfirmationModal] = useState(false);
 
@@ -57,7 +59,7 @@ const Residence = () => {
             <div className=" mb-8  sm:flex sm:justify-between">
               <nav className="flex -mb-px space-x-10">
                 <div>
-                  <input className="search-input bg-slate-200" placeholder="search or filter" />
+                  <input className="search-input bg-slate-200" placeholder="search or filter" onChange={(e) => setSearch(e.target.value)} />
                   <BsSearch className="ml-3 absolute" style={{ color: "#000000", marginTop: "-25px" }} />
                 </div>
               </nav>
@@ -86,52 +88,56 @@ const Residence = () => {
                   </thead>
                   <tbody>
                     {allResidenceData &&
-                      allResidenceData.map((item, index) => (
-                        <tr className="bg-gray-50 border-b-[1px]" key={index}>
-                          <td className="px-4 py-4 pt-6 lg:pt-5 text-sm font-bold text-gray-900 align-top lg:align-middle whitespace-nowrap">{index + 1}</td>
-                          <td className="px-4 py-4 text-sm font-medium text-gray-900 lg:table-cell whitespace-nowrap">
-                            <div className="flex items-center capitalize">{item?.flate_name}</div>
-                          </td>
-                          <td className="px-4 py-4 text-sm font-medium text-gray-900 lg:table-cell whitespace-nowrap">
-                            <div className="flex items-center capitalize ">{item?.resident_type}</div>
-                          </td>
-                          <td className="px-4 py-4 text-sm font-medium text-gray-900 xl:table-cell whitespace-nowrap">
-                            <div className="flex items-center capitalize">{item?.residence_name}</div>
-                          </td>
-                          <td className="px-4 py-4 text-sm font-medium text-gray-900 xl:table-cell whitespace-nowrap">
-                            <div className="flex items-center capitalize">
-                              <span>€</span>
-                              {item?.price.toLocaleString()}
-                            </div>
-                          </td>
-                          <td className="px-4 py-4 text-sm font-medium text-gray-900 xl:table-cell whitespace-nowrap">
-                            <div className="flex items-center capitalize  ">{item?.address}</div>
-                          </td>
-                          <td className="px-4 py-4 text-sm font-medium text-gray-900 xl:table-cell whitespace-nowrap">
-                            <div className="flex items-center capitalize  ">{item?.status}</div>
-                          </td>
-                          <td className=" px-4 py-4 lg:table-cell whitespace-nowrap">
-                            <div className="flex items-center space-x-4">
-                              <div
-                                onClick={() => navigate(`/update_Residence`, { state: { id: item } })}
-                                className="cursor-pointer inline-flex items-center px-1 py-1 text-sm font-medium text-gray-700 transition-all duration-200 bg-gray-100 border border-gray-300 rounded-md shadow-sm hover:bg-indigo-200 focus:outline-none hover:text-white hover:border-indigo-600 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                              >
-                                <AiOutlineEdit className="h-6 w-6 text-indigo-500" />
+                      allResidenceData
+                        .filter((item) => {
+                          return search.toLowerCase() === "" ? item : item?.flate_name.toLowerCase().includes(search);
+                        })
+                        .map((item, index) => (
+                          <tr className="bg-gray-50 border-b-[1px]" key={index}>
+                            <td className="px-4 py-4 pt-6 lg:pt-5 text-sm font-bold text-gray-900 align-top lg:align-middle whitespace-nowrap">{index + 1}</td>
+                            <td className="px-4 py-4 text-sm font-medium text-gray-900 lg:table-cell whitespace-nowrap">
+                              <div className="flex items-center capitalize">{item?.flate_name}</div>
+                            </td>
+                            <td className="px-4 py-4 text-sm font-medium text-gray-900 lg:table-cell whitespace-nowrap">
+                              <div className="flex items-center capitalize ">{item?.resident_type}</div>
+                            </td>
+                            <td className="px-4 py-4 text-sm font-medium text-gray-900 xl:table-cell whitespace-nowrap">
+                              <div className="flex items-center capitalize">{item?.residence_name}</div>
+                            </td>
+                            <td className="px-4 py-4 text-sm font-medium text-gray-900 xl:table-cell whitespace-nowrap">
+                              <div className="flex items-center capitalize">
+                                <span>€</span>
+                                {item?.price.toLocaleString()}
                               </div>
-                              <div
-                                onClick={() => {
-                                  setOpenConfirmationModal(true);
-                                  setViewItems({ item, index });
-                                }}
-                                // onClick={() => handlerDelete({ item, index })}
-                                className="cursor-pointer inline-flex items-center px-1 py-1 text-sm font-medium text-gray-700 transition-all duration-200 bg-gray-100 border border-gray-300 rounded-md shadow-sm hover:bg-indigo-200 focus:outline-none hover:text-white hover:border-indigo-600 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                              >
-                                <AiOutlineDelete className="h-6 w-6 text-rose-600" />
+                            </td>
+                            <td className="px-4 py-4 text-sm font-medium text-gray-900 xl:table-cell whitespace-nowrap">
+                              <div className="flex items-center capitalize  ">{item?.address}</div>
+                            </td>
+                            <td className="px-4 py-4 text-sm font-medium text-gray-900 xl:table-cell whitespace-nowrap">
+                              <div className="flex items-center capitalize  ">{item?.status}</div>
+                            </td>
+                            <td className=" px-4 py-4 lg:table-cell whitespace-nowrap">
+                              <div className="flex items-center space-x-4">
+                                <div
+                                  onClick={() => navigate(`/update_Residence`, { state: { id: item } })}
+                                  className="cursor-pointer inline-flex items-center px-1 py-1 text-sm font-medium text-gray-700 transition-all duration-200 bg-gray-100 border border-gray-300 rounded-md shadow-sm hover:bg-indigo-200 focus:outline-none hover:text-white hover:border-indigo-600 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                >
+                                  <AiOutlineEdit className="h-6 w-6 text-indigo-500" />
+                                </div>
+                                <div
+                                  onClick={() => {
+                                    setOpenConfirmationModal(true);
+                                    setViewItems({ item, index });
+                                  }}
+                                  // onClick={() => handlerDelete({ item, index })}
+                                  className="cursor-pointer inline-flex items-center px-1 py-1 text-sm font-medium text-gray-700 transition-all duration-200 bg-gray-100 border border-gray-300 rounded-md shadow-sm hover:bg-indigo-200 focus:outline-none hover:text-white hover:border-indigo-600 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                >
+                                  <AiOutlineDelete className="h-6 w-6 text-rose-600" />
+                                </div>
                               </div>
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
+                            </td>
+                          </tr>
+                        ))}
                   </tbody>
                 </table>
               </div>

@@ -208,7 +208,7 @@ const UpdateResidence = (props) => {
                               setOpenApartments(false);
                             }}
                           />
-                          <FormControlLabel
+                          {/* <FormControlLabel
                             value="appartment"
                             control={<Radio />}
                             label="Appartment"
@@ -216,7 +216,7 @@ const UpdateResidence = (props) => {
                               setOpenApartments(!openApartments);
                               setOpenRoom(false);
                             }}
-                          />
+                          /> */}
                         </RadioGroup>
                       </FormControl>
                     </div>
@@ -274,7 +274,7 @@ const UpdateResidence = (props) => {
                   ) : (
                     ""
                   )}
-                  {openApartments || residenceType === "appartment" ? (
+                  {/* {openApartments || residenceType === "appartment" ? (
                     <div className="max-w-4xl mx-auto mt-8 ">
                       <div className="space-y-4">
                         <div className="relative">
@@ -326,7 +326,7 @@ const UpdateResidence = (props) => {
                     </div>
                   ) : (
                     ""
-                  )}
+                  )} */}
                   <Grid container spacing={2} sx={{ marginTop: "15px" }}></Grid>
                   <Grid container spacing={2} sx={{ marginTop: "15px" }}>
                     {image.map((img, index) => (

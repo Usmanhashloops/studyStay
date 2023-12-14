@@ -61,8 +61,8 @@ const Header = () => {
       <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-0">
         <div className="flex items-center justify-between">
           {" "}
-          <div style={{ marginTop: "-5px", marginBottom: "-10px", marginRight: "-70px" }}>
-            <img src={Icon} style={{ height: "78px", width: "100px" }} />
+          <div style={{ marginTop: "-5px", marginBottom: "-10px", marginRight: "-70px" }} onClick={() => navigate("/")}>
+            <img src={Icon} style={{ height: "78px", width: "100px", cursor: "pointer" }} />
           </div>
           <div className="flex lg:hidden">
             <button type="button" className="text-gray-900" onClick={toggleExpanded} aria-expanded={expanded}>

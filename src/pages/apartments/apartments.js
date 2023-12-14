@@ -14,12 +14,12 @@ const Apartments = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { searchValue } = useParams();
-
   const [pages, setPages] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   console.log("searchValue", searchValue);
   console.log("location", location);
   const [allCoordinates, setAllCoordinates] = useState();
+  const [filteredData, setFilteredData] = useState();
   const [flashSearchData, setFlashSearchData] = useState();
   const [availableSearchData, setAvailableSearchData] = useState();
   const [residenceData, setResidenceData] = useState();
@@ -38,7 +38,6 @@ const Apartments = () => {
       console.error("Error while fetching coordinates:", error);
     }
   };
-
   useEffect(() => {
     console.log("searchValue", searchValue);
   }, [searchValue]);
@@ -46,14 +45,24 @@ const Apartments = () => {
   useEffect(() => {
     setAllCoordinates(location?.state?.coordinates);
   }, [location?.state]);
+  useEffect(() => {
+    setFilteredData(location?.state?.checkedItems);
+  }, [location?.state]);
 
+  console.log("filteredData", filteredData);
   const HandlerAvailableSearch = async () => {
     try {
       console.log("all cord", location?.state?.coordinates);
+
       const payload = {
         address: searchValue,
         latitude: location?.state?.coordinates?.lat,
         longitude: location?.state?.coordinates?.lng,
+        pets: location?.state?.checkedItems?.Pets ? 1 : 0,
+        do_you_smoke: location?.state?.checkedItems?.Smoker ? 1 : 0,
+        are_you_tidy: location?.state?.checkedItems?.Tidy ? 1 : 0,
+        allergies: location?.state?.checkedItems?.Allergies ? 1 : 0,
+        do_you_cook: location?.state?.checkedItems?.Cook ? 1 : 0,
       };
       const response = await Api("post", "search-near-available-places", payload);
       if (response?.status === 200 || response?.status === 201) {
@@ -72,6 +81,11 @@ const Apartments = () => {
         address: searchValue,
         latitude: location?.state?.coordinates?.lat,
         longitude: location?.state?.coordinates?.lng,
+        pets: location?.state?.checkedItems?.Pets ? 1 : 0,
+        do_you_smoke: location?.state?.checkedItems?.Smoker ? 1 : 0,
+        are_you_tidy: location?.state?.checkedItems?.Tidy ? 1 : 0,
+        allergies: location?.state?.checkedItems?.Allergies ? 1 : 0,
+        do_you_cook: location?.state?.checkedItems?.Cook ? 1 : 0,
       };
       const response = await Api("post", "search-near-flash-places", payload);
       if (response?.status === 200 || response?.status === 201) {
