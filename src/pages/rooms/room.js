@@ -11,7 +11,9 @@ import GoogleMapReact from "google-map-react";
 import { useNavigate } from "react-router-dom";
 import { FaLocationDot } from "react-icons/fa6";
 import ConfirmationReserveModal from "./residentProfileViewModal/confirmationReserveModal";
+import Loader from "../../components/loader/Loader";
 const Rooms = (props) => {
+  const [loader, setLoader] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const [showResidentProfileModal, setshowResidentProfileModal] = useState(false);
@@ -38,11 +40,14 @@ const Rooms = (props) => {
   }, []);
 
   const getResidenceById = async () => {
+    setLoader(true);
+
     const response = await Api("get", `get-residence/${roomData?.id?.id}`);
     console.log("response", response);
     if (response?.status === 200 || response?.status == 201) {
       setResidenceDataByID(response?.data?.data);
     }
+    setLoader(false);
   };
   const localAuth = localStorage.getItem("auth-token");
   const showModal = () => {
@@ -57,11 +62,14 @@ const Rooms = (props) => {
   const [userAllReserveResidence, setUserAllReserveResidence] = useState();
 
   const getUserAllReserveResidence = async () => {
+    setLoader(true);
+
     const response = await Api("get", "show-user-reserve-residence");
     console.log("response", response);
     if (response?.status === 200 || response?.status == 201) {
       setUserAllReserveResidence(response?.data?.data);
     }
+    setLoader(false);
   };
 
   useEffect(() => {
@@ -74,12 +82,14 @@ const Rooms = (props) => {
 
   const lat = Number(roomData?.id?.latitude);
   const lng = Number(roomData?.id?.longitude);
-  console.log("lat", lat);
-  console.log("lng", lng);
+  // console.log("lat", lat);
+  // console.log("lng", lng);
   const points = [{ lat: lat, lng: lng, id: <FaLocationDot className="h-8 w-8 text-blue-600" /> }];
 
   return (
     <section class="py-8 bg-neutral-50 sm:py-16 lg:py-12" style={{ marginTop: "-62px" }}>
+      {loader ? <Loader /> : null}
+
       <div class="px-2 mx-auto sm:px-6 lg:px-0 max-w-7xl pt-12">
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6} md={7} lg={8}>

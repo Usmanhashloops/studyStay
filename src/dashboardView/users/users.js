@@ -6,12 +6,13 @@ import { useNavigate } from "react-router-dom";
 import { Api } from "../../utils/Api";
 import { BsSearch } from "react-icons/bs";
 import { IMAGE_BASE_URL } from "../../utils/Url";
-import GeocodeAddress from "../../components/getAddress/getAddress";
 import Pagination from "../../components/Pagination/pagination";
 import { toast } from "react-hot-toast";
 import ConfirmationModal from "../../components/confirmationModal/confirmationModal";
-
+import Loader from "../../components/loader/Loader";
 const Users = () => {
+  const [loader, setLoader] = useState(false);
+
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [allUsersData, setAllUsersData] = useState();
@@ -23,6 +24,8 @@ const Users = () => {
     getAllUsers(currentPage);
   }, [currentPage]);
   const getAllUsers = async (page) => {
+    setLoader(true);
+
     const response = await Api("get", `user-list?page=${page}`);
     console.log("response", response);
     if (response?.status === 200 || response?.status == 201) {
@@ -34,10 +37,13 @@ const Users = () => {
       }
       setAllUsersData(response?.data?.data?.data);
     }
+    setLoader(false);
   };
   console.log("allUsersData", allUsersData);
 
   const handlerBlock = async (index) => {
+    setLoader(true);
+
     const response = await Api("post", `blocked-user/${allUsersData[index].id}`);
     console.log("response", response);
     if (response.status === 200 || response.status === 201) {
@@ -46,10 +52,13 @@ const Users = () => {
       setAllUsersData(newData);
       setOpenConfirmationModal(false);
       toast.success(response?.data?.message);
+      setLoader(false);
     } else toast.error(response?.data?.message);
   };
   return (
     <div className="flex flex-col flex-1 xl:pl-64">
+      {loader ? <Loader /> : null}
+
       <div className="py-12 bg-white sm:py-16 lg:py-8">
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col ">

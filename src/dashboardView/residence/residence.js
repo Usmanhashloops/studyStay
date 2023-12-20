@@ -6,10 +6,10 @@ import { useNavigate } from "react-router-dom";
 import { Api } from "../../utils/Api";
 import { BsSearch } from "react-icons/bs";
 import { IMAGE_BASE_URL } from "../../utils/Url";
-import GeocodeAddress from "../../components/getAddress/getAddress";
 import Pagination from "../../components/Pagination/pagination";
 import { toast } from "react-hot-toast";
 import ConfirmationModal from "../../components/confirmationModal/confirmationModal";
+import Loader from "../../components/loader/Loader";
 
 const Residence = () => {
   const navigate = useNavigate();
@@ -17,6 +17,7 @@ const Residence = () => {
   const [search, setSearch] = useState("");
   const [allResidenceData, setAllResidenceData] = useState();
   const [openConfirmationModal, setOpenConfirmationModal] = useState(false);
+  const [loader, setLoader] = useState(false);
 
   const [viewItems, setViewItems] = useState();
   const [pages, setPages] = useState([]);
@@ -25,7 +26,7 @@ const Residence = () => {
     getAllResidenceData(currentPage);
   }, [currentPage]);
   const getAllResidenceData = async (page) => {
-    // const response = await Api("get", `all-residence`);
+    setLoader(true);
     const response = await Api("get", `all-residence?page=${page}`);
     console.log("response", response);
     if (response?.status === 200 || response?.status == 201) {
@@ -37,9 +38,12 @@ const Residence = () => {
       }
       setAllResidenceData(response?.data?.data?.data);
     }
+    setLoader(false);
   };
 
   const handlerDelete = async (index) => {
+    setLoader(true);
+
     const response = await Api("post", `delete-residence/${allResidenceData[index].id}`);
     console.log("response", response);
     if (response.status === 200 || response.status === 201) {
@@ -48,11 +52,13 @@ const Residence = () => {
       setAllResidenceData(newData);
       setOpenConfirmationModal(false);
       toast.success(response?.data?.message);
+      setLoader(false);
     } else toast.error(response?.data?.message);
   };
   console.log("allResidenceData", allResidenceData);
   return (
     <div className="flex flex-col flex-1 xl:pl-64">
+      {loader ? <Loader /> : null}
       <div className="py-12 bg-white sm:py-16 lg:py-8">
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col ">
@@ -129,7 +135,6 @@ const Residence = () => {
                                     setOpenConfirmationModal(true);
                                     setViewItems({ item, index });
                                   }}
-                                  // onClick={() => handlerDelete({ item, index })}
                                   className="cursor-pointer inline-flex items-center px-1 py-1 text-sm font-medium text-gray-700 transition-all duration-200 bg-gray-100 border border-gray-300 rounded-md shadow-sm hover:bg-indigo-200 focus:outline-none hover:text-white hover:border-indigo-600 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                 >
                                   <AiOutlineDelete className="h-6 w-6 text-rose-600" />

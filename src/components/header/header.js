@@ -229,36 +229,12 @@ const Header = () => {
         <nav className={expanded ? "block" : "hidden"} x-collapse>
           <div className="px-1 py-8">
             <div className="grid gap-y-7">
-              {/* <PlacesAutocomplete value={address} onChange={setAddress} onSelect={handleSelect} searchOptions={{ types: ["geocode"] }}>
-                {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-                  <div>
-                    <input
-                      className="search-input"
-                      {...getInputProps({
-                        placeholder: "Enter address or location",
-                      })}
-                    />
-                    <BsSearch className="ml-3 absolute" style={{ color: "#000000", marginTop: "-25px" }} />
-
-                    <div className="bg-slate-100 rounded-xl absolute">
-                      {loading && <div className=" px-2 py-2">Loading...</div>}
-                      {suggestions.map((suggestion) => (
-                        <div className=" px-2 py-2" key={suggestion.id}>
-                          <div {...getSuggestionItemProps(suggestion)}>{suggestion.description}</div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </PlacesAutocomplete> */}
-              {/* {SearchFieldWithDropdown(searchDropdown, setSearchDropdown)} */}
               {localAuth ? (
                 <a
                   onClick={handleClick}
                   aria-controls={open ? "account-menu" : undefined}
                   aria-haspopup="true"
                   aria-expanded={open ? "true" : undefined}
-                  // onClick={() => navigate("/profile")}
                   title=""
                   class="
         inline-flex

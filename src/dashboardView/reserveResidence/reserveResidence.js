@@ -7,18 +7,21 @@ import { BsSearch } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import { Api } from "../../utils/Api";
 import { IMAGE_BASE_URL } from "../../utils/Url";
-import GeocodeAddress from "../../components/getAddress/getAddress";
 import { toast } from "react-hot-toast";
 import { MdRemoveRedEye } from "react-icons/md";
 import BookResidenceModal from "./modal/BookResidenceModal";
 import Pagination from "../../components/Pagination/pagination";
+import Loader from "../../components/loader/Loader";
 const ReserveResidence = () => {
   const tabs = [
     { item: "Reserved", url: "show-reserve-residence" },
     { item: "Booked", url: "show-all-booking-residence" },
   ];
+  const [loader, setLoader] = useState(false);
   const navigate = useNavigate();
+  const [filteredData, setFilteredData] = useState([]);
   const [activeTab, setActiveTab] = useState(0);
+  const [searchField, setSearchField] = useState("");
   const [bookResidenceModal, setBookResidenceModal] = useState(false);
   const [valueReserveResidence, setValueReserveResidence] = useState();
   const [allData, setAllData] = useState([]);
@@ -35,7 +38,9 @@ const ReserveResidence = () => {
   useEffect(() => {
     getAllResidenceData(currentPage, url);
   }, [currentPage]);
+
   const getAllResidenceData = async (page, url) => {
+    setLoader(true);
     const response = await Api("get", `${url}?page=${page}`);
     console.log("response", response);
     if (response?.status === 200 || response?.status == 201) {
@@ -47,19 +52,29 @@ const ReserveResidence = () => {
       }
       setAllData(response?.data?.data?.data);
     }
+    setLoader(false);
   };
 
   const handlerView = ({ item, i }) => {
     setBookResidenceModal(true);
     setValueReserveResidence({ item, i });
   };
-  // const serchFilter = (search) => {
-  //   {
-  //     name: search;
-  //   }
-  // };
+  const handleSearch = async (e) => {
+    setLoader(true);
+    const payload = {
+      name: e,
+    };
+    const response = await Api("post", "reserved-search", payload);
+    console.log("res", response);
+    if (response?.status === 200 || response?.status === 201) {
+      setAllData(response?.data?.data?.data);
+    }
+    setLoader(false);
+  };
+  console.log("allData", allData);
   return (
     <div className="flex flex-col flex-1 xl:pl-64">
+      {loader ? <Loader /> : null}
       <div className="py-12 bg-white sm:py-16 lg:py-8">
         <div className="px-4 sm:px-6 lg:px-8">
           <div className=" mb-8  sm:flex sm:justify-between">
@@ -83,7 +98,9 @@ const ReserveResidence = () => {
                 <input
                   className="search-input"
                   placeholder="search or filter"
-                  // onChange={(e) => serchFilter(e.target.value)}
+                  onChange={(e) => {
+                    handleSearch(e.target.value);
+                  }}
                 />
                 <BsSearch className="ml-3 absolute" style={{ color: "#000000", marginTop: "-25px" }} />
               </div>
@@ -104,7 +121,7 @@ const ReserveResidence = () => {
                       <th className="py-3.5 px-4 text-left text-sm tracking-widest font-medium text-gray-500">Residence Name</th>
                       <th className="py-3.5 px-4 text-left text-sm tracking-widest font-medium text-gray-500">Price</th>
                       <th className="py-3.5 px-4 text-left text-sm tracking-widest font-medium text-gray-500">Status</th>
-                      <th className="py-3.5 px-4 text-left text-sm tracking-widest font-medium text-gray-500">Book</th>
+                      <th className="py-3.5 px-4 text-left text-sm tracking-widest font-medium text-gray-500">Action</th>
                     </tr>
                   </thead>
 
@@ -158,7 +175,6 @@ const ReserveResidence = () => {
                 </table>
                 {allData?.length > 0 ? <Pagination currentPage={currentPage} setCurrentPage={(page) => setCurrentPage(page)} pages={pages} /> : null}
               </div>
-
               {bookResidenceModal && (
                 <BookResidenceModal
                   open={bookResidenceModal}

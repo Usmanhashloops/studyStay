@@ -2,24 +2,32 @@ import React, { useState, useEffect } from "react";
 import { Api } from "../../utils/Api";
 import ConfirmationModal from "../../components/confirmationModal/confirmationModal";
 import toast from "react-hot-toast";
+import Loader from "../../components/loader/Loader";
 
 const RemoveResidence = () => {
+  const [loader, setLoader] = useState(false);
+
   const [showConfirmationModal, setShowConfirmationModal] = useState("");
   const [sendData, setSendData] = useState();
   const [btnDisabled, setBtnDisabled] = useState(false);
 
   const [userAllReserveResidence, setUserAllReserveResidence] = useState();
   const getUserAllReserveResidence = async () => {
+    setLoader(true);
+
     const response = await Api("get", "show-user-reserve-residence");
     console.log("response", response);
     if (response?.status === 200 || response?.status == 201) {
       setUserAllReserveResidence(response?.data?.data);
     }
+    setLoader(false);
   };
   useEffect(() => {
     getUserAllReserveResidence();
   }, []);
   const handlerDelete = async (index) => {
+    setLoader(true);
+
     const response = await Api("post", `user-cancel-reserve/${userAllReserveResidence[index].id}`);
     console.log("response", response);
     if (response.status === 200 || response.status === 201) {
@@ -28,11 +36,14 @@ const RemoveResidence = () => {
       setUserAllReserveResidence(newData);
       setShowConfirmationModal(false);
       toast.success(response?.data?.message);
+      setLoader(false);
     } else toast.error(response?.data?.message);
   };
   console.log("userAllReserveResidence", userAllReserveResidence);
   return (
     <section class="py-12 bg-neutral-50 sm:py-16 lg:py-17 h-[90vh]">
+      {loader ? <Loader /> : null}
+
       <div class="px-2 mx-auto sm:px-6 lg:px-0 max-w-7xl">
         <div className=" text-3xl text-slate-500  font-bold text-center  ">Reserved Residences</div>
         <div className=" mt-10">

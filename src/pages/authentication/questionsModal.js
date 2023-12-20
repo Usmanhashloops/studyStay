@@ -16,6 +16,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import toast from "react-hot-toast";
 
 import { RxCrossCircled } from "react-icons/rx";
+import Loader from "../../components/loader/Loader";
 const style = {
   position: "absolute",
   top: "50%",
@@ -30,6 +31,8 @@ const style = {
 const QuestionsModal = (props) => {
   const { name, email, password, confirmPassword, onClose } = props;
   const navigate = useNavigate();
+  const [loader, setLoader] = useState(false);
+
   const [signUpData, setSignUpData] = useState();
   const [gender, setGender] = useState("");
   const [cook, setCook] = useState("");
@@ -63,6 +66,8 @@ const QuestionsModal = (props) => {
     setImagePreview(null);
   };
   const HandlerSignup = async () => {
+    setLoader(true);
+
     if (!gender || !cook || !tidy || !allergies || !pets || !smoke || !preference || !visitors || !social || !bathroom || !shareRoom || !briefDescription) {
       toast.error("Fill all the fields");
     }
@@ -91,6 +96,7 @@ const QuestionsModal = (props) => {
       setSignUpData(response?.data?.data);
       toast.success("User SignUp Successfully");
       navigate("/login");
+      setLoader(false);
     } else {
       toast.error("User SignUp Failed");
     }
@@ -99,6 +105,7 @@ const QuestionsModal = (props) => {
   return (
     <Modal open={props.open} onClose={onClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" size="md">
       <Box className="modalScrollbar" sx={style}>
+        {loader ? <Loader /> : null}
         <RxCrossCircled className="absolute text-red-600 h-6 w-6 right-1 top-1 cursor-pointer" onClick={() => onClose()} />
         <h1 className="-mt-2 mb-8 text-center font-bold text-xl text-black font-pj">Add Some Basic Information</h1>
 
@@ -114,11 +121,11 @@ const QuestionsModal = (props) => {
             </FormControl>
           </FormControl>
           <FormControl fullWidth style={{ marginTop: "8px", marginBottom: "6px" }}>
-            <div className="mb-2  font-semibold font-pj text-base">Do you cook?</div>
+            <div className="mb-2  font-semibold font-pj text-base">Do you Cook?</div>
             <CustomRadioButton value={cook} onChange={(e) => setCook(e.target.value)} />
           </FormControl>
           <FormControl fullWidth style={{ marginTop: "8px", marginBottom: "6px" }}>
-            <div className="mb-2  font-semibold font-pj text-base">Are you tidy?</div>
+            <div className="mb-2  font-semibold font-pj text-base">Are you Tidy?</div>
             <CustomRadioButton value={tidy} onChange={(e) => setTidy(e.target.value)} />
           </FormControl>
           <FormControl fullWidth style={{ marginTop: "8px", marginBottom: "6px" }}>
@@ -127,19 +134,19 @@ const QuestionsModal = (props) => {
             <CustomRadioButton value={pets} onChange={(e) => setPets(e.target.value)} />
           </FormControl>
           <FormControl fullWidth style={{ marginTop: "8px", marginBottom: "6px" }}>
-            <div className="mb-2  font-semibold font-pj text-base">Do you smoke?</div>
+            <div className="mb-2  font-semibold font-pj text-base">Do you Smoke?</div>
             <CustomRadioButton value={smoke} onChange={(e) => setSmoke(e.target.value)} />
           </FormControl>
           <FormControl fullWidth style={{ marginTop: "8px", marginBottom: "6px" }}>
-            <div className="mb-2  font-semibold font-pj text-base">visitors?</div>
+            <div className="mb-2  font-semibold font-pj text-base">Visitors?</div>
             <CustomRadioButton value={visitors} onChange={(e) => setVisitors(e.target.value)} />
           </FormControl>
           <FormControl fullWidth style={{ marginTop: "8px", marginBottom: "6px" }}>
-            <div className="mb-2  font-semibold font-pj text-base">Social within the house?</div>
+            <div className="mb-2  font-semibold font-pj text-base">Social within the House?</div>
             <CustomRadioButton value={social} onChange={(e) => setSocial(e.target.value)} />
           </FormControl>
           <FormControl fullWidth style={{ marginTop: "8px", marginBottom: "6px" }}>
-            <div className="mb-2  font-semibold font-pj text-base">Bathroom schedules?</div>
+            <div className="mb-2  font-semibold font-pj text-base">Bathroom Schedules?</div>
             <CustomRadioButton value={bathroom} onChange={(e) => setBathroom(e.target.value)} />
           </FormControl>
           <FormControl fullWidth style={{ marginTop: "8px", marginBottom: "6px" }}>
@@ -147,6 +154,7 @@ const QuestionsModal = (props) => {
             <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group" value={shareRoom} onChange={(e) => setShareRoom(e.target.value)}>
               <FormControlLabel value="boy" control={<Radio size="small" />} label="boy" />
               <FormControlLabel value="girl" control={<Radio size="small" />} label="girl" />
+              <FormControlLabel value="doesn't matter" control={<Radio size="small" />} label="doesn't matter" />
             </RadioGroup>
           </FormControl>
           <FormControl fullWidth style={{ marginTop: "8px", marginBottom: "6px" }}>
@@ -159,7 +167,7 @@ const QuestionsModal = (props) => {
         </div>
         {allergiesInput && (
           <div>
-            <div className="mb-2  font-semibold font-pj text-base mt-2">Which ones?</div>
+            <div className="mb-2  font-semibold font-pj text-base mt-2">Which Ones?</div>
             <TextField
               id="outlined-multiline-flexible"
               placeholder="Enter type of allergies"
@@ -171,13 +179,12 @@ const QuestionsModal = (props) => {
             />
           </div>
         )}
-
         <FormControl fullWidth style={{ marginTop: "8px", marginBottom: "6px" }}>
-          <div className="mb-2  font-semibold font-pj text-base">Atmosphere preference?</div>
+          <div className="mb-2  font-semibold font-pj text-base">Atmosphere Preference?</div>
           <TextField id="outlined-multiline-flexible" placeholder="Enter Atmosphere Preference" multiline className="w-full" value={preference} onChange={(e) => setPreference(e.target.value)} />
         </FormControl>
 
-        <div className="mb-2  font-semibold font-pj text-base mt-2">Brief description</div>
+        <div className="mb-2  font-semibold font-pj text-base mt-2">Brief Description</div>
         <TextField
           id="outlined-multiline-flexible"
           placeholder="Enter Description"

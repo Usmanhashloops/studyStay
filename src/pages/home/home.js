@@ -8,16 +8,73 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 import { BsSearch } from "react-icons/bs";
 import { Api } from "../../utils/Api";
+// import swiperSlide from "../../components/swiperSlider/swiperSlider";
 import SliderHome from "../../components/sliderHome/sliderHome";
 import { IMAGE_BASE_URL } from "../../utils/Url";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-
+import Loader from "../../components/loader/Loader";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 const Home = () => {
+  const sliderRef = useRef(null);
+  const settings = {
+    // className: "center",
+    dots: false,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 5,
+    slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1,
+          dots: false,
+          infinite: false,
+        },
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+          dots: false,
+          initialSlide: 1,
+          infinite: false,
+        },
+      },
+
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+          initialSlide: 1,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          initialSlide: 1,
+        },
+      },
+    ],
+  };
+  const handleClickNext = () => {
+    if (sliderRef.current) {
+      sliderRef.current.slickNext();
+    }
+  };
   const [startIndex, setStartIndex] = useState(0);
   const [smoker, setSmoker] = useState("");
+  const [loader, setLoader] = useState(false);
   const imageContainerRef = useRef(null);
   const [imageWidth, setImageWidth] = useState(0);
   const [pages, setPages] = useState([]);
@@ -27,7 +84,6 @@ const Home = () => {
   const navigate = useNavigate();
   const [coordinates, setCoordinates] = useState(null);
   const [address, setAddress] = useState("");
-
   const labels = ["Cook", "Pets", "Tidy", "Allergies", "Smoker"];
   const [checkedItems, setCheckedItems] = React.useState({
     Cook: false,
@@ -36,7 +92,6 @@ const Home = () => {
     Allergies: false,
     Smoker: false,
   });
-
   const handleCheckboxChange = (label) => {
     setCheckedItems((prevCheckedItems) => ({
       ...prevCheckedItems,
@@ -44,11 +99,6 @@ const Home = () => {
     }));
   };
   console.log(checkedItems, "checkedItems");
-  const containerFilterStyle = (label) => ({
-    backgroundColor: checkedItems[label] ? "#ec1d41" : "white",
-    color: checkedItems[label] ? "white" : "#7a7979",
-  });
-
   const handleSelect = async (selectedAddress) => {
     try {
       const results = await geocodeByAddress(selectedAddress);
@@ -59,6 +109,7 @@ const Home = () => {
       console.error("Error while fetching coordinates:", error);
     }
   };
+  const localdata = localStorage.getItem("auth-token");
   useEffect(() => {
     getAllAvailableResidence(currentPage);
   }, [currentPage]);
@@ -66,6 +117,7 @@ const Home = () => {
     getAllFlashResidence();
   }, []);
   const getAllAvailableResidence = async (page) => {
+    setLoader(true);
     const response = await Api("get", `get-all-available-residence?page=${page}`);
     console.log("response===>>", response);
     if (response.status === 200 || response.status === 201) {
@@ -75,7 +127,10 @@ const Home = () => {
         }
         setPages(pages);
       }
+      setLoader(false);
       setAllAvailableResidence(response?.data?.data?.data);
+    } else {
+      setLoader(false);
     }
   };
   const getAllFlashResidence = async () => {
@@ -85,7 +140,6 @@ const Home = () => {
       setAllFlashResidence(response?.data?.data?.data);
     }
   };
-
   useEffect(() => {
     const firstImage = imageContainerRef.current?.querySelector(".img-slider");
     if (firstImage) {
@@ -95,49 +149,49 @@ const Home = () => {
   const handlePrev = () => {
     setStartIndex((prevIndex) => Math.max(prevIndex - 1, 0));
   };
-
   const handleNext = () => {
     setStartIndex((prevIndex) => Math.min(prevIndex + 1, Math.max(0, allFlashResidence?.length - 5)));
   };
-
-  console.log("allFlashResidence", allFlashResidence);
-  console.log("smoker", smoker);
+  console.log("allAvailableResidence", allAvailableResidence);
   return (
     <section>
+      {loader ? <Loader /> : null}
       <section class=" bg-neutral-50">
         <div className="bg-custom-background">
           <div className="pt-52">
-            <div className="text-3xl sm:text-5xl font-extrabold text-slate-600 flex items-center justify-center ">
+            <div className="text-3xl sm:text-5xl font-extrabold text-slate-600 flex pb-6 items-center justify-center ">
               We find you <span className="ml-2 text-red-600"> home</span>{" "}
             </div>
-            <div className="mt-14 flex justify-center flex-wrap">
-              <FormGroup sx={{ display: { xs: "contents", sm: "block" } }}>
-                {labels.map((label) => (
-                  <FormControlLabel
-                    key={label}
-                    className="container-filter"
-                    style={{
-                      backgroundColor: checkedItems[label] ? "#dc2626" : "transparent",
-                      color: checkedItems[label] ? "white" : "#7a7979",
-                    }}
-                    control={
-                      <Checkbox
-                        size="small"
-                        style={{
-                          color: checkedItems[label] ? "#ffffff" : "#7a7979", // Change the checked color here
-                        }}
-                        color="default"
-                        sx={{ marginRight: "-5px" }}
-                        checked={checkedItems[label] || false}
-                        onChange={() => handleCheckboxChange(label)}
-                      />
-                    }
-                    label={label}
-                  />
-                ))}
-              </FormGroup>
-            </div>
-            <div className="">
+            {!localdata && (
+              <div className="mt-8 flex justify-center flex-wrap">
+                <FormGroup sx={{ display: { xs: "contents", sm: "block" } }}>
+                  {labels.map((label) => (
+                    <FormControlLabel
+                      key={label}
+                      className="container-filter"
+                      style={{
+                        backgroundColor: checkedItems[label] ? "#dc2626" : "transparent",
+                        color: checkedItems[label] ? "white" : "#7a7979",
+                      }}
+                      control={
+                        <Checkbox
+                          size="small"
+                          style={{
+                            color: checkedItems[label] ? "#ffffff" : "#7a7979", // Change the checked color here
+                          }}
+                          color="default"
+                          sx={{ marginRight: "-5px" }}
+                          checked={checkedItems[label] || false}
+                          onChange={() => handleCheckboxChange(label)}
+                        />
+                      }
+                      label={label}
+                    />
+                  ))}
+                </FormGroup>
+              </div>
+            )}
+            <div className=" ">
               <PlacesAutocomplete value={address} onChange={setAddress} onSelect={handleSelect} searchOptions={{ types: ["geocode"] }}>
                 {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
                   <div>
@@ -175,8 +229,8 @@ const Home = () => {
         </div>
         <div class="px-4 mx-auto sm:px-6 lg:px-0 max-w-7xl">
           <div class="text-center lg:text-left mt-12">
-            <div className=" text-3xl text-slate-500  font-bold  text-center mt-6">Flash Opportunity</div>
-            <div className="app mt-6 mb-12">
+            <div className=" text-3xl text-slate-500  font-bold  text-center mt-6">Flash Property </div>
+            {/* <div className="app mt-6 mb-12">
               {allFlashResidence && allFlashResidence?.length > 0 ? (
                 <div className="slider pt-4">
                   {allFlashResidence?.length > 5 ? (
@@ -192,14 +246,13 @@ const Home = () => {
                   ) : (
                     ""
                   )}
-
                   <div className="image-container" style={{ transform: `translateX(-${startIndex * imageWidth}px)` }} ref={imageContainerRef}>
                     {allFlashResidence?.map((item, index) => (
                       <div className="img-slider bg-slate-200  rounded-lg " key={index}>
                         <img
                           src={IMAGE_BASE_URL + item?.images[0]?.images}
                           alt="logo"
-                          className="img cursor-pointer"
+                          className="img"
                           //  onClick={() => navigate(`/rooms`, { state: { roomData: item } })}
                         />
                         <div className=" px-3 py-3">
@@ -238,9 +291,37 @@ const Home = () => {
               ) : (
                 <div className=" text-base text-black  font-bold font-pj text-center mt-12">No Flash Property Exist</div>
               )}
+            </div> */}
+            <div className=" mt-12 mb-12">
+              <Slider {...settings}>
+                {allFlashResidence?.map((item, index) => (
+                  <div className="img-slider bg-slate-200  rounded-lg " key={index}>
+                    <img
+                      src={IMAGE_BASE_URL + item?.images[0]?.images}
+                      alt="logo"
+                      className="img"
+                      //  onClick={() => navigate(`/rooms`, { state: { roomData: item } })}
+                    />
+                    <div className=" px-3 py-3">
+                      <div className="font-bold text-sm text-black capitalize">{item?.flate_name}</div>
+                      <div className="lg:flex justify-between">
+                        <div className="font-bold text-sm text-black mt-1">
+                          <span className="">€</span>
+                          {item?.price.toLocaleString()}
+                        </div>
+                        <div className="flex justify-end">
+                          <img src={image} className="imagesmallIcon mr-2" />
+                          <div className=" text-sm text-right mt-1">
+                            {item?.remaining_person}/{item?.total_person}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </Slider>
             </div>
-
-            <div className=" text-3xl text-slate-500 font-bold  text-center pt-2 mb-10 mt-8">Featured Opportunity</div>
+            <div className=" text-3xl text-slate-500 font-bold  text-center pt-2 mb-10 mt-8">Featured Property </div>
             {allAvailableResidence ? (
               <Grid container spacing={2}>
                 {allAvailableResidence.map((item, i) => (
@@ -255,7 +336,6 @@ const Home = () => {
                               <span className="">€</span>
                               {item?.price.toLocaleString()}
                             </div>
-
                             <div className="flex justify-end">
                               <img src={image} className="imagesmallIcon mr-2" />
                               <div className=" text-sm text-right mt-1">
@@ -270,7 +350,6 @@ const Home = () => {
                     </div>
                   </Grid>
                 ))}
-                {/* <Pagination /> */}
               </Grid>
             ) : (
               <div className=" text-base text-black  font-bold font-pj text-center mt-16 pb-10  mb-10">No Featured Property Exist</div>

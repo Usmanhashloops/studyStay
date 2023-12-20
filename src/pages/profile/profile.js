@@ -22,8 +22,11 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
+import Loader from "../../components/loader/Loader";
 
 const Profile = () => {
+  const [loader, setLoader] = useState(false);
+
   const navigate = useNavigate();
   const [showUpdateProfileModal, setShowUpdateProfileModal] = React.useState(false);
   const handlerModalClose = () => setShowUpdateProfileModal(false);
@@ -63,10 +66,13 @@ const Profile = () => {
   };
 
   const getProfileData = async () => {
+    setLoader(true);
+
     const response = await Api("get", `profile-get/${decoded?.sub}`);
     if (response?.data?.code === 200 || response?.data?.code === 201) {
       setShowProfileData(response?.data?.data);
     }
+    setLoader(false);
   };
   useEffect(() => {
     getProfileData();
@@ -123,7 +129,9 @@ const Profile = () => {
   };
   console.log("showProfileData", showProfileData);
   return (
-    <div className="flex flex-col flex-1 xl:pl-56 xl:pr-56">
+    <div className="flex flex-col flex-1 xl:pl-56 xl:pr-56 backgroundImage">
+      {loader ? <Loader /> : null}
+
       <main>
         <div className="py-6 pt-8">
           <div className="px-4 mx-auto sm:px-6 md:px-8">
@@ -192,14 +200,14 @@ const Profile = () => {
                   </FormControl>
                 </FormControl>
                 <FormControl fullWidth>
-                  <div className="mb-2  font-semibold font-pj text-base">Do you cook?</div>
+                  <div className="mb-2  font-semibold font-pj text-base">Do you Cook?</div>
                   <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group" value={cook} onChange={(e) => setCook(e.target.value)}>
                     <FormControlLabel value="yes" control={<Radio size="small" />} label="yes" />
                     <FormControlLabel value="no" control={<Radio size="small" />} label="no" />
                   </RadioGroup>
                 </FormControl>
                 <FormControl fullWidth>
-                  <div className="mb-2  font-semibold font-pj text-base">Are you tidy?</div>
+                  <div className="mb-2  font-semibold font-pj text-base">Are you Tidy?</div>
                   <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group" value={tidy} onChange={(e) => setTidy(e.target.value)}>
                     <FormControlLabel value="yes" control={<Radio size="small" />} label="yes" />
                     <FormControlLabel value="no" control={<Radio size="small" />} label="no" />
@@ -213,28 +221,28 @@ const Profile = () => {
                   </RadioGroup>
                 </FormControl>
                 <FormControl fullWidth>
-                  <div className="mb-2  font-semibold font-pj text-base">Do you smoke?</div>
+                  <div className="mb-2  font-semibold font-pj text-base">Do you Smoke?</div>
                   <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group" value={smoke} onChange={(e) => setSmoke(e.target.value)}>
                     <FormControlLabel value="yes" control={<Radio size="small" />} label="yes" />
                     <FormControlLabel value="no" control={<Radio size="small" />} label="no" />
                   </RadioGroup>
                 </FormControl>
                 <FormControl fullWidth>
-                  <div className="mb-2  font-semibold font-pj text-base">visitors?</div>
+                  <div className="mb-2  font-semibold font-pj text-base">Visitors?</div>
                   <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group" value={visitors} onChange={(e) => setVisitors(e.target.value)}>
                     <FormControlLabel value="yes" control={<Radio size="small" />} label="yes" />
                     <FormControlLabel value="no" control={<Radio size="small" />} label="no" />
                   </RadioGroup>
                 </FormControl>
                 <FormControl fullWidth>
-                  <div className="mb-2  font-semibold font-pj text-base">Social within the house?</div>
+                  <div className="mb-2  font-semibold font-pj text-base">Social within the House?</div>
                   <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group" value={social} onChange={(e) => setSocial(e.target.value)}>
                     <FormControlLabel value="yes" control={<Radio size="small" />} label="yes" />
                     <FormControlLabel value="no" control={<Radio size="small" />} label="no" />
                   </RadioGroup>
                 </FormControl>
                 <FormControl fullWidth>
-                  <div className="mb-2  font-semibold font-pj text-base">Bathroom schedules?</div>
+                  <div className="mb-2  font-semibold font-pj text-base">Bathroom Schedules?</div>
                   <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group" value={bathroom} onChange={(e) => setBathroom(e.target.value)}>
                     <FormControlLabel value="yes" control={<Radio size="small" />} label="yes" />
                     <FormControlLabel value="no" control={<Radio size="small" />} label="no" />
@@ -243,8 +251,9 @@ const Profile = () => {
                 <FormControl fullWidth>
                   <div className="mb-2  font-semibold font-pj text-base">Share Room with?</div>
                   <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group" value={shareRoom} onChange={(e) => setShareRoom(e.target.value)}>
-                    <FormControlLabel value="yes" control={<Radio size="small" />} label="yes" />
-                    <FormControlLabel value="no" control={<Radio size="small" />} label="no" />
+                    <FormControlLabel value="boy" control={<Radio size="small" />} label="boy" />
+                    <FormControlLabel value="girl" control={<Radio size="small" />} label="girl" />
+                    <FormControlLabel value="doesn't matter" control={<Radio size="small" />} label="doesn't matter" />
                   </RadioGroup>
                 </FormControl>
                 <FormControl fullWidth>
@@ -256,7 +265,7 @@ const Profile = () => {
                 </FormControl>
                 {allergies === 1 || allergies === "yes" ? (
                   <FormControl fullWidth>
-                    <div className="mb-2  font-semibold font-pj text-base">Which ones?</div>
+                    <div className="mb-2  font-semibold font-pj text-base">Which Ones?</div>
                     <input
                       type="text"
                       name=""
@@ -272,7 +281,7 @@ const Profile = () => {
                 )}
 
                 <FormControl fullWidth>
-                  <div className="mb-2  font-semibold font-pj text-base">Atmosphere preference?</div>
+                  <div className="mb-2  font-semibold font-pj text-base">Atmosphere Preference?</div>
                   <input
                     type="text"
                     name=""
@@ -284,7 +293,7 @@ const Profile = () => {
                   />
                 </FormControl>
                 <FormControl fullWidth>
-                  <div className="mb-2  font-semibold font-pj text-base ">Brief description</div>
+                  <div className="mb-2  font-semibold font-pj text-base ">Brief Description</div>
                   <input
                     type="text"
                     name=""

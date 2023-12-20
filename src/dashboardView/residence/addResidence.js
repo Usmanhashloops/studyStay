@@ -14,7 +14,10 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 
 import TextField from "@mui/material/TextField";
+import Loader from "../../components/loader/Loader";
 const AddResidence = (props) => {
+  const [loader, setLoader] = useState(false);
+
   const navigate = useNavigate();
   const [flatName, setFlatName] = useState("");
   const [price, setPrice] = useState("");
@@ -71,7 +74,7 @@ const AddResidence = (props) => {
     setImagePreview(updatedImagePreview);
   };
   const HandlerAddResidence = async () => {
-    console.log("sdasd");
+    setLoader(true);
     if (!flatName || !residenceType || !residenceName || !person || !price || !address) {
       toast.error("Fill all the fields");
     }
@@ -94,12 +97,15 @@ const AddResidence = (props) => {
       setResidenceData(response?.data?.data);
       toast.success(response?.data?.message);
       navigate("/dashboard/residence");
+      setLoader(false);
     } else {
       toast.error("Error");
     }
   };
   return (
     <div className="flex flex-col flex-1 ">
+      {loader ? <Loader /> : null}
+
       <div className="py-12 bg-white sm:py-16 lg:py-8">
         <div className="px-4 sm:px-6 lg:px-8" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
           <div className="lg:mt-8 addInventory">

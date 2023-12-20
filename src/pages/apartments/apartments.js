@@ -10,7 +10,57 @@ import { useParams } from "react-router-dom";
 import image from "../../assets/profileicon.png";
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 import { BsSearch } from "react-icons/bs";
+import Loader from "../../components/loader/Loader";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 const Apartments = () => {
+  const settings = {
+    className: "center",
+    dots: false,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 5,
+    slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1,
+          dots: false,
+          infinite: false,
+        },
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+          dots: false,
+          initialSlide: 1,
+          infinite: false,
+        },
+      },
+
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+          initialSlide: 1,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          initialSlide: 1,
+        },
+      },
+    ],
+  };
   const navigate = useNavigate();
   const location = useLocation();
   const { searchValue } = useParams();
@@ -23,6 +73,7 @@ const Apartments = () => {
   const [flashSearchData, setFlashSearchData] = useState();
   const [availableSearchData, setAvailableSearchData] = useState();
   const [residenceData, setResidenceData] = useState();
+  const [loader, setLoader] = useState(false);
   const [startIndex, setStartIndex] = useState(0);
   const imageContainerRef = useRef(null);
   const [imageWidth, setImageWidth] = useState(0);
@@ -52,6 +103,7 @@ const Apartments = () => {
   console.log("filteredData", filteredData);
   const HandlerAvailableSearch = async () => {
     try {
+      setLoader(true);
       console.log("all cord", location?.state?.coordinates);
 
       const payload = {
@@ -67,7 +119,10 @@ const Apartments = () => {
       const response = await Api("post", "search-near-available-places", payload);
       if (response?.status === 200 || response?.status === 201) {
         setAvailableSearchData(response?.data?.data?.data);
+        setLoader(false);
       } else {
+        setLoader(false);
+
         console.error("API error:", response);
       }
     } catch (error) {
@@ -77,6 +132,7 @@ const Apartments = () => {
 
   const HandlerFlashSearch = async () => {
     try {
+      setLoader(true);
       const payload = {
         address: searchValue,
         latitude: location?.state?.coordinates?.lat,
@@ -90,7 +146,10 @@ const Apartments = () => {
       const response = await Api("post", "search-near-flash-places", payload);
       if (response?.status === 200 || response?.status === 201) {
         setFlashSearchData(response?.data?.data?.data);
+        setLoader(false);
       } else {
+        setLoader(false);
+
         console.error("API error:", response);
       }
     } catch (error) {
@@ -128,6 +187,7 @@ const Apartments = () => {
   console.log("flashSearchData", flashSearchData);
   return (
     <div>
+      {loader ? <Loader /> : null}
       <div className="bg-apartment-background">
         <div className="pt-56 z-20 ">
           <Grid container spacing={2}>
@@ -176,7 +236,7 @@ const Apartments = () => {
       </div>
       <section class="py-12 bg-neutral-50 sm:py-16 lg:py-16">
         <div class="px-2 mx-auto sm:px-6 lg:px-0 max-w-7xl">
-          <div className=" text-3xl text-slate-500 font-bold font-pj text-center mb-10">Featured Opportunity</div>
+          <div className=" text-3xl text-slate-500 font-bold font-pj text-center mb-10">Featured Property</div>
           {availableSearchData ? (
             <Grid container spacing={2}>
               {availableSearchData.map((item, i) => (
@@ -212,6 +272,38 @@ const Apartments = () => {
             <div className=" text-base text-black  font-bold font-pj text-center mt-16">No Featured Property Exist</div>
           )}
           <div className="app mt-20 mb-12">
+            {/* {flashSearchData && flashSearchData.length > 0 ? ( */}
+            <Slider {...settings}>
+              {flashSearchData?.map((item, index) => (
+                <div className="img-slider bg-slate-200  rounded-lg " key={index}>
+                  {console.log("item==>", item)}
+                  <img src={IMAGE_BASE_URL + item?.images[0]?.images} alt="logo" className="img cursor-pointer" onClick={() => navigate(`/rooms`, { state: { roomData: item } })} />
+                  <div className="flex justify-between px-3 pt-2 ">
+                    <div className="capitalize font-bold text-sm text-black ">{item?.id?.flate_name}</div>
+                    <div className="flex justify-end">
+                      <img src={image} className="imagesmallIcon mr-2" />
+                      <div className=" text-sm text-right mt-1">
+                        {item?.id?.remaining_person}/{item?.id?.total_person}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex justify-between px-3 ">
+                    <div className="font-bold text-sm text-black ">
+                      <span className="">€</span>
+                      {item?.id?.price.toLocaleString()}
+                    </div>
+                  </div>
+                  <div className=" px-3 pb-2">
+                    <div className="text-sm">{item?.distance == 0 ? 0 : item?.distance.toFixed(1)} Km</div>
+                  </div>
+                </div>
+              ))}
+            </Slider>
+            {/* ) : (
+              <div className=" text-base text-black  font-bold font-pj text-center mt-12">No Flash Property Exist</div>
+            )} */}
+          </div>
+          {/* <div className="app mt-20 mb-12">
             {flashSearchData && flashSearchData.length > 0 ? (
               <div className="slider pt-4">
                 {flashSearchData?.length > 5 ? (
@@ -271,7 +363,7 @@ const Apartments = () => {
             ) : (
               <div className=" text-base text-black  font-bold font-pj text-center mt-12">No Flash Property Exist</div>
             )}
-          </div>
+          </div> */}
         </div>
       </section>
     </div>

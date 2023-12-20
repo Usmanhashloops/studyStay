@@ -34,6 +34,7 @@ const routes = [
     element: <HeaderRender />,
     children: [{ path: "/reserve_residence", element: <RemoveResidence /> }],
   },
+
   { path: "/login", element: <Login /> },
   { path: "/signup", element: <SignUp /> },
   { path: "/change_password", element: <ChangePassword /> },

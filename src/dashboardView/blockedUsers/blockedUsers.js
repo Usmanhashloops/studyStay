@@ -6,12 +6,14 @@ import { useNavigate } from "react-router-dom";
 import { Api } from "../../utils/Api";
 import { BsSearch } from "react-icons/bs";
 import { IMAGE_BASE_URL } from "../../utils/Url";
-import GeocodeAddress from "../../components/getAddress/getAddress";
+import Loader from "../../components/loader/Loader";
+// import GeocodeAddress from "../../components/getAddress/getAddress";
 import Pagination from "../../components/Pagination/pagination";
 import { toast } from "react-hot-toast";
 import ConfirmationModal from "../../components/confirmationModal/confirmationModal";
-
 const BlockedUsers = () => {
+  const [loader, setLoader] = useState(false);
+
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [allUsersData, setAllUsersData] = useState();
@@ -24,6 +26,8 @@ const BlockedUsers = () => {
     getAllUsers(currentPage);
   }, [currentPage]);
   const getAllUsers = async (page) => {
+    setLoader(true);
+
     const response = await Api("get", `user-blocked-list?page=${page}`);
     console.log("response", response);
     if (response?.status === 200 || response?.status == 201) {
@@ -35,10 +39,13 @@ const BlockedUsers = () => {
       }
       setAllBlockedData(response?.data?.data?.data);
     }
+    setLoader(false);
   };
   console.log("viewItems", viewItems);
   console.log("allBlockedData", allBlockedData);
   const handlerUnBlock = async (index) => {
+    setLoader(true);
+
     const response = await Api("post", `unblocked-user/${allBlockedData[index].id}`);
     console.log("response", response);
     if (response.status === 200 || response.status === 201) {
@@ -47,10 +54,13 @@ const BlockedUsers = () => {
       setAllBlockedData(newData);
       setOpenConfirmationModal(false);
       toast.success("Successfully");
+      setLoader(false);
     } else toast.error("Error");
   };
   return (
     <div className="flex flex-col flex-1 xl:pl-64">
+      {loader ? <Loader /> : null}
+
       <div className="py-12 bg-white sm:py-16 lg:py-8">
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col ">
