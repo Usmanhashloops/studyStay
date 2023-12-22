@@ -13,7 +13,6 @@ import { toast } from "react-hot-toast";
 import ConfirmationModal from "../../components/confirmationModal/confirmationModal";
 const BlockedUsers = () => {
   const [loader, setLoader] = useState(false);
-
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [allUsersData, setAllUsersData] = useState();
@@ -22,14 +21,15 @@ const BlockedUsers = () => {
   const [viewItems, setViewItems] = useState();
   const [pages, setPages] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+
   useEffect(() => {
     getAllUsers(currentPage);
   }, [currentPage]);
+
   const getAllUsers = async (page) => {
     setLoader(true);
 
     const response = await Api("get", `user-blocked-list?page=${page}`);
-    console.log("response", response);
     if (response?.status === 200 || response?.status == 201) {
       if (pages.length === 0) {
         for (let i = 1; i <= Math.ceil(response?.data?.data?.total / response.data?.data?.per_page); i++) {
@@ -41,13 +41,10 @@ const BlockedUsers = () => {
     }
     setLoader(false);
   };
-  console.log("viewItems", viewItems);
-  console.log("allBlockedData", allBlockedData);
+
   const handlerUnBlock = async (index) => {
     setLoader(true);
-
     const response = await Api("post", `unblocked-user/${allBlockedData[index].id}`);
-    console.log("response", response);
     if (response.status === 200 || response.status === 201) {
       const newData = [...allBlockedData];
       newData.splice(index, 1);
@@ -57,10 +54,10 @@ const BlockedUsers = () => {
       setLoader(false);
     } else toast.error("Error");
   };
+
   return (
     <div className="flex flex-col flex-1 xl:pl-64">
       {loader ? <Loader /> : null}
-
       <div className="py-12 bg-white sm:py-16 lg:py-8">
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col ">

@@ -85,7 +85,6 @@ const UpdateProfileModal = (props) => {
   }, [showProfileData]);
   const localStorageData = localStorage.getItem("auth-token");
   const decoded = jwtDecode(localStorageData);
-  console.log("decoded", decoded);
   const HandlerUpdate = async () => {
     // if (!gender || !cook || !tidy || !allergies || !pets || !smoke || !preference || !visitors || !image || !social || !bathroom || !shareRoom || !briefDescription) {
     //   toast.error("Fill all the fields");
@@ -107,7 +106,6 @@ const UpdateProfileModal = (props) => {
     formData.append("prefer_to_share_with", shareRoom);
     formData.append("description", briefDescription);
     const response = await Api("post", `profile-update/${decoded?.sub}`, formData);
-    console.log("response", response);
     if (response?.data?.code === 200 || response?.data?.code === 201) {
       setShowProfileData(response?.data?.data);
       toast.success("Profile Update Successfully");
@@ -116,7 +114,6 @@ const UpdateProfileModal = (props) => {
       toast.error("Profile Update Failed");
     }
   };
-  //   console.log("showProfileData", showProfileData);
 
   return (
     <Modal open={props.open} onClose={props.onClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" size="md">

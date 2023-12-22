@@ -85,7 +85,6 @@ const InformationPage = (props) => {
     formData.append("prefer_to_share_with", shareRoom);
     formData.append("description", briefDescription);
     const response = await Api("post", "sign-up", formData);
-    console.log("response", response);
     if (response?.data?.code === 200 || response?.data?.code === 201) {
       setSignUpData(response?.data?.data);
       toast.success("User SignUp Successfully");
@@ -94,7 +93,6 @@ const InformationPage = (props) => {
       toast.error("User SignUp Failed");
     }
   };
-  console.log("gender", gender);
   return (
     <Box className="modalScrollbar" sx={style}>
       <h1 className="-mt-2 mb-8 text-center font-bold text-xl text-black font-pj">Add Some Basic Information</h1>

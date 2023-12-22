@@ -39,7 +39,6 @@ const Login = () => {
     if (response?.data?.code === 200) {
       localStorage.setItem("auth-token", response?.data?.data?.token);
       const decoded = jwtDecode(response?.data?.data?.token);
-      console.log(decoded);
       if (response?.data?.data?.role === "admin") {
         toast.success("Admin Login Successfully");
         navigate("/dashboard");

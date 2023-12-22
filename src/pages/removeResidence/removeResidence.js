@@ -16,7 +16,6 @@ const RemoveResidence = () => {
     setLoader(true);
 
     const response = await Api("get", "show-user-reserve-residence");
-    console.log("response", response);
     if (response?.status === 200 || response?.status == 201) {
       setUserAllReserveResidence(response?.data?.data);
     }
@@ -29,7 +28,6 @@ const RemoveResidence = () => {
     setLoader(true);
 
     const response = await Api("post", `user-cancel-reserve/${userAllReserveResidence[index].id}`);
-    console.log("response", response);
     if (response.status === 200 || response.status === 201) {
       const newData = [...userAllReserveResidence];
       newData.splice(index, 1);
@@ -39,7 +37,6 @@ const RemoveResidence = () => {
       setLoader(false);
     } else toast.error(response?.data?.message);
   };
-  console.log("userAllReserveResidence", userAllReserveResidence);
   return (
     <section class="py-12 bg-neutral-50 sm:py-16 lg:py-17 h-[90vh]">
       {loader ? <Loader /> : null}

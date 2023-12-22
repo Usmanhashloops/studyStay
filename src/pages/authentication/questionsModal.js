@@ -91,7 +91,6 @@ const QuestionsModal = (props) => {
     formData.append("prefer_to_share_with", shareRoom);
     formData.append("description", briefDescription);
     const response = await Api("post", "sign-up", formData);
-    console.log("response", response);
     if (response?.data?.code === 200 || response?.data?.code === 201) {
       setSignUpData(response?.data?.data);
       toast.success("User SignUp Successfully");
@@ -101,7 +100,6 @@ const QuestionsModal = (props) => {
       toast.error("User SignUp Failed");
     }
   };
-  console.log("gender", gender);
   return (
     <Modal open={props.open} onClose={onClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" size="md">
       <Box className="modalScrollbar" sx={style}>
@@ -206,7 +204,7 @@ const QuestionsModal = (props) => {
           onClick={HandlerSignup}
           className="flex items-center justify-center w-full px-8 py-4 mt-12 text-base font-bold text-white transition-all duration-200 bg-gray-900 border border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 font-pj hover:bg-gray-600"
         >
-          SignUp
+          Sign up
         </button>
       </Box>
     </Modal>

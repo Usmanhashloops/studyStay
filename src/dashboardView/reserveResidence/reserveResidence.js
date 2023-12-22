@@ -14,23 +14,25 @@ import Pagination from "../../components/Pagination/pagination";
 import Loader from "../../components/loader/Loader";
 const ReserveResidence = () => {
   const tabs = [
-    { item: "Reserved", url: "show-reserve-residence" },
-    { item: "Booked", url: "show-all-booking-residence" },
+    { item: "Reserved", url: "show-reserve-residence", searchUrl: "reserved-search" },
+    { item: "Booked", url: "show-all-booking-residence", searchUrl: "booked-search" },
   ];
   const [loader, setLoader] = useState(false);
   const navigate = useNavigate();
-  const [filteredData, setFilteredData] = useState([]);
   const [activeTab, setActiveTab] = useState(0);
-  const [searchField, setSearchField] = useState("");
+  const [inputValue, setInputValue] = useState("");
   const [bookResidenceModal, setBookResidenceModal] = useState(false);
   const [valueReserveResidence, setValueReserveResidence] = useState();
   const [allData, setAllData] = useState([]);
   const [pages, setPages] = useState([]);
   const [url, setUrl] = useState("show-reserve-residence");
+  const [searchUrl, setSearchUrl] = useState("reserved-search");
   const [currentPage, setCurrentPage] = useState(1);
 
-  const handleTabClick = (tabNumber, url) => {
+  const handleTabClick = (tabNumber, url, searchUrl) => {
+    setInputValue("");
     getAllResidenceData(currentPage, url);
+    setSearchUrl(searchUrl);
     setUrl(url);
     setActiveTab(tabNumber);
   };
@@ -42,7 +44,6 @@ const ReserveResidence = () => {
   const getAllResidenceData = async (page, url) => {
     setLoader(true);
     const response = await Api("get", `${url}?page=${page}`);
-    console.log("response", response);
     if (response?.status === 200 || response?.status == 201) {
       if (pages.length === 0) {
         for (let i = 1; i <= Math.ceil(response?.data?.data?.total / response.data?.data?.per_page); i++) {
@@ -59,19 +60,18 @@ const ReserveResidence = () => {
     setBookResidenceModal(true);
     setValueReserveResidence({ item, i });
   };
+
   const handleSearch = async (e) => {
     setLoader(true);
     const payload = {
       name: e,
     };
-    const response = await Api("post", "reserved-search", payload);
-    console.log("res", response);
+    const response = await Api("post", searchUrl, payload);
     if (response?.status === 200 || response?.status === 201) {
-      setAllData(response?.data?.data?.data);
+      setAllData(response?.data?.data[0]);
     }
     setLoader(false);
   };
-  console.log("allData", allData);
   return (
     <div className="flex flex-col flex-1 xl:pl-64">
       {loader ? <Loader /> : null}
@@ -87,7 +87,7 @@ const ReserveResidence = () => {
                       ? "py-2 text-sm font-medium	 text-indigo-600 transition-all duration-200 border-b-2 border-indigo-600 whitespace-nowrap cursor-pointer"
                       : "py-2 text-sm font-medium text-gray-500 transition-all duration-200 border-b-2 border-transparent hover:border-gray-300 whitespace-nowrap cursor-pointer"
                   }`}
-                  onClick={() => handleTabClick(index, tab?.url)}
+                  onClick={() => handleTabClick(index, tab?.url, tab.searchUrl)}
                 >
                   {tab?.item}
                 </div>
@@ -96,10 +96,17 @@ const ReserveResidence = () => {
             <nav className="flex">
               <div>
                 <input
+                  value={inputValue}
+                  type="text"
                   className="search-input"
                   placeholder="search or filter"
                   onChange={(e) => {
-                    handleSearch(e.target.value);
+                    setInputValue(e.target.value);
+                    if (e.target.value.length == 0) {
+                      getAllResidenceData(currentPage, url);
+                    } else {
+                      handleSearch(e.target.value);
+                    }
                   }}
                 />
                 <BsSearch className="ml-3 absolute" style={{ color: "#000000", marginTop: "-25px" }} />
@@ -124,9 +131,8 @@ const ReserveResidence = () => {
                       <th className="py-3.5 px-4 text-left text-sm tracking-widest font-medium text-gray-500">Action</th>
                     </tr>
                   </thead>
-
                   <tbody>
-                    {allData &&
+                    {allData?.length > 0 &&
                       allData.map((item, i) => (
                         <tr className="bg-gray-50 border-b-[1px]" key={i}>
                           <td className="px-4 py-4 pt-6 lg:pt-5 text-sm font-bold text-gray-900 align-top lg:align-middle whitespace-nowrap">

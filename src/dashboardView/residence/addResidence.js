@@ -49,9 +49,7 @@ const AddResidence = (props) => {
     var array = [];
     if (imagePreview?.length > 0) {
       setImage([...image, ...file]);
-      console.log("xsdsdsds", array);
       array = imagePreview;
-      console.log("c", array);
     } else {
       setImage(file);
     }
@@ -67,7 +65,6 @@ const AddResidence = (props) => {
       }
     }
   };
-  console.log(imagePreview, "imagePreview");
   const handleImageClose = (index) => {
     const updatedImagePreview = [...imagePreview];
     updatedImagePreview.splice(index, 1);
@@ -92,7 +89,6 @@ const AddResidence = (props) => {
       formData.append("images[]", image[i]);
     }
     const response = await Api("post", "add-residence", formData);
-    console.log("Add-response", response);
     if (response?.status === 200 || response?.status === 201) {
       setResidenceData(response?.data?.data);
       toast.success(response?.data?.message);

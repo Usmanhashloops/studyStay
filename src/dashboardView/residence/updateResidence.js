@@ -34,7 +34,6 @@ const UpdateResidence = (props) => {
   const [address, setAddress] = useState("");
   const [coordinates, setCoordinates] = useState(null);
   const apiKey = "AIzaSyC7Jz78vSl5-mHKv4eBOy1fRhmoph6loMA";
-  console.log("valueUpdate", valueUpdate);
   const handleSelect = async (selectedAddress) => {
     try {
       const results = await geocodeByAddress(selectedAddress);
@@ -111,7 +110,6 @@ const UpdateResidence = (props) => {
     formData.append("longitude", coordinates?.lng);
     formData.append("latitude", coordinates?.lat);
     const response = await Api("post", `update-residence/${valueUpdate?.id}`, formData);
-    // console.log("response", response);
     if (response?.status === 200 || response?.status === 201) {
       setUpdatedDate(response?.data?.data);
       toast.success(response?.data?.message);
@@ -121,7 +119,6 @@ const UpdateResidence = (props) => {
       toast.error(response?.data?.message);
     }
   };
-  // console.log("residenceType", residenceType);
   return (
     <div className="flex flex-col flex-1 ">
       {loader ? <Loader /> : null}

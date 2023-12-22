@@ -23,7 +23,6 @@ const ConfirmationReserveModal = (props) => {
       try {
         setLoading(true); // Set loading to true on button click
         const response = await Api("post", `reserve-residence/${sendData?.id?.id}`);
-        console.log("response", response);
         if (response?.status === 200 || response?.status === 201) {
           // setResidenceView(response?.data?.data);
           toast.success("Reserved Successfully");
@@ -42,7 +41,6 @@ const ConfirmationReserveModal = (props) => {
     }
     // if (localData) {
     //   const response = await Api("post", `reserve-residence/${sendData?.id?.id}`);
-    //   console.log("response", response);
     //   if (response?.status === 200 || response?.status === 201) {
     //     // setResidenceView(response?.data?.data);
     //     toast.success("Reserved Successfully");
@@ -54,7 +52,6 @@ const ConfirmationReserveModal = (props) => {
     //   }
     // }
   };
-  console.log("residenceView", residenceView);
   return (
     <Dialog open={open} onClose={onClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
       <DialogContent>

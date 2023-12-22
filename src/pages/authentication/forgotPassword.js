@@ -63,7 +63,6 @@ const ForgotPassword = () => {
       email: email,
     };
     const response = await Api("post", "forget-password", payload);
-    console.log("response", response);
     if (response?.data?.code === 200 || response?.data?.code === 201) {
       toast.success("Password sent to your email");
       navigate("/");

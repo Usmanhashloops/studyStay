@@ -7,7 +7,6 @@ import { IMAGE_BASE_URL } from "../../../utils/Url";
 import { RxCrossCircled } from "react-icons/rx";
 const ResidentProfileModal = (props) => {
   const { profileData } = props;
-  console.log("profileData", profileData);
   const residents = ["", "", "", ""];
   return (
     <Dialog open={props.open} onClose={props.onClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">

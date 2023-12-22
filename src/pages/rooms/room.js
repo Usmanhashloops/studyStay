@@ -43,7 +43,6 @@ const Rooms = (props) => {
     setLoader(true);
 
     const response = await Api("get", `get-residence/${roomData?.id?.id}`);
-    console.log("response", response);
     if (response?.status === 200 || response?.status == 201) {
       setResidenceDataByID(response?.data?.data);
     }
@@ -60,12 +59,10 @@ const Rooms = (props) => {
   };
 
   const [userAllReserveResidence, setUserAllReserveResidence] = useState();
-
   const getUserAllReserveResidence = async () => {
     setLoader(true);
 
     const response = await Api("get", "show-user-reserve-residence");
-    console.log("response", response);
     if (response?.status === 200 || response?.status == 201) {
       setUserAllReserveResidence(response?.data?.data);
     }
@@ -75,15 +72,10 @@ const Rooms = (props) => {
   useEffect(() => {
     getUserAllReserveResidence();
   }, []);
-  console.log("userAllReserveResidence", userAllReserveResidence);
-  console.log("residenceDataByID", residenceDataByID);
-  console.log("sendData", sendData);
-  console.log("roomData", roomData);
 
   const lat = Number(roomData?.id?.latitude);
   const lng = Number(roomData?.id?.longitude);
-  // console.log("lat", lat);
-  // console.log("lng", lng);
+
   const points = [{ lat: lat, lng: lng, id: <FaLocationDot className="h-8 w-8 text-blue-600" /> }];
 
   return (
@@ -144,7 +136,7 @@ const Rooms = (props) => {
                 <Grid container spacing={2}>
                   <Grid item xs={9} sm={7} md={7}>
                     <div className="text-lg text-black  font-bold  pb-3 mt-6">Residents</div>
-                    {residenceDataByID.length > 0 &&
+                    {residenceDataByID.length > 0 ? (
                       residenceDataByID?.map((item, i) => (
                         <div key={i}>
                           {item?.user_data.length > 0 ? (
@@ -164,7 +156,10 @@ const Rooms = (props) => {
                             <div className="mt-3 text-base text-black capitalize cursor-pointer"> No Resident Exist </div>
                           )}
                         </div>
-                      ))}
+                      ))
+                    ) : (
+                      <div className="mt-3 text-base text-black capitalize cursor-pointer"> No Resident Exist </div>
+                    )}
                   </Grid>
                   <Grid item xs={3} sm={5} md={5}>
                     <div className="text-lg text-black  font-bold pb-3 mt-6 flex items-end justify-end">Room Capacity</div>

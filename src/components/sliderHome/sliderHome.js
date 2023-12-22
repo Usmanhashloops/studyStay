@@ -35,7 +35,7 @@ const SliderHome = ({ images, imageDummy, item }) => {
           borderTopRightRadius: "10px",
           //   cursor: "pointer",
         }}
-        onClick={() => navigate(`/rooms`, { state: { roomData: item } })}
+        // onClick={() => navigate(`/rooms`, { state: { roomData: item } })}
       />
       <button className="right-icon" onClick={nextSlide}>
         <IoIosArrowForward />

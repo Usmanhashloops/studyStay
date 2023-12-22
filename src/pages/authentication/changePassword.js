@@ -63,7 +63,6 @@ const ChangePassword = () => {
       password: newPassword,
     };
     const response = await Api("post", "change-password", payload);
-    console.log("response", response);
     if (response?.data?.code === 200) {
       toast.success("Password Changed Successfully");
       navigate("/");

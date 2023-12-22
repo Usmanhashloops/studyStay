@@ -42,7 +42,6 @@ const Apartments = () => {
           infinite: false,
         },
       },
-
       {
         breakpoint: 600,
         settings: {
@@ -66,12 +65,12 @@ const Apartments = () => {
   const { searchValue } = useParams();
   const [pages, setPages] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  console.log("searchValue", searchValue);
-  console.log("location", location);
+
   const [allCoordinates, setAllCoordinates] = useState();
   const [filteredData, setFilteredData] = useState();
   const [flashSearchData, setFlashSearchData] = useState();
   const [availableSearchData, setAvailableSearchData] = useState();
+  const [freshSearchData, setFreshSearchData] = useState();
   const [residenceData, setResidenceData] = useState();
   const [loader, setLoader] = useState(false);
   const [startIndex, setStartIndex] = useState(0);
@@ -79,6 +78,7 @@ const Apartments = () => {
   const [imageWidth, setImageWidth] = useState(0);
   const [address, setAddress] = useState("");
   const [coordinates, setCoordinates] = useState(null);
+
   const handleSelect = async (selectedAddress) => {
     try {
       const results = await geocodeByAddress(selectedAddress);
@@ -89,6 +89,7 @@ const Apartments = () => {
       console.error("Error while fetching coordinates:", error);
     }
   };
+
   useEffect(() => {
     console.log("searchValue", searchValue);
   }, [searchValue]);
@@ -96,34 +97,53 @@ const Apartments = () => {
   useEffect(() => {
     setAllCoordinates(location?.state?.coordinates);
   }, [location?.state]);
+
   useEffect(() => {
     setFilteredData(location?.state?.checkedItems);
   }, [location?.state]);
 
-  console.log("filteredData", filteredData);
+  const localdata = localStorage.getItem("auth-token");
+
   const HandlerAvailableSearch = async () => {
     try {
       setLoader(true);
-      console.log("all cord", location?.state?.coordinates);
-
-      const payload = {
-        address: searchValue,
-        latitude: location?.state?.coordinates?.lat,
-        longitude: location?.state?.coordinates?.lng,
-        pets: location?.state?.checkedItems?.Pets ? 1 : 0,
-        do_you_smoke: location?.state?.checkedItems?.Smoker ? 1 : 0,
-        are_you_tidy: location?.state?.checkedItems?.Tidy ? 1 : 0,
-        allergies: location?.state?.checkedItems?.Allergies ? 1 : 0,
-        do_you_cook: location?.state?.checkedItems?.Cook ? 1 : 0,
-      };
-      const response = await Api("post", "search-near-available-places", payload);
-      if (response?.status === 200 || response?.status === 201) {
-        setAvailableSearchData(response?.data?.data?.data);
-        setLoader(false);
+      if (localdata) {
+        const payload = {
+          address: searchValue,
+          latitude: location?.state?.coordinates?.lat,
+          longitude: location?.state?.coordinates?.lng,
+        };
+        const response = await Api("post", "search-near-user-available-places", payload);
+        if (response?.status === 200 || response?.status === 201) {
+          setAvailableSearchData(response?.data?.data?.data);
+          setFreshSearchData(response?.data?.newAccommodations?.data);
+          setLoader(false);
+        } else {
+          setLoader(false);
+          console.error("API error:", response);
+        }
       } else {
-        setLoader(false);
+        const payload = {
+          address: searchValue,
+          latitude: location?.state?.coordinates?.lat,
+          longitude: location?.state?.coordinates?.lng,
+          pets: location?.state?.checkedItems?.Pets ? 1 : 0,
+          do_you_smoke: location?.state?.checkedItems?.Smoker ? 1 : 0,
+          are_you_tidy: location?.state?.checkedItems?.Tidy ? 1 : 0,
+          visitors: location?.state?.checkedItems?.Visitors ? 1 : 0,
+          do_you_cook: location?.state?.checkedItems?.Cook ? 1 : 0,
+          bathroom_schedules: location?.state?.checkedItems?.Bathroom_Schedules ? 1 : 0,
+        };
+        const response = await Api("post", "search-near-available-places", payload);
+        if (response?.status === 200 || response?.status === 201) {
+          setAvailableSearchData(response?.data?.data?.data);
+          setFreshSearchData(response?.data?.newAccommodations?.data);
+          setLoader(false);
+        } else {
+          setLoader(false);
 
-        console.error("API error:", response);
+          console.error("API error:", response);
+        }
       }
     } catch (error) {
       console.error("Error:", error);
@@ -133,32 +153,50 @@ const Apartments = () => {
   const HandlerFlashSearch = async () => {
     try {
       setLoader(true);
-      const payload = {
-        address: searchValue,
-        latitude: location?.state?.coordinates?.lat,
-        longitude: location?.state?.coordinates?.lng,
-        pets: location?.state?.checkedItems?.Pets ? 1 : 0,
-        do_you_smoke: location?.state?.checkedItems?.Smoker ? 1 : 0,
-        are_you_tidy: location?.state?.checkedItems?.Tidy ? 1 : 0,
-        allergies: location?.state?.checkedItems?.Allergies ? 1 : 0,
-        do_you_cook: location?.state?.checkedItems?.Cook ? 1 : 0,
-      };
-      const response = await Api("post", "search-near-flash-places", payload);
-      if (response?.status === 200 || response?.status === 201) {
-        setFlashSearchData(response?.data?.data?.data);
-        setLoader(false);
+      if (localdata) {
+        const payload = {
+          address: searchValue,
+          latitude: location?.state?.coordinates?.lat,
+          longitude: location?.state?.coordinates?.lng,
+        };
+        const response = await Api("post", "search-near-user-flash-places", payload);
+        if (response?.status === 200 || response?.status === 201) {
+          setFlashSearchData(response?.data?.data?.data);
+          setLoader(false);
+        } else {
+          setLoader(false);
+          console.error("API error:", response);
+        }
       } else {
-        setLoader(false);
-
-        console.error("API error:", response);
+        const payload = {
+          address: searchValue,
+          latitude: location?.state?.coordinates?.lat,
+          longitude: location?.state?.coordinates?.lng,
+          pets: location?.state?.checkedItems?.Pets ? 1 : 0,
+          do_you_smoke: location?.state?.checkedItems?.Smoker ? 1 : 0,
+          are_you_tidy: location?.state?.checkedItems?.Tidy ? 1 : 0,
+          visitors: location?.state?.checkedItems?.Visitors ? 1 : 0,
+          do_you_cook: location?.state?.checkedItems?.Cook ? 1 : 0,
+          bathroom_schedules: location?.state?.checkedItems?.Bathroom_Schedules ? 1 : 0,
+        };
+        const response = await Api("post", "search-near-flash-places", payload);
+        if (response?.status === 200 || response?.status === 201) {
+          setFlashSearchData(response?.data?.data?.data);
+          setLoader(false);
+        } else {
+          setLoader(false);
+          console.error("API error:", response);
+        }
       }
     } catch (error) {
       console.error("Error:", error);
     }
   };
+
   const handleFlashHandlers = () => {
     HandlerFlashSearch();
   };
+
   const handleAvailableHandlers = () => {
     HandlerAvailableSearch();
   };
@@ -166,6 +204,7 @@ const Apartments = () => {
   useEffect(() => {
     handleAvailableHandlers();
   }, [searchValue]);
+
   useEffect(() => {
     handleFlashHandlers();
   }, [searchValue]);
@@ -177,6 +216,7 @@ const Apartments = () => {
   const handleNext = () => {
     setStartIndex((prevIndex) => Math.min(prevIndex + 1, Math.max(0, flashSearchData?.length - 5)));
   };
+
   useEffect(() => {
     const firstImage = imageContainerRef.current?.querySelector(".img-slider");
     if (firstImage) {
@@ -184,7 +224,6 @@ const Apartments = () => {
     }
   }, [flashSearchData]);
 
-  console.log("flashSearchData", flashSearchData);
   return (
     <div>
       {loader ? <Loader /> : null}
@@ -204,7 +243,7 @@ const Apartments = () => {
                         <input
                           className="search-input-banner shadow-2xl"
                           {...getInputProps({
-                            placeholder: "Enter address or location name",
+                            placeholder: "Enter address or location ",
                             onKeyDown: (e) => {
                               if (e.key === "Enter") {
                                 navigate(`/apartments/${encodeURIComponent(address)}`, { state: { coordinates: coordinates } });
@@ -236,7 +275,42 @@ const Apartments = () => {
       </div>
       <section class="py-12 bg-neutral-50 sm:py-16 lg:py-16">
         <div class="px-2 mx-auto sm:px-6 lg:px-0 max-w-7xl">
-          <div className=" text-3xl text-slate-500 font-bold font-pj text-center mb-10">Featured Property</div>
+          <div className=" text-3xl text-slate-500 font-bold font-pj text-center mb-10">Fresh Property</div>
+          {freshSearchData ? (
+            <Grid container spacing={2}>
+              {freshSearchData.map((item, i) => (
+                <Grid item xs={12} sm={6} md={4} lg={3} key={i}>
+                  <div className="bg-slate-200  rounded-lg mt-4">
+                    <SliderApartment images={item?.images ? item?.images : ""} item={item} />
+                    <div className=" px-3 py-2">
+                      <div className="flex justify-between">
+                        <div className="">
+                          <div className="capitalize font-bold text-sm text-black">{item?.id?.flate_name}</div>
+
+                          <div className="font-bold text-sm text-black mt-1">
+                            <span className="">€</span>
+                            {item?.id?.price.toLocaleString()}
+                          </div>
+                        </div>
+                        <div className="">
+                          <div className="text-sm flex justify-end">{item?.distance == 0 ? 0 : item?.distance.toFixed(1)} Km</div>
+                          <div className="flex justify-end">
+                            <img src={image} className="imagesmallIcon mr-2" />
+                            <div className=" text-sm text-right mt-1">
+                              {item?.id?.remaining_person}/{item?.id?.total_person}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </Grid>
+              ))}
+            </Grid>
+          ) : (
+            <div className=" text-base text-black  font-bold font-pj text-center mt-16">No Fresh Property Exist</div>
+          )}
+          <div className=" text-3xl text-slate-500 font-bold font-pj text-center mb-10 mt-16">Featured Property</div>
           {availableSearchData ? (
             <Grid container spacing={2}>
               {availableSearchData.map((item, i) => (
@@ -272,36 +346,35 @@ const Apartments = () => {
             <div className=" text-base text-black  font-bold font-pj text-center mt-16">No Featured Property Exist</div>
           )}
           <div className="app mt-20 mb-12">
-            {/* {flashSearchData && flashSearchData.length > 0 ? ( */}
-            <Slider {...settings}>
-              {flashSearchData?.map((item, index) => (
-                <div className="img-slider bg-slate-200  rounded-lg " key={index}>
-                  {console.log("item==>", item)}
-                  <img src={IMAGE_BASE_URL + item?.images[0]?.images} alt="logo" className="img cursor-pointer" onClick={() => navigate(`/rooms`, { state: { roomData: item } })} />
-                  <div className="flex justify-between px-3 pt-2 ">
-                    <div className="capitalize font-bold text-sm text-black ">{item?.id?.flate_name}</div>
-                    <div className="flex justify-end">
-                      <img src={image} className="imagesmallIcon mr-2" />
-                      <div className=" text-sm text-right mt-1">
-                        {item?.id?.remaining_person}/{item?.id?.total_person}
+            {flashSearchData && flashSearchData.length > 0 ? (
+              <Slider {...settings}>
+                {flashSearchData?.map((item, index) => (
+                  <div className="img-slider bg-slate-200  rounded-lg " key={index}>
+                    <img src={IMAGE_BASE_URL + item?.images[0]?.images} alt="logo" className="img cursor-pointer" onClick={() => navigate(`/rooms`, { state: { roomData: item } })} />
+                    <div className="flex justify-between px-3 pt-2">
+                      <div className="capitalize font-bold text-sm text-black">{item?.id?.flate_name}</div>
+                      <div className="flex justify-end">
+                        <img src={image} className="imagesmallIcon mr-2" />
+                        <div className=" text-sm text-right mt-1">
+                          {item?.id?.remaining_person}/{item?.id?.total_person}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="flex justify-between px-3 ">
-                    <div className="font-bold text-sm text-black ">
-                      <span className="">€</span>
-                      {item?.id?.price.toLocaleString()}
+                    <div className="flex justify-between px-3">
+                      <div className="font-bold text-sm text-black">
+                        <span className="">€</span>
+                        {item?.id?.price.toLocaleString()}
+                      </div>
+                    </div>
+                    <div className=" px-3 pb-2">
+                      <div className="text-sm">{item?.distance == 0 ? 0 : item?.distance.toFixed(1)} Km</div>
                     </div>
                   </div>
-                  <div className=" px-3 pb-2">
-                    <div className="text-sm">{item?.distance == 0 ? 0 : item?.distance.toFixed(1)} Km</div>
-                  </div>
-                </div>
-              ))}
-            </Slider>
-            {/* ) : (
+                ))}
+              </Slider>
+            ) : (
               <div className=" text-base text-black  font-bold font-pj text-center mt-12">No Flash Property Exist</div>
-            )} */}
+            )}
           </div>
           {/* <div className="app mt-20 mb-12">
             {flashSearchData && flashSearchData.length > 0 ? (

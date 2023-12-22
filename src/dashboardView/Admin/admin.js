@@ -15,7 +15,6 @@ const AdminDashboard = () => {
     setAllData([...allData, newData]); // Add the new data to the existing array
     setAddModal(false);
   };
-  console.log("allData", allData);
   const handlerDelete = (index) => {
     const newData = [...allData];
     newData.splice(index, 1);

@@ -28,7 +28,6 @@ const Residence = () => {
   const getAllResidenceData = async (page) => {
     setLoader(true);
     const response = await Api("get", `all-residence?page=${page}`);
-    console.log("response", response);
     if (response?.status === 200 || response?.status == 201) {
       if (pages.length === 0) {
         for (let i = 1; i <= Math.ceil(response?.data?.data?.total / response.data?.data?.per_page); i++) {
@@ -45,7 +44,6 @@ const Residence = () => {
     setLoader(true);
 
     const response = await Api("post", `delete-residence/${allResidenceData[index].id}`);
-    console.log("response", response);
     if (response.status === 200 || response.status === 201) {
       const newData = [...allResidenceData];
       newData.splice(index, 1);
@@ -55,7 +53,6 @@ const Residence = () => {
       setLoader(false);
     } else toast.error(response?.data?.message);
   };
-  console.log("allResidenceData", allResidenceData);
   return (
     <div className="flex flex-col flex-1 xl:pl-64">
       {loader ? <Loader /> : null}

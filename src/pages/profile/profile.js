@@ -97,10 +97,8 @@ const Profile = () => {
       setImage(showProfileData?.image);
     }
   }, [showProfileData]);
-  console.log("showProfileData", showProfileData);
   const localStorageData = localStorage.getItem("auth-token");
   const decoded = jwtDecode(localStorageData);
-  console.log("decoded", decoded);
   const HandlerUpdate = async () => {
     const formData = new FormData();
     formData.append("name", name);
@@ -119,7 +117,6 @@ const Profile = () => {
     formData.append("prefer_to_share_with", shareRoom);
     formData.append("description", briefDescription);
     const response = await Api("post", `profile-update/${decoded?.sub}`, formData);
-    console.log("response", response);
     if (response?.data?.code === 200 || response?.data?.code === 201) {
       setShowProfileData(response?.data?.data);
       toast.success("Profile Update Successfully");
@@ -127,7 +124,6 @@ const Profile = () => {
       toast.error("Profile Update Failed");
     }
   };
-  console.log("showProfileData", showProfileData);
   return (
     <div className="flex flex-col flex-1 xl:pl-56 xl:pr-56 backgroundImage">
       {loader ? <Loader /> : null}

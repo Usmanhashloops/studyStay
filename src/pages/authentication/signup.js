@@ -35,7 +35,7 @@ const SignUp = () => {
             <div className="relative overflow-hidden bg-white shadow-xl rounded-xl containerWidth">
               <div className="px-4 py-6 sm:px-8">
                 <div className="flex items-center justify-between">
-                  <h1 className="text-xl font-bold text-gray-900 font-pj">SignUp</h1>
+                  <h1 className="text-xl font-bold text-gray-900 font-pj">Sign up</h1>
                 </div>
                 <div className="mt-8 mb-6">
                   <div className="space-y-4">

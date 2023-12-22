@@ -12,12 +12,10 @@ const BookResidenceModal = (props) => {
   const [loader, setLoader] = useState(false);
 
   const { open, onClose, valueReserveResidence, setAllReserveResidenceData } = props;
-  console.log("valueReserveResidence", valueReserveResidence);
   const handlerBookResidence = async () => {
     setLoader(true);
 
     const response = await Api("post", `booking-residence/${valueReserveResidence?.item?.id}`);
-    console.log("response", response);
     if (response?.status === 200 || response?.status === 201) {
       setAllReserveResidenceData(response?.data?.data?.status);
       toast.success("Residence Successfully Booked");
@@ -31,7 +29,6 @@ const BookResidenceModal = (props) => {
     setLoader(true);
 
     const response = await Api("post", `cancel-reserve/${valueReserveResidence?.item?.id}`);
-    console.log("response", response);
     if (response?.status === 200 || response?.status === 201) {
       toast.success("Residence Successfully Cancelled");
       onClose();

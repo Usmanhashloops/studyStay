@@ -7,9 +7,6 @@ import Button from "../button";
 import { AiOutlineDelete } from "react-icons/ai";
 const ConfirmationModal = (props) => {
   const { open, setOpen, onClick, onClose, onConfirm, setBtnDisabled, btnDisabled } = props;
-  const residents = ["", "", "", ""];
-  console.log("setBtnDisabled", setBtnDisabled);
-  console.log("btnDisabled", btnDisabled);
   return (
     <Dialog open={open} onClose={onClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
       <DialogContent>

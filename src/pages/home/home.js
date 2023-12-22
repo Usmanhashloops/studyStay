@@ -16,13 +16,13 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Loader from "../../components/loader/Loader";
 import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+// import "slick-carousel/slick/slick.css";
+// import "slick-carousel/slick/slick-theme.css";
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 const Home = () => {
   const sliderRef = useRef(null);
   const settings = {
-    // className: "center",
+    className: "center",
     dots: false,
     infinite: false,
     speed: 500,
@@ -30,7 +30,16 @@ const Home = () => {
     slidesToScroll: 1,
     responsive: [
       {
-        breakpoint: 1024,
+        breakpoint: 1440,
+        settings: {
+          slidesToShow: 4,
+          slidesToScroll: 1,
+          dots: false,
+          infinite: false,
+        },
+      },
+      {
+        breakpoint: 992,
         settings: {
           slidesToShow: 3,
           slidesToScroll: 1,
@@ -44,17 +53,14 @@ const Home = () => {
           slidesToShow: 2,
           slidesToScroll: 1,
           dots: false,
-          initialSlide: 1,
           infinite: false,
         },
       },
-
       {
         breakpoint: 600,
         settings: {
           slidesToShow: 2,
           slidesToScroll: 1,
-          initialSlide: 1,
         },
       },
       {
@@ -62,16 +68,17 @@ const Home = () => {
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
-          initialSlide: 1,
         },
       },
     ],
   };
+
   const handleClickNext = () => {
     if (sliderRef.current) {
       sliderRef.current.slickNext();
     }
   };
+
   const [startIndex, setStartIndex] = useState(0);
   const [smoker, setSmoker] = useState("");
   const [loader, setLoader] = useState(false);
@@ -84,21 +91,24 @@ const Home = () => {
   const navigate = useNavigate();
   const [coordinates, setCoordinates] = useState(null);
   const [address, setAddress] = useState("");
-  const labels = ["Cook", "Pets", "Tidy", "Allergies", "Smoker"];
+  const labels = ["Cook", "Pets", "Tidy", "Visitors", "Smoker", "Bathroom_Schedules"];
+
   const [checkedItems, setCheckedItems] = React.useState({
     Cook: false,
     Pets: false,
     Tidy: false,
-    Allergies: false,
+    Visitors: false,
     Smoker: false,
+    Bathroom_Schedules: false,
   });
+
   const handleCheckboxChange = (label) => {
     setCheckedItems((prevCheckedItems) => ({
       ...prevCheckedItems,
       [label]: !prevCheckedItems[label],
     }));
   };
-  console.log(checkedItems, "checkedItems");
+
   const handleSelect = async (selectedAddress) => {
     try {
       const results = await geocodeByAddress(selectedAddress);
@@ -110,16 +120,18 @@ const Home = () => {
     }
   };
   const localdata = localStorage.getItem("auth-token");
+
   useEffect(() => {
     getAllAvailableResidence(currentPage);
   }, [currentPage]);
+
   useEffect(() => {
     getAllFlashResidence();
   }, []);
+
   const getAllAvailableResidence = async (page) => {
     setLoader(true);
     const response = await Api("get", `get-all-available-residence?page=${page}`);
-    console.log("response===>>", response);
     if (response.status === 200 || response.status === 201) {
       if (pages.length === 0) {
         for (let i = 1; i <= Math.ceil(response?.data?.data?.total / response.data?.data?.per_page); i++) {
@@ -133,6 +145,7 @@ const Home = () => {
       setLoader(false);
     }
   };
+
   const getAllFlashResidence = async () => {
     const response = await Api("get", `get-all-flash-residence`);
 
@@ -140,19 +153,20 @@ const Home = () => {
       setAllFlashResidence(response?.data?.data?.data);
     }
   };
+
   useEffect(() => {
     const firstImage = imageContainerRef.current?.querySelector(".img-slider");
     if (firstImage) {
       setImageWidth(firstImage.clientWidth);
     }
   }, [allFlashResidence]);
+
   const handlePrev = () => {
     setStartIndex((prevIndex) => Math.max(prevIndex - 1, 0));
   };
   const handleNext = () => {
     setStartIndex((prevIndex) => Math.min(prevIndex + 1, Math.max(0, allFlashResidence?.length - 5)));
   };
-  console.log("allAvailableResidence", allAvailableResidence);
   return (
     <section>
       {loader ? <Loader /> : null}

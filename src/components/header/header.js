@@ -27,7 +27,6 @@ const Header = () => {
   const getProfileData = async () => {
     if (localAuth) {
       const decoded = jwtDecode(localAuth);
-      console.log("decoded", decoded);
       const response = await Api("get", `profile-get/${decoded?.sub}`);
       if (response?.data?.code === 200 || response?.data?.code === 201) {
         setShowProfileData(response?.data?.data);
@@ -55,7 +54,6 @@ const Header = () => {
     localStorage.clear();
     navigate("/login");
   };
-  console.log("showProfileData", showProfileData);
   return (
     <header className=" bg-white z-50 " x-data="{ expanded: false }">
       <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-0">
@@ -80,7 +78,7 @@ const Header = () => {
           </div>
           {localAuth ? (
             <nav class="hidden lg:flex lg:items-end lg:justify-end lg:space-x-4">
-              <div className="capitalize mt-1 text-base font-medium text-gray-900 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-50 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2">
+              <div className="capitalize text-base font-medium text-gray-900 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-50 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2">
                 {showProfileData?.name}
               </div>
               <a>

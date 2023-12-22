@@ -8,7 +8,6 @@ function AuthInitializer() {
   useEffect(() => {
     // Retrieve the token from local storage
     const storedToken = localStorage.getItem("auth-token");
-    console.log(storedToken, "storedToken");
     // Set the token in the Redux store
     if (storedToken) {
       const decodedToken = jwt_decode(storedToken);

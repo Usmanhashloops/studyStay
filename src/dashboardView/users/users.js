@@ -27,7 +27,6 @@ const Users = () => {
     setLoader(true);
 
     const response = await Api("get", `user-list?page=${page}`);
-    console.log("response", response);
     if (response?.status === 200 || response?.status == 201) {
       if (pages.length === 0) {
         for (let i = 1; i <= Math.ceil(response?.data?.data?.total / response.data?.data?.per_page); i++) {
@@ -39,13 +38,11 @@ const Users = () => {
     }
     setLoader(false);
   };
-  console.log("allUsersData", allUsersData);
 
   const handlerBlock = async (index) => {
     setLoader(true);
 
     const response = await Api("post", `blocked-user/${allUsersData[index].id}`);
-    console.log("response", response);
     if (response.status === 200 || response.status === 201) {
       const newData = [...allUsersData];
       newData.splice(index, 1);
