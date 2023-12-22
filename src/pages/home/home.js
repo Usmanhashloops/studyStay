@@ -91,6 +91,7 @@ const Home = () => {
   const navigate = useNavigate();
   const [coordinates, setCoordinates] = useState(null);
   const [address, setAddress] = useState("");
+
   const labels = ["Cook", "Pets", "Tidy", "Visitors", "Smoker", "Bathroom_Schedules"];
 
   const [checkedItems, setCheckedItems] = React.useState({

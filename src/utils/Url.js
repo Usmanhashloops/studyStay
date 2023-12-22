@@ -1,2 +1,4 @@
-export const API_BASE_URL = "http://192.168.100.2:8000/api/";
-export const IMAGE_BASE_URL = "http://192.168.100.2:8000/images/";
+export const API_BASE_URL = "http://study-stay.hashloops.com/backend/public/api/";
+export const IMAGE_BASE_URL = "http://study-stay.hashloops.com/backend/public/images/";
+// export const API_BASE_URL = "http://192.168.100.2:8000/api/";
+// export const IMAGE_BASE_URL = "http://192.168.100.2:8000/images/";
