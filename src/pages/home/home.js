@@ -116,6 +116,7 @@ const Home = () => {
       console.error("Error while fetching coordinates:", error);
     }
   };
+
   const localdata = localStorage.getItem("auth-token");
 
   useEffect(() => {
@@ -167,7 +168,7 @@ const Home = () => {
   };
 
   console.log("allAvailableResidence", allAvailableResidence);
-
+  console.log("address", address);
   return (
     <section>
       {loader ? <Loader /> : null}
@@ -223,7 +224,10 @@ const Home = () => {
                           },
                         })}
                       />
-                      <div className="searchiconbox" onClick={() => navigate(`/apartments/${encodeURIComponent(address)}`, { state: { coordinates: coordinates, checkedItems: checkedItems } })}>
+                      <div
+                        className="searchiconbox"
+                        onClick={() => address && navigate(`/apartments/${encodeURIComponent(address)}`, { state: { coordinates: coordinates, checkedItems: checkedItems } })}
+                      >
                         <BsSearch style={{ color: "#ffffff", height: "25px", width: "25px" }} />
                       </div>
                     </div>
