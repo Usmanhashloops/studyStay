@@ -314,7 +314,7 @@ const Home = () => {
               )}
             </div> */}
             <div className=" mt-12 mb-12">
-              {allAvailableResidence && allAvailableResidence.length > 0 ? (
+              {allFlashResidence && allFlashResidence.length > 0 ? (
                 <Slider {...settings}>
                   {allFlashResidence?.map((item, index) => (
                     <div className="img-slider bg-slate-200  rounded-lg " key={index}>
