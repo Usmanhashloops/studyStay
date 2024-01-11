@@ -226,7 +226,7 @@ const Home = () => {
                         })}
                       />
                       <div
-                        className="searchiconbox"
+                        className={address ? "searchiconbox-active" : "searchiconbox"}
                         onClick={() => address && navigate(`/apartments/${encodeURIComponent(address)}`, { state: { coordinates: coordinates, checkedItems: checkedItems } })}
                       >
                         <BsSearch style={{ color: "#ffffff", height: "25px", width: "25px" }} />
@@ -314,36 +314,40 @@ const Home = () => {
               )}
             </div> */}
             <div className=" mt-12 mb-12">
-              <Slider {...settings}>
-                {allFlashResidence?.map((item, index) => (
-                  <div className="img-slider bg-slate-200  rounded-lg " key={index}>
-                    <img
-                      src={IMAGE_BASE_URL + item?.images[0]?.images}
-                      alt="logo"
-                      className="img"
-                      //  onClick={() => navigate(`/rooms`, { state: { roomData: item } })}
-                    />
-                    <div className=" px-3 py-3">
-                      <div className="font-bold text-sm text-black capitalize">{item?.flate_name}</div>
-                      <div className="lg:flex justify-between">
-                        <div className="font-bold text-sm text-black mt-1">
-                          <span className="">€</span>
-                          {item?.price.toLocaleString()}
-                        </div>
-                        <div className="flex justify-end">
-                          <img src={image} className="imagesmallIcon mr-2" />
-                          <div className=" text-sm text-right mt-1">
-                            {item?.remaining_person}/{item?.total_person}
+              {allAvailableResidence && allAvailableResidence.length > 0 ? (
+                <Slider {...settings}>
+                  {allFlashResidence?.map((item, index) => (
+                    <div className="img-slider bg-slate-200  rounded-lg " key={index}>
+                      <img
+                        src={IMAGE_BASE_URL + item?.images[0]?.images}
+                        alt="logo"
+                        className="img"
+                        //  onClick={() => navigate(`/rooms`, { state: { roomData: item } })}
+                      />
+                      <div className=" px-3 py-3">
+                        <div className="font-bold text-sm text-black capitalize">{item?.flate_name}</div>
+                        <div className="lg:flex justify-between">
+                          <div className="font-bold text-sm text-black mt-1">
+                            <span className="">€</span>
+                            {item?.price.toLocaleString()}
+                          </div>
+                          <div className="flex justify-end">
+                            <img src={image} className="imagesmallIcon mr-2" />
+                            <div className=" text-sm text-right mt-1">
+                              {item?.remaining_person}/{item?.total_person}
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </Slider>
+                  ))}
+                </Slider>
+              ) : (
+                <div className=" text-base text-black  font-bold font-pj text-center mt-16 pb-10  mb-10">No Flash Property Exist</div>
+              )}
             </div>
             <div className=" text-3xl text-slate-500 font-bold  text-center pt-2 mb-10 mt-8">Featured Property </div>
-            {allAvailableResidence ? (
+            {allAvailableResidence && allAvailableResidence.length > 0 ? (
               <Grid container spacing={2}>
                 {allAvailableResidence.map((item, i) => (
                   <Grid item xs={12} sm={6} md={4} lg={3}>

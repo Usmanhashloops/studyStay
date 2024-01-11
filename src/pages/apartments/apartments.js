@@ -251,7 +251,10 @@ const Apartments = () => {
                             },
                           })}
                         />
-                        <div className="searchicon-apartmentbox" onClick={() => navigate(`/apartments/${encodeURIComponent(address)}`, { state: { coordinates: coordinates } })}>
+                        <div
+                          className={address ? "searchicon-apartmentbox-active " : "searchicon-apartmentbox"}
+                          onClick={() => address && navigate(`/apartments/${encodeURIComponent(address)}`, { state: { coordinates: coordinates } })}
+                        >
                           <BsSearch style={{ color: "#ffffff", height: "25px", width: "25px" }} />
                         </div>
                       </div>

@@ -84,6 +84,19 @@ body::-webkit-scrollbar {
   align-items: center;
   height: 100%;
 }
+.searchiconbox-active {
+  background-color: #414141;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  height: 55px !important;
+  width: 55px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  cursor: pointer;
+}
 .searchicon-apartmentbox {
   background-color: #1d51aa;
   border-top-right-radius: 10px;
@@ -95,6 +108,19 @@ body::-webkit-scrollbar {
   justify-content: center;
   align-items: center;
   height: 100%;
+}
+.searchicon-apartmentbox-active {
+  background-color: #1d51aa;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  height: 55px !important;
+  width: 55px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  cursor: pointer;
 }
 .search-icon {
   position: absolute;
