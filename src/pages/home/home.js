@@ -169,6 +169,7 @@ const Home = () => {
 
   console.log("allAvailableResidence", allAvailableResidence);
   console.log("address", address);
+  console.log("address", address);
   return (
     <section>
       {loader ? <Loader /> : null}
