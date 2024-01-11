@@ -251,7 +251,7 @@ const Apartments = () => {
                             },
                           })}
                         />
-                        <div className="searchicon-apartmentbox">
+                        <div className="searchicon-apartmentbox" onClick={()=> navigate(`/apartments/${encodeURIComponent(address)}`, { state: { coordinates: coordinates } })}>
                           <BsSearch style={{ color: "#ffffff", height: "25px", width: "25px" }} />
                         </div>
                       </div>
@@ -276,7 +276,7 @@ const Apartments = () => {
       <section class="py-12 bg-neutral-50 sm:py-16 lg:py-16">
         <div class="px-2 mx-auto sm:px-6 lg:px-0 max-w-7xl">
           <div className=" text-3xl text-slate-500 font-bold font-pj text-center mb-10">Fresh Property</div>
-          {freshSearchData ? (
+          {freshSearchData & & freshSearchData.length > 0 ? (
             <Grid container spacing={2}>
               {freshSearchData.map((item, i) => (
                 <Grid item xs={12} sm={6} md={4} lg={3} key={i}>
@@ -311,7 +311,7 @@ const Apartments = () => {
             <div className=" text-base text-black  font-bold font-pj text-center mt-16">No Fresh Property Exist</div>
           )}
           <div className=" text-3xl text-slate-500 font-bold font-pj text-center mb-10 mt-16">Featured Property</div>
-          {availableSearchData ? (
+          {availableSearchData && availableSearchData.length > 0 ? (
             <Grid container spacing={2}>
               {availableSearchData.map((item, i) => (
                 <Grid item xs={12} sm={6} md={4} lg={3} key={i}>

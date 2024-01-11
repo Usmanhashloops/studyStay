@@ -6,15 +6,12 @@ import Loader from "../../components/loader/Loader";
 
 const RemoveResidence = () => {
   const [loader, setLoader] = useState(false);
-
   const [showConfirmationModal, setShowConfirmationModal] = useState("");
   const [sendData, setSendData] = useState();
   const [btnDisabled, setBtnDisabled] = useState(false);
-
   const [userAllReserveResidence, setUserAllReserveResidence] = useState();
   const getUserAllReserveResidence = async () => {
     setLoader(true);
-
     const response = await Api("get", "show-user-reserve-residence");
     if (response?.status === 200 || response?.status == 201) {
       setUserAllReserveResidence(response?.data?.data);
@@ -26,7 +23,6 @@ const RemoveResidence = () => {
   }, []);
   const handlerDelete = async (index) => {
     setLoader(true);
-
     const response = await Api("post", `user-cancel-reserve/${userAllReserveResidence[index].id}`);
     if (response.status === 200 || response.status === 201) {
       const newData = [...userAllReserveResidence];
@@ -40,10 +36,9 @@ const RemoveResidence = () => {
   return (
     <section class="py-12 bg-neutral-50 sm:py-16 lg:py-17 h-[90vh]">
       {loader ? <Loader /> : null}
-
       <div class="px-2 mx-auto sm:px-6 lg:px-0 max-w-7xl">
-        <div className=" text-3xl text-slate-500  font-bold text-center  ">Reserved Residences</div>
-        <div className=" mt-10">
+        <div className="text-3xl text-slate-500  font-bold text-center">Reserved Residences</div>
+        <div className="mt-10">
           <div className="flex flex-col ">
             <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
@@ -72,7 +67,6 @@ const RemoveResidence = () => {
                           <td className="px-4 py-4 text-sm font-medium text-gray-900 xl:table-cell whitespace-nowrap">
                             <div className="flex items-center capitalize"> {item?.accommodation_id?.residence_name} </div>
                           </td>
-
                           <td className="px-4 py-4 text-sm font-medium text-gray-900 xl:table-cell whitespace-nowrap">
                             <div className="flex items-center capitalize"> {item?.accommodation_id?.address} </div>
                           </td>

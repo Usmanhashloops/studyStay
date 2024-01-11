@@ -26,7 +26,6 @@ import Loader from "../../components/loader/Loader";
 
 const Profile = () => {
   const [loader, setLoader] = useState(false);
-
   const navigate = useNavigate();
   const [showUpdateProfileModal, setShowUpdateProfileModal] = React.useState(false);
   const handlerModalClose = () => setShowUpdateProfileModal(false);

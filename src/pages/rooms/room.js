@@ -78,6 +78,9 @@ const Rooms = (props) => {
 
   const points = [{ lat: lat, lng: lng, id: <FaLocationDot className="h-8 w-8 text-blue-600" /> }];
 
+  console.log("residenceDataByID", residenceDataByID);
+  console.log("roomData", roomData);
+
   return (
     <section class="py-8 bg-neutral-50 sm:py-16 lg:py-12" style={{ marginTop: "-62px" }}>
       {loader ? <Loader /> : null}

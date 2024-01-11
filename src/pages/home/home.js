@@ -16,8 +16,8 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Loader from "../../components/loader/Loader";
 import Slider from "react-slick";
-// import "slick-carousel/slick/slick.css";
-// import "slick-carousel/slick/slick-theme.css";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 const Home = () => {
   const sliderRef = useRef(null);
@@ -91,9 +91,7 @@ const Home = () => {
   const navigate = useNavigate();
   const [coordinates, setCoordinates] = useState(null);
   const [address, setAddress] = useState("");
-
   const labels = ["Cook", "Pets", "Tidy", "Visitors", "Smoker", "Bathroom_Schedules"];
-
   const [checkedItems, setCheckedItems] = React.useState({
     Cook: false,
     Pets: false,
@@ -102,14 +100,12 @@ const Home = () => {
     Smoker: false,
     Bathroom_Schedules: false,
   });
-
   const handleCheckboxChange = (label) => {
     setCheckedItems((prevCheckedItems) => ({
       ...prevCheckedItems,
       [label]: !prevCheckedItems[label],
     }));
   };
-
   const handleSelect = async (selectedAddress) => {
     try {
       const results = await geocodeByAddress(selectedAddress);
@@ -165,9 +161,13 @@ const Home = () => {
   const handlePrev = () => {
     setStartIndex((prevIndex) => Math.max(prevIndex - 1, 0));
   };
+
   const handleNext = () => {
     setStartIndex((prevIndex) => Math.min(prevIndex + 1, Math.max(0, allFlashResidence?.length - 5)));
   };
+
+  console.log("allAvailableResidence", allAvailableResidence);
+
   return (
     <section>
       {loader ? <Loader /> : null}
@@ -206,6 +206,7 @@ const Home = () => {
                 </FormGroup>
               </div>
             )}
+
             <div className=" ">
               <PlacesAutocomplete value={address} onChange={setAddress} onSelect={handleSelect} searchOptions={{ types: ["geocode"] }}>
                 {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
@@ -222,7 +223,7 @@ const Home = () => {
                           },
                         })}
                       />
-                      <div className="searchiconbox">
+                      <div className="searchiconbox" onClick={() => navigate(`/apartments/${encodeURIComponent(address)}`, { state: { coordinates: coordinates, checkedItems: checkedItems } })}>
                         <BsSearch style={{ color: "#ffffff", height: "25px", width: "25px" }} />
                       </div>
                     </div>

@@ -47,7 +47,7 @@ const Login = () => {
         navigate("/");
       }
     } else {
-      toast.error("Invalid data");
+      toast.error("Invalid Credentials");
     }
   };
 

@@ -19,6 +19,7 @@ const SliderHome = ({ images, imageDummy, item }) => {
   if (!images || images.length === 0) {
     return null;
   }
+  console.log("item====>", item);
   return (
     <div className="slider-component">
       <button className="left-icon" onClick={prevSlide}>
@@ -35,7 +36,7 @@ const SliderHome = ({ images, imageDummy, item }) => {
           borderTopRightRadius: "10px",
           //   cursor: "pointer",
         }}
-        // onClick={() => navigate(`/rooms`, { state: { roomData: item } })}
+        onClick={() => navigate(`/rooms`, { state: { roomData: item } })}
       />
       <button className="right-icon" onClick={nextSlide}>
         <IoIosArrowForward />

@@ -19,6 +19,7 @@ const SliderApartment = ({ images, imageDummy, item }) => {
   if (!images || images.length === 0) {
     return null;
   }
+  console.log("item", item);
   return (
     <div className="slider-component">
       <button className="left-icon" onClick={prevSlide}>
